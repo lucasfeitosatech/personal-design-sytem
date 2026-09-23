@@ -1,0 +1,137 @@
+{
+  "color": {
+    "$description": "Semantic colours of the light theme. Core serves any product; finance is the bills vocabulary.",
+    "bg": {
+      "$value": "#faf9f7",
+      "$type": "color"
+    },
+    "bg-page": {
+      "$value": "#f3f1ed",
+      "$type": "color"
+    },
+    "surface": {
+      "$value": "#ffffff",
+      "$type": "color"
+    },
+    "surface-raised": {
+      "$value": "#f0ede8",
+      "$type": "color"
+    },
+    "surface-muted": {
+      "$value": "#fcfbf9",
+      "$type": "color"
+    },
+    "border": {
+      "$value": "#e6e2dc",
+      "$type": "color"
+    },
+    "border-soft": {
+      "$value": "#f0ede8",
+      "$type": "color"
+    },
+    "text": {
+      "$value": "#1e1c19",
+      "$type": "color"
+    },
+    "text-secondary": {
+      "$value": "#55504a",
+      "$type": "color"
+    },
+    "text-tertiary": {
+      "$value": "#6f685f",
+      "$type": "color"
+    },
+    "text-disabled": {
+      "$value": "#a8a199",
+      "$type": "color"
+    },
+    "accent": {
+      "$value": "#2f6b4f",
+      "$type": "color"
+    },
+    "accent-hover": {
+      "$value": "#21503b",
+      "$type": "color"
+    },
+    "accent-soft": {
+      "$value": "#eaf2ed",
+      "$type": "color"
+    },
+    "accent-border": {
+      "$value": "#d6e6dc",
+      "$type": "color"
+    },
+    "accent-tint": {
+      "$value": "#f4f8f5",
+      "$type": "color"
+    },
+    "on-accent": {
+      "$value": "#ffffff",
+      "$type": "color"
+    },
+    "scrim": {
+      "$value": "rgb(20 19 17 / 0.45)",
+      "$type": "color"
+    },
+    "focus": {
+      "$value": "#2f6b4f",
+      "$type": "color"
+    },
+    "finance": {
+      "paid": {
+        "$value": "#2f6b4f",
+        "$type": "color"
+      },
+      "paid-soft": {
+        "$value": "#eaf2ed",
+        "$type": "color"
+      },
+      "pending": {
+        "$value": "#8f877c",
+        "$type": "color"
+      },
+      "due-soon": {
+        "$value": "#8a6520",
+        "$type": "color"
+      },
+      "due-soon-mark": {
+        "$value": "#b07e22",
+        "$type": "color"
+      },
+      "due-soon-soft": {
+        "$value": "#fdf6e9",
+        "$type": "color"
+      },
+      "overdue": {
+        "$value": "#b4462a",
+        "$type": "color"
+      },
+      "overdue-soft": {
+        "$value": "#fbede8",
+        "$type": "color"
+      },
+      "overdue-border": {
+        "$value": "#ebc9bc",
+        "$type": "color"
+      },
+      "on-overdue": {
+        "$value": "#ffffff",
+        "$type": "color"
+      },
+      "skipped": {
+        "$value": "#948c81",
+        "$type": "color"
+      },
+      "skipped-soft": {
+        "$value": "#f0ede8",
+        "$type": "color"
+      }
+    }
+  },
+  "shadow": {
+    "overlay": {
+      "$value": "0 12px 32px rgba(30, 28, 25, 0.16)",
+      "$type": "shadow"
+    }
+  }
+}

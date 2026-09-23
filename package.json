@@ -1,0 +1,65 @@
+{
+  "name": "@lucasfeitosatech/design-system",
+  "version": "0.1.0",
+  "description": "Design system for React and React Native: one identity, one contract, two renderers.",
+  "license": "UNLICENSED",
+  "private": false,
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "files": [
+    "dist",
+    "src/native",
+    "tokens/core",
+    "tokens/components",
+    "README.md"
+  ],
+  "exports": {
+    "./tokens": {
+      "types": "./dist/tokens/index.d.ts",
+      "import": "./dist/tokens/index.js",
+      "require": "./dist/tokens/index.cjs"
+    },
+    "./tokens.css": "./dist/tokens/tokens.css",
+    "./headless": {
+      "types": "./dist/headless/index.d.ts",
+      "import": "./dist/headless/index.js",
+      "require": "./dist/headless/index.cjs"
+    },
+    "./web": {
+      "types": "./dist/web/index.d.ts",
+      "import": "./dist/web/index.js",
+      "require": "./dist/web/index.cjs"
+    },
+    "./web.css": "./dist/web/index.css",
+    "./native": {
+      "types": "./src/native/index.ts",
+      "react-native": "./src/native/index.ts",
+      "default": "./src/native/index.ts"
+    }
+  },
+  "scripts": {
+    "tokens:build": "node scripts/build-tokens.mjs",
+    "build": "npm run tokens:build && tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "pack:local": "npm run build && npm pack",
+    "clean": "rm -rf dist *.tgz"
+  },
+  "peerDependencies": {
+    "react": ">=19",
+    "react-dom": ">=19",
+    "react-native": ">=0.80"
+  },
+  "peerDependenciesMeta": {
+    "react-dom": { "optional": true },
+    "react-native": { "optional": true }
+  },
+  "devDependencies": {
+    "style-dictionary": "^5.5.3",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  }
+}

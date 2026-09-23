@@ -1,0 +1,110 @@
+{
+  "$description": "Theme-independent scales. Values are the ones already shipping on the web (D-09 closed type scale).",
+  "text": {
+    "xs": {
+      "$value": "11px",
+      "$type": "dimension"
+    },
+    "sm": {
+      "$value": "12px",
+      "$type": "dimension"
+    },
+    "md": {
+      "$value": "13px",
+      "$type": "dimension"
+    },
+    "base": {
+      "$value": "14px",
+      "$type": "dimension"
+    },
+    "lg": {
+      "$value": "16px",
+      "$type": "dimension"
+    },
+    "xl": {
+      "$value": "20px",
+      "$type": "dimension"
+    },
+    "2xl": {
+      "$value": "26px",
+      "$type": "dimension"
+    }
+  },
+  "space": {
+    "1": {
+      "$value": "4px",
+      "$type": "dimension"
+    },
+    "2": {
+      "$value": "8px",
+      "$type": "dimension"
+    },
+    "3": {
+      "$value": "12px",
+      "$type": "dimension"
+    },
+    "4": {
+      "$value": "16px",
+      "$type": "dimension"
+    },
+    "5": {
+      "$value": "24px",
+      "$type": "dimension"
+    },
+    "6": {
+      "$value": "32px",
+      "$type": "dimension"
+    },
+    "7": {
+      "$value": "48px",
+      "$type": "dimension"
+    },
+    "8": {
+      "$value": "64px",
+      "$type": "dimension"
+    }
+  },
+  "radius": {
+    "sm": {
+      "$value": "6px",
+      "$type": "dimension"
+    },
+    "md": {
+      "$value": "10px",
+      "$type": "dimension"
+    },
+    "lg": {
+      "$value": "13px",
+      "$type": "dimension"
+    },
+    "pill": {
+      "$value": "999px",
+      "$type": "dimension"
+    }
+  },
+  "motion": {
+    "fast": {
+      "$value": "150ms",
+      "$type": "duration"
+    },
+    "base": {
+      "$value": "220ms",
+      "$type": "duration"
+    }
+  },
+  "font": {
+    "ui": {
+      "$value": "'Libre Franklin', system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "$type": "fontFamily"
+    },
+    "mono": {
+      "$value": "'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace",
+      "$type": "fontFamily"
+    }
+  },
+  "tap": {
+    "$value": "44px",
+    "$type": "dimension",
+    "$description": "Minimum touch target."
+  }
+}

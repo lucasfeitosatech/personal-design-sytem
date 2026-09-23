@@ -1,0 +1,21 @@
+{
+  "$description": "Application layout measurements. Web-only today; a native app sizes its own chrome.",
+  "sidebar": {
+    "width": {
+      "$value": "232px",
+      "$type": "dimension"
+    }
+  },
+  "content": {
+    "max": {
+      "$value": "920px",
+      "$type": "dimension"
+    }
+  },
+  "bottom-nav": {
+    "height": {
+      "$value": "60px",
+      "$type": "dimension"
+    }
+  }
+}
