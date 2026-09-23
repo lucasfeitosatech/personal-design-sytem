@@ -37,6 +37,7 @@ export function TextField({
   secret = false,
   mode = 'text',
   mono = false,
+  align = 'left',
   readOnly,
   prefix,
   suffix,
@@ -47,7 +48,8 @@ export function TextField({
 }: TextFieldProps) {
   const { palette } = useTheme();
   const [focused, setFocused] = useState(false);
-  const lifted = focused || (value ?? '').length > 0;
+  // A prefix already occupies the row, so the label has nowhere to rest.
+  const lifted = focused || (value ?? '').length > 0 || prefix !== undefined;
   const progress = useRef(new Animated.Value(lifted ? 1 : 0)).current;
 
   useEffect(() => {
@@ -74,7 +76,7 @@ export function TextField({
               {
                 color: labelColor,
                 backgroundColor: notch,
-                left: prefix ? space[3] + 24 : space[3],
+                left: space[3],
                 top: progress.interpolate({ inputRange: [0, 1], outputRange: [INPUT_HEIGHT[size] / 2 - 10, -8] }),
                 fontSize: progress.interpolate({ inputRange: [0, 1], outputRange: [LABEL_RESTING_SIZE, LABEL_FLOATING_SIZE] }),
                 paddingHorizontal: progress.interpolate({ inputRange: [0, 1], outputRange: [0, 4] }),
@@ -86,7 +88,7 @@ export function TextField({
           </Animated.Text>
           {prefix}
           <TextInput
-            style={[styles.input, { color: palette.text }, mono ? { fontFamily: monoFamily } : null]}
+            style={[styles.input, { color: palette.text, textAlign: align }, mono ? { fontFamily: monoFamily } : null]}
             value={value}
             onChangeText={onValueChange}
             secureTextEntry={secret}

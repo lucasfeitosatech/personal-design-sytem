@@ -28,6 +28,18 @@ not remove a contract prop, rename it, or change what it means.
 | Select | yes | yes | Two different controls: a combobox popover on the web, a bottom sheet on a device |
 | Modal | yes | yes | Centred dialog with focus trap on the web; bottom sheet with stacked actions on a device |
 | Toast | yes | yes | Auto-dismiss 6s, 10s with an action, paused on hover; an error never dismisses itself |
+| MoneyInput | yes | yes | Value is digits in cents; fills from the right so the caret never moves |
+| PeriodInput | yes | yes | Value is up to six digits; the slash is drawn, never stored |
+
+## Where the shared base pays
+
+The masks are the clearest case: `formatMoney`, `moneyDigits`, `formatPeriod` and `periodValue` are
+pure functions in `design-core`, covered by tests once and used by both renderers unchanged. The two
+inputs on top of them are thin, because the hard part is not the rendering.
+
+The value is always the digits, never the formatted string. Typing appends and backspace removes,
+so the caret stays at the end and never has to be repositioned — the trap that breaks masked inputs,
+and the one thing DOM and a phone keyboard could never have agreed on.
 
 ## Known gaps
 

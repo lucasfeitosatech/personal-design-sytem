@@ -1,7 +1,7 @@
 // Gallery: every component and state, for validating a tarball in a web app.
 import {
   Button, Card, Checkbox, Chip, Divider, EmptyState, Modal, PasswordField, RadioGroup, Section,
-  Select, Spinner, Switch, Text, Textarea, TextField, Toast, ToastRegion,
+  MoneyInput, PeriodInput, Select, Spinner, Switch, Text, Textarea, TextField, Toast, ToastRegion,
 } from '@lucasfeitosatech/components-react';
 import '@lucasfeitosatech/components-react/styles.css';
 import '@lucasfeitosatech/design-tokens/tokens.css';
@@ -19,6 +19,8 @@ export function WebGallery() {
   const [choice, setChoice] = useState('mensal');
   const [picked, setPicked] = useState<string>('accent');
   const [banco, setBanco] = useState('nubank');
+  const [cents, setCents] = useState('123456');
+  const [period, setPeriod] = useState('032026');
   const [confirm, setConfirm] = useState(false);
   const [toast, setToast] = useState<'default' | 'error' | null>(null);
 
@@ -96,6 +98,10 @@ export function WebGallery() {
           ]}
         />
         <Select label="Com erro" error="Escolha um banco" options={[{ value: 'a', label: 'Opção A' }]} onValueChange={() => {}} />
+        <MoneyInput label="Valor" hint="preenche da direita, como uma máquina registradora" value={cents} onValueChange={setCents} />
+        <MoneyInput label="Vazio" value="" onValueChange={() => {}} />
+        <PeriodInput label="Período" value={period} onValueChange={setPeriod} />
+        <PeriodInput label="Mês inválido" value="132026" error="Mês entre 01 e 12" onValueChange={() => {}} />
         <Button variant="danger" onClick={() => setConfirm(true)}>Abrir confirmação</Button>
         <Button variant="secondary" onClick={() => setToast('default')}>Mostrar aviso</Button>
         <Button variant="ghost" onClick={() => setToast('error')}>Mostrar erro</Button>

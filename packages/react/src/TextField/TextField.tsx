@@ -20,7 +20,7 @@ export type TextFieldProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'id' | 
  * single space: an empty placeholder would make the input look filled from the first paint.
  */
 export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function TextField(
-  { label, hint, error, required, disabled, size = 'md', secret = false, mode, mono = false, readOnly, prefix, suffix, className, value, onValueChange, placeholder = ' ', ...rest },
+  { label, hint, error, required, disabled, size = 'md', secret = false, mode, mono = false, align = 'left', readOnly, prefix, suffix, className, value, onValueChange, placeholder = ' ', ...rest },
   ref,
 ) {
   return (
@@ -38,7 +38,7 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function T
           ) : null}
           <input
             ref={ref}
-            className={[styles.input, mono ? styles.mono : ''].filter(Boolean).join(' ')}
+            className={[styles.input, mono ? styles.mono : '', align === 'right' ? styles.right : ''].filter(Boolean).join(' ')}
             type={secret ? 'password' : 'text'}
             inputMode={mode}
             readOnly={readOnly}

@@ -20,6 +20,8 @@ export type TextFieldContract = {
   readOnly?: boolean;
   /** Figures and codes read better in mono. */
   mono?: boolean;
+  /** Figures line up right-aligned. Text stays left. */
+  align?: 'left' | 'right';
 };
 
 /**

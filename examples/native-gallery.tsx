@@ -1,7 +1,7 @@
 /** Gallery: every component and state, for validating a tarball on a device. */
 import {
   Button, Card, Checkbox, Chip, Divider, EmptyState, Modal, PasswordField, RadioGroup, Section, Select,
-  Spinner, Switch, Text, Textarea, TextField, ThemeProvider, Toast, ToastRegion,
+  MoneyInput, PeriodInput, Spinner, Switch, Text, Textarea, TextField, ThemeProvider, Toast, ToastRegion,
 } from '@lucasfeitosatech/components-react-native';
 import { BUTTON_VARIANTS } from '@lucasfeitosatech/design-core';
 import { darkPalette, lightPalette, space } from '@lucasfeitosatech/design-tokens';
@@ -19,6 +19,8 @@ function Screen() {
   const [choice, setChoice] = useState('mensal');
   const [picked, setPicked] = useState('accent');
   const [banco, setBanco] = useState('nubank');
+  const [cents, setCents] = useState('123456');
+  const [period, setPeriod] = useState('032026');
   const [confirm, setConfirm] = useState(false);
   const [toast, setToast] = useState<'default' | 'error' | null>(null);
   const palette = useColorScheme() === 'dark' ? darkPalette : lightPalette;
@@ -101,6 +103,10 @@ function Screen() {
           />
           <Select label="Vazio" placeholder="Selecione" options={[{ value: 'a', label: 'Opção A' }]} onValueChange={() => {}} />
           <Select label="Com erro" error="Escolha um banco" options={[{ value: 'a', label: 'Opção A' }]} onValueChange={() => {}} />
+          <MoneyInput label="Valor" hint="preenche da direita, como uma máquina registradora" value={cents} onValueChange={setCents} />
+          <MoneyInput label="Vazio" value="" onValueChange={() => {}} />
+          <PeriodInput label="Período" value={period} onValueChange={setPeriod} />
+          <PeriodInput label="Mês inválido" value="132026" error="Mês entre 01 e 12" onValueChange={() => {}} />
           <Button variant="danger" onPress={() => setConfirm(true)}>Abrir confirmação</Button>
           <Button variant="secondary" onPress={() => setToast('default')}>Mostrar aviso</Button>
           <Button variant="ghost" onPress={() => setToast('error')}>Mostrar erro</Button>

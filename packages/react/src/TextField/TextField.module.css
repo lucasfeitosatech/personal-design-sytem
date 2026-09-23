@@ -51,6 +51,7 @@
 /* Transparent until the label lifts, so the two never overlap. */
 .input::placeholder { color: transparent; }
 .mono { font-family: var(--ds-font-mono); font-variant-numeric: tabular-nums; }
+.right { text-align: right; }
 
 .label {
   position: absolute;
@@ -68,7 +69,16 @@
   color: var(--ds-color-text-tertiary);
   transition: transform var(--ds-motion-fast), font-size var(--ds-motion-fast), color var(--ds-motion-fast);
 }
-.hasPrefix .label { left: calc(var(--ds-space-3) + 1.6em); }
+/* A prefix already occupies the row, so the label has nowhere to rest: it starts lifted, or the
+   field reads as "R$ Valor". */
+.hasPrefix .label {
+  transform: translateY(calc(-50% - var(--_lift)));
+  font-size: var(--ds-text-xs);
+  background: inherit;
+  padding: 0 4px;
+  margin-left: -4px;
+}
+.hasPrefix .legend { max-width: 100%; }
 
 /* Lifted: focused, filled, or autofilled. Autofill never fires a change event. */
 .input:focus ~ .label,
