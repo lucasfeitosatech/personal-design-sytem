@@ -12,6 +12,12 @@ export type TextFieldProps = Omit<TextInputProps, 'style' | 'value' | 'editable'
   TextFieldContract & {
     prefix?: ReactNode;
     suffix?: ReactNode;
+    /**
+     * The colour behind the frame. The floating label paints it to fake a notch, because a native
+     * border cannot be cut. Defaults to the surface colour, which is right inside a Card; pass the
+     * page colour when the field sits directly on the background.
+     */
+    surfaceBehind?: string;
   };
 
 /**
@@ -34,6 +40,7 @@ export function TextField({
   readOnly,
   prefix,
   suffix,
+  surfaceBehind,
   value,
   onValueChange,
   ...rest
@@ -49,12 +56,14 @@ export function TextField({
 
   const borderColor = error ? palette.overdue : focused ? palette.accent : palette.border;
   const labelColor = error ? palette.overdue : focused ? palette.accent : palette.textTertiary;
-  const surface = disabled ? palette.surfaceRaised : palette.surface;
+  const fill = disabled ? palette.surfaceRaised : palette.surface;
+  // Not the fill: a disabled field is grey inside, but the notch opens onto whatever is behind it.
+  const notch = surfaceBehind ?? palette.surface;
 
   return (
     <Field label={label} hideLabel hint={hint} error={error} required={required} disabled={disabled}>
       {(control) => (
-        <View style={[styles.frame, { minHeight: INPUT_HEIGHT[size], borderColor, backgroundColor: surface }]}>
+        <View style={[styles.frame, { minHeight: INPUT_HEIGHT[size], borderColor, backgroundColor: fill }]}>
           <Animated.Text
             pointerEvents="none"
             numberOfLines={1}
@@ -62,7 +71,7 @@ export function TextField({
               styles.label,
               {
                 color: labelColor,
-                backgroundColor: surface,
+                backgroundColor: notch,
                 left: prefix ? space[3] + 24 : space[3],
                 top: progress.interpolate({ inputRange: [0, 1], outputRange: [INPUT_HEIGHT[size] / 2 - 10, -8] }),
                 fontSize: progress.interpolate({ inputRange: [0, 1], outputRange: [LABEL_RESTING_SIZE, LABEL_FLOATING_SIZE] }),

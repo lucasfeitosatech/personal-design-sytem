@@ -1,0 +1,40 @@
+.frame { position: relative; display: flex; background: var(--ds-color-surface); border-radius: var(--ds-radius-sm); }
+.disabled { background: var(--ds-color-surface-raised); }
+.outline {
+  position: absolute; inset: -6px 0 0; margin: 0; padding: 0 var(--ds-space-2); pointer-events: none;
+  border: 1px solid var(--ds-color-border); border-radius: var(--ds-radius-sm);
+  transition: border-color var(--ds-motion-fast);
+}
+.legend {
+  width: auto; max-width: 0.01px; height: 11px; padding: 0; font-size: var(--ds-text-xs);
+  visibility: hidden; white-space: nowrap; transition: max-width var(--ds-motion-fast);
+}
+.legend > span { padding: 0 4px; }
+.input {
+  flex: 1; min-width: 0; resize: vertical; border: none; background: transparent;
+  padding: 12px var(--ds-space-3);
+  font-family: var(--ds-font-ui); font-size: var(--ds-text-base); line-height: 20px; color: var(--ds-color-text);
+}
+.input:focus { outline: none; }
+.input::placeholder { color: transparent; }
+/* Rests at the first line, not centred: a tall frame would put a centred label in the middle of the text. */
+.label {
+  position: absolute; left: var(--ds-space-3); top: 12px; transform-origin: left top;
+  pointer-events: none; max-width: calc(100% - var(--ds-space-5));
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-family: var(--ds-font-ui); font-size: var(--ds-text-base); color: var(--ds-color-text-tertiary);
+  transition: transform var(--ds-motion-fast), font-size var(--ds-motion-fast), color var(--ds-motion-fast);
+}
+.input:focus ~ .label,
+.input:not(:placeholder-shown) ~ .label {
+  transform: translateY(-18px); font-size: var(--ds-text-xs);
+  background: inherit; padding: 0 4px; margin-left: -4px;
+}
+.input:focus ~ .label { color: var(--ds-color-accent); }
+.input:focus ~ .outline, .input:not(:placeholder-shown) ~ .outline { border-color: var(--ds-color-accent); }
+.input:not(:focus) ~ .outline { border-color: var(--ds-color-border); }
+.input:focus ~ .outline { border-color: var(--ds-color-accent); }
+.input:focus ~ .outline > .legend, .input:not(:placeholder-shown) ~ .outline > .legend { max-width: 100%; }
+.invalid .label { color: var(--ds-color-overdue); }
+.invalid .outline, .invalid .input:focus ~ .outline { border-color: var(--ds-color-overdue); }
+@media (prefers-reduced-motion: reduce) { .label, .outline, .legend { transition: none; } }

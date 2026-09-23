@@ -1,0 +1,22 @@
+.wrap { display: flex; flex-direction: column; gap: var(--ds-space-1); }
+.row { display: flex; align-items: flex-start; }
+.disabled { opacity: 0.55; }
+.input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; }
+.control { display: flex; align-items: flex-start; gap: var(--ds-space-3); cursor: pointer; }
+.disabled .control { cursor: not-allowed; }
+.box {
+  flex: none; width: 20px; height: 20px; margin-top: 2px; display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--ds-color-pending); border-radius: var(--ds-radius-sm);
+  background: var(--ds-color-surface); transition: background var(--ds-motion-fast), border-color var(--ds-motion-fast);
+}
+.mark { color: transparent; font-size: 13px; font-weight: 600; line-height: 1; }
+.input:checked + .control .box,
+.input:indeterminate + .control .box { background: var(--ds-color-accent); border-color: var(--ds-color-accent); }
+.input:checked + .control .mark,
+.input:indeterminate + .control .mark { color: var(--ds-color-on-accent); }
+.input:focus-visible + .control .box { outline: 2px solid var(--ds-color-focus); outline-offset: 2px; }
+.invalid { border-color: var(--ds-color-overdue); }
+.labels { display: flex; flex-direction: column; gap: 2px; }
+.error { margin-left: calc(20px + var(--ds-space-3)); }
+@media (prefers-reduced-motion: reduce) { .box { transition: none; } }
+@media (max-width: 879px) { .control { min-height: var(--ds-tap); } }

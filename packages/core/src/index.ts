@@ -3,4 +3,7 @@ export * from './contracts/button';
 export * from './contracts/text';
 export * from './contracts/field';
 export * from './contracts/input';
+export * from './contracts/textarea';
+export * from './contracts/toggle';
+export * from './contracts/choice';
 export * from './contracts/surface';

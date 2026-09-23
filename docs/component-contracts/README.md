@@ -16,11 +16,20 @@ not remove a contract prop, rename it, or change what it means.
 | Spinner | yes | yes | `label` is required and announced on both |
 | Field | yes | yes | Web binds by `htmlFor`; native puts the label on the control and hides the visible one |
 | TextField | yes | yes | Binding differs (`target.value` vs `onChangeText`), contract does not |
+| Textarea | yes | yes | Label rests at the first line, not centred |
+| PasswordField | yes | yes | Reveal flips `type`, so a password manager still sees one field |
+| Switch | yes | yes | Commits on the spot; native uses the platform control |
+| Checkbox | yes | yes | Part of a form. `indeterminate` is a DOM property on the web and `"mixed"` on native |
+| RadioGroup | yes | yes | The group owns the label and the error, so a reader can count "2 of 3" |
 
 ## Known gaps
 
 - **Fonts on native.** The tokens carry CSS font stacks, which a device cannot use. UI text falls
   back to the system font and mono to Menlo or `monospace` until Libre Franklin and IBM Plex Mono
   are bundled into the app.
+- **The native notch.** A native border cannot be cut, so the floating label paints the colour
+  behind the frame. The component cannot know what that is, so `surfaceBehind` declares it and
+  defaults to the surface colour, which is right inside a Card. Without it a disabled field paints
+  its own grey fill over a white card and leaves a visible block.
 - **Line height.** The web sets a unitless ratio; the native Text leaves it to the platform rather
   than converting the ratio wrongly. Revisit when the fonts are bundled.
