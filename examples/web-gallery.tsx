@@ -1,10 +1,11 @@
 // Gallery: every component and state, for validating a tarball in a web app.
 import {
-  Button, Card, Checkbox, PasswordField, RadioGroup, Spinner, Switch, Text, Textarea, TextField,
+  Button, Card, Checkbox, Chip, Divider, EmptyState, PasswordField, RadioGroup, Section, Spinner,
+  Switch, Text, Textarea, TextField,
 } from '@lucasfeitosatech/components-react';
 import '@lucasfeitosatech/components-react/styles.css';
 import '@lucasfeitosatech/design-tokens/tokens.css';
-import { BUTTON_VARIANTS } from '@lucasfeitosatech/design-core';
+import { BUTTON_VARIANTS, CHIP_TONES } from '@lucasfeitosatech/design-core';
 import { space } from '@lucasfeitosatech/design-tokens';
 import { useState } from 'react';
 
@@ -16,6 +17,7 @@ export function WebGallery() {
   const [on, setOn] = useState(true);
   const [checked, setChecked] = useState<boolean | 'indeterminate'>('indeterminate');
   const [choice, setChoice] = useState('mensal');
+  const [picked, setPicked] = useState<string>('accent');
 
   return (
     <div style={{ display: 'grid', gap: space[4], padding: space[5], maxWidth: 420 }}>
@@ -56,6 +58,26 @@ export function WebGallery() {
         />
         <Spinner label="Carregando" />
       </Card>
+
+      <Section title="Etiquetas" meta="6 tons" action={<Text size="xs" tone="accent">ver todos</Text>}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: space[2] }}>
+          {CHIP_TONES.map((t) => (
+            <Chip key={t} label={t} tone={t} selected={picked === t} onClick={() => setPicked(t)} />
+          ))}
+        </div>
+        <Divider />
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: space[2] }}>
+          <Chip label="1.234,56" tone="neutral" mono />
+          <Chip label="removível" tone="accent" onRemove={() => {}} />
+        </div>
+      </Section>
+
+      <EmptyState
+        title="Nada registrado em setembro ainda."
+        body="Comece marcando uma prática ou escrevendo uma linha."
+        actions={<Button variant="secondary" size="sm">Escrever no diário</Button>}
+      />
+      <EmptyState tone="error" title="Não foi possível carregar." actions={<Button variant="primary" size="sm">Tentar de novo</Button>} />
     </div>
   );
 }

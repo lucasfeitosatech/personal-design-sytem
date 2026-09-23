@@ -21,6 +21,10 @@ not remove a contract prop, rename it, or change what it means.
 | Switch | yes | yes | Commits on the spot; native uses the platform control |
 | Checkbox | yes | yes | Part of a form. `indeterminate` is a DOM property on the web and `"mixed"` on native |
 | RadioGroup | yes | yes | The group owns the label and the error, so a reader can count "2 of 3" |
+| Chip | yes | yes | Semantic tones, not domain ones; an app maps paid to success and overdue to danger |
+| EmptyState | yes | yes | Always offers one way out; the error tone announces itself |
+| Section | yes | yes | Sentence case heading (D-18), mono meta, one quiet action |
+| Divider | yes | yes | Decorative and hidden from assistive technology; native uses the platform hairline |
 
 ## Known gaps
 

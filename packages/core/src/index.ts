@@ -6,4 +6,7 @@ export * from './contracts/input';
 export * from './contracts/textarea';
 export * from './contracts/toggle';
 export * from './contracts/choice';
+export * from './contracts/chip';
+export * from './contracts/empty-state';
+export * from './contracts/section';
 export * from './contracts/surface';

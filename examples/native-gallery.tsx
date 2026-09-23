@@ -1,11 +1,13 @@
 /** Gallery: every component and state, for validating a tarball on a device. */
 import {
-  Button, Card, Checkbox, PasswordField, RadioGroup, Spinner, Switch, Text, Textarea, TextField, ThemeProvider,
+  Button, Card, Checkbox, Chip, Divider, EmptyState, PasswordField, RadioGroup, Section, Spinner, Switch,
+  Text, Textarea, TextField, ThemeProvider,
 } from '@lucasfeitosatech/components-react-native';
 import { BUTTON_VARIANTS } from '@lucasfeitosatech/design-core';
 import { darkPalette, lightPalette, space } from '@lucasfeitosatech/design-tokens';
 import { useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, useColorScheme, View } from 'react-native';
+import { CHIP_TONES } from '@lucasfeitosatech/design-core';
 
 function Screen() {
   const [empty, setEmpty] = useState('');
@@ -15,6 +17,7 @@ function Screen() {
   const [on, setOn] = useState(true);
   const [checked, setChecked] = useState<boolean | 'indeterminate'>('indeterminate');
   const [choice, setChoice] = useState('mensal');
+  const [picked, setPicked] = useState('accent');
   const palette = useColorScheme() === 'dark' ? darkPalette : lightPalette;
 
   return (
@@ -59,6 +62,26 @@ function Screen() {
           />
           <Spinner label="Carregando" />
         </Card>
+
+        <Section title="Etiquetas" meta="6 tons" action={<Text size="xs" tone="accent">ver todos</Text>}>
+          <View style={styles.chips}>
+            {CHIP_TONES.map((t) => (
+              <Chip key={t} label={t} tone={t} selected={picked === t} onPress={() => setPicked(t)} />
+            ))}
+          </View>
+          <Divider />
+          <View style={styles.chips}>
+            <Chip label="1.234,56" tone="neutral" mono />
+            <Chip label="removível" tone="accent" onRemove={() => {}} />
+          </View>
+        </Section>
+
+        <EmptyState
+          title="Nada registrado em setembro ainda."
+          body="Comece marcando uma prática ou escrevendo uma linha."
+          actions={<Button variant="secondary" size="sm">Escrever no diário</Button>}
+        />
+        <EmptyState tone="error" title="Não foi possível carregar." actions={<Button variant="primary" size="sm">Tentar de novo</Button>} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -77,4 +100,5 @@ const styles = StyleSheet.create({
   content: { padding: space[4], gap: space[4] },
   card: { gap: space[4] },
   divider: { height: 1, backgroundColor: '#00000014' },
+  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
 });
