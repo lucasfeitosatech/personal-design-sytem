@@ -25,6 +25,9 @@ not remove a contract prop, rename it, or change what it means.
 | EmptyState | yes | yes | Always offers one way out; the error tone announces itself |
 | Section | yes | yes | Sentence case heading (D-18), mono meta, one quiet action |
 | Divider | yes | yes | Decorative and hidden from assistive technology; native uses the platform hairline |
+| Select | yes | yes | Two different controls: a combobox popover on the web, a bottom sheet on a device |
+| Modal | yes | yes | Centred dialog with focus trap on the web; bottom sheet with stacked actions on a device |
+| Toast | yes | yes | Auto-dismiss 6s, 10s with an action, paused on hover; an error never dismisses itself |
 
 ## Known gaps
 
@@ -35,5 +38,8 @@ not remove a contract prop, rename it, or change what it means.
   behind the frame. The component cannot know what that is, so `surfaceBehind` declares it and
   defaults to the surface colour, which is right inside a Card. Without it a disabled field paints
   its own grey fill over a white card and leaves a visible block.
+- **Sheet gestures.** The native sheet closes by tapping the scrim, not by dragging. Dragging needs
+  a gesture library and which one is the application's decision, so the sheet stays gesture-free and
+  an app can wrap it.
 - **Line height.** The web sets a unitless ratio; the native Text leaves it to the platform rather
   than converting the ratio wrongly. Revisit when the fonts are bundled.

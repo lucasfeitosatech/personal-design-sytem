@@ -1,0 +1,25 @@
+.region {
+  position: fixed; z-index: 70; left: var(--ds-space-5); bottom: var(--ds-space-5);
+  display: flex; flex-direction: column; gap: var(--ds-space-2); max-width: 420px;
+}
+.toast {
+  display: flex; align-items: center; gap: var(--ds-space-3);
+  padding: var(--ds-space-3) var(--ds-space-4);
+  background: var(--ds-color-text); color: var(--ds-color-bg);
+  border-radius: var(--ds-radius-md); box-shadow: var(--ds-shadow-overlay);
+}
+.error { background: var(--ds-color-overdue); color: var(--ds-color-on-overdue); }
+.message { flex: 1; min-width: 0; color: inherit; }
+.action {
+  border: none; background: transparent; padding: 4px 0; color: inherit; cursor: pointer;
+  font: inherit; font-size: var(--ds-text-md); font-weight: 600; text-decoration: underline; text-underline-offset: 3px;
+  white-space: nowrap;
+}
+.dismiss {
+  display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px;
+  border: none; border-radius: var(--ds-radius-sm); background: transparent; color: inherit;
+  cursor: pointer; font-size: 16px; line-height: 1; opacity: 0.8;
+}
+.dismiss:hover { opacity: 1; }
+.action:focus-visible, .dismiss:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+@media (max-width: 879px) { .region { left: var(--ds-space-4); right: var(--ds-space-4); max-width: none; } }

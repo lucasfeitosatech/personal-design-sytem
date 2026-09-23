@@ -1,7 +1,7 @@
 // Gallery: every component and state, for validating a tarball in a web app.
 import {
-  Button, Card, Checkbox, Chip, Divider, EmptyState, PasswordField, RadioGroup, Section, Spinner,
-  Switch, Text, Textarea, TextField,
+  Button, Card, Checkbox, Chip, Divider, EmptyState, Modal, PasswordField, RadioGroup, Section,
+  Select, Spinner, Switch, Text, Textarea, TextField, Toast, ToastRegion,
 } from '@lucasfeitosatech/components-react';
 import '@lucasfeitosatech/components-react/styles.css';
 import '@lucasfeitosatech/design-tokens/tokens.css';
@@ -18,6 +18,9 @@ export function WebGallery() {
   const [checked, setChecked] = useState<boolean | 'indeterminate'>('indeterminate');
   const [choice, setChoice] = useState('mensal');
   const [picked, setPicked] = useState<string>('accent');
+  const [banco, setBanco] = useState('nubank');
+  const [confirm, setConfirm] = useState(false);
+  const [toast, setToast] = useState<'default' | 'error' | null>(null);
 
   return (
     <div style={{ display: 'grid', gap: space[4], padding: space[5], maxWidth: 420 }}>
@@ -78,6 +81,47 @@ export function WebGallery() {
         actions={<Button variant="secondary" size="sm">Escrever no diário</Button>}
       />
       <EmptyState tone="error" title="Não foi possível carregar." actions={<Button variant="primary" size="sm">Tentar de novo</Button>} />
+
+      <Card style={{ display: 'grid', gap: space[4] }}>
+        <Select
+          label="Banco"
+          hint="popover ancorado, com setas e busca por letra"
+          value={banco}
+          onValueChange={setBanco}
+          options={[
+            { value: 'nubank', label: 'Nubank', description: 'conta corrente' },
+            { value: 'itau', label: 'Itaú' },
+            { value: 'bb', label: 'Banco do Brasil' },
+            { value: 'caixa', label: 'Caixa', disabled: true },
+          ]}
+        />
+        <Select label="Com erro" error="Escolha um banco" options={[{ value: 'a', label: 'Opção A' }]} onValueChange={() => {}} />
+        <Button variant="danger" onClick={() => setConfirm(true)}>Abrir confirmação</Button>
+        <Button variant="secondary" onClick={() => setToast('default')}>Mostrar aviso</Button>
+        <Button variant="ghost" onClick={() => setToast('error')}>Mostrar erro</Button>
+      </Card>
+
+      <Modal
+        open={confirm}
+        alert
+        title="Excluir a conta Netflix?"
+        body="As ocorrências já pagas continuam no histórico. Isso não pode ser desfeito."
+        primaryAction={{ label: 'Excluir', onPress: () => setConfirm(false) }}
+        secondaryAction={{ label: 'Cancelar' }}
+        onClose={() => setConfirm(false)}
+      />
+
+      <ToastRegion>
+        {toast ? (
+          <Toast
+            message={toast === 'error' ? 'Não foi possível salvar.' : 'Conta marcada como paga.'}
+            tone={toast}
+            actionLabel={toast === 'default' ? 'Desfazer' : undefined}
+            onAction={() => setToast(null)}
+            onDismiss={() => setToast(null)}
+          />
+        ) : null}
+      </ToastRegion>
     </div>
   );
 }

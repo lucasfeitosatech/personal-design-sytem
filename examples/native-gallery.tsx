@@ -1,7 +1,7 @@
 /** Gallery: every component and state, for validating a tarball on a device. */
 import {
-  Button, Card, Checkbox, Chip, Divider, EmptyState, PasswordField, RadioGroup, Section, Spinner, Switch,
-  Text, Textarea, TextField, ThemeProvider,
+  Button, Card, Checkbox, Chip, Divider, EmptyState, Modal, PasswordField, RadioGroup, Section, Select,
+  Spinner, Switch, Text, Textarea, TextField, ThemeProvider, Toast, ToastRegion,
 } from '@lucasfeitosatech/components-react-native';
 import { BUTTON_VARIANTS } from '@lucasfeitosatech/design-core';
 import { darkPalette, lightPalette, space } from '@lucasfeitosatech/design-tokens';
@@ -18,6 +18,9 @@ function Screen() {
   const [checked, setChecked] = useState<boolean | 'indeterminate'>('indeterminate');
   const [choice, setChoice] = useState('mensal');
   const [picked, setPicked] = useState('accent');
+  const [banco, setBanco] = useState('nubank');
+  const [confirm, setConfirm] = useState(false);
+  const [toast, setToast] = useState<'default' | 'error' | null>(null);
   const palette = useColorScheme() === 'dark' ? darkPalette : lightPalette;
 
   return (
@@ -82,7 +85,50 @@ function Screen() {
           actions={<Button variant="secondary" size="sm">Escrever no diário</Button>}
         />
         <EmptyState tone="error" title="Não foi possível carregar." actions={<Button variant="primary" size="sm">Tentar de novo</Button>} />
+
+        <Card style={styles.card}>
+          <Select
+            label="Banco"
+            hint="abre uma folha, não um popover"
+            value={banco}
+            onValueChange={setBanco}
+            options={[
+              { value: 'nubank', label: 'Nubank', description: 'conta corrente' },
+              { value: 'itau', label: 'Itaú' },
+              { value: 'bb', label: 'Banco do Brasil' },
+              { value: 'caixa', label: 'Caixa', disabled: true },
+            ]}
+          />
+          <Select label="Vazio" placeholder="Selecione" options={[{ value: 'a', label: 'Opção A' }]} onValueChange={() => {}} />
+          <Select label="Com erro" error="Escolha um banco" options={[{ value: 'a', label: 'Opção A' }]} onValueChange={() => {}} />
+          <Button variant="danger" onPress={() => setConfirm(true)}>Abrir confirmação</Button>
+          <Button variant="secondary" onPress={() => setToast('default')}>Mostrar aviso</Button>
+          <Button variant="ghost" onPress={() => setToast('error')}>Mostrar erro</Button>
+        </Card>
       </ScrollView>
+
+      <Modal
+        open={confirm}
+        alert
+        title="Excluir a conta Netflix?"
+        body="As ocorrências já pagas continuam no histórico. Isso não pode ser desfeito."
+        primaryAction={{ label: 'Excluir', onPress: () => setConfirm(false) }}
+        secondaryAction={{ label: 'Cancelar' }}
+        onClose={() => setConfirm(false)}
+        safeBottom={34}
+      />
+
+      <ToastRegion tabBar={0} safeBottom={34}>
+        {toast ? (
+          <Toast
+            message={toast === 'error' ? 'Não foi possível salvar.' : 'Conta marcada como paga.'}
+            tone={toast}
+            actionLabel={toast === 'default' ? 'Desfazer' : undefined}
+            onAction={() => setToast(null)}
+            onDismiss={() => setToast(null)}
+          />
+        ) : null}
+      </ToastRegion>
     </SafeAreaView>
   );
 }
