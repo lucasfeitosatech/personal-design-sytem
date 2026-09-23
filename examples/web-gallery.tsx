@@ -1,29 +1,29 @@
-// Temporary: proves the published package resolves, types and ships its stylesheet.
-import { Button, Card, Field, Spinner, Text, TextField } from '@lucasfeitosatech/components-react';
+// Gallery: every component and every input state, for validating a tarball in a web app.
+import { Button, Card, Spinner, Text, TextField } from '@lucasfeitosatech/components-react';
 import '@lucasfeitosatech/components-react/styles.css';
 import '@lucasfeitosatech/design-tokens/tokens.css';
-import { BUTTON_VARIANTS, type ButtonVariant } from '@lucasfeitosatech/design-core';
-import { lightPalette, space } from '@lucasfeitosatech/design-tokens';
+import { BUTTON_VARIANTS } from '@lucasfeitosatech/design-core';
+import { space } from '@lucasfeitosatech/design-tokens';
+import { useState } from 'react';
 
-export function DsSmoke() {
-  const variants: readonly ButtonVariant[] = BUTTON_VARIANTS;
+export function WebGallery() {
+  const [empty, setEmpty] = useState('');
+  const [filled, setFilled] = useState('Lucas Feitosa');
   return (
-    <Card tone="raised" style={{ display: 'grid', gap: space[3] }}>
-      <Text as="h2" size="xl" weight="semibold">
-        Amostra
-      </Text>
-      <Text size="sm" tone="tertiary" mono>
-        {lightPalette.accent}
-      </Text>
-      {variants.map((v) => (
-        <Button key={v} variant={v}>
-          {v}
-        </Button>
-      ))}
-      <TextField label="Nome" hint="Como te chamam" onValueChange={() => {}} />
-      <TextField label="Valor" mono mode="decimal" error="Obrigatório" prefix="R$" />
-      <Field label="Bloco">{(control) => <input {...control} />}</Field>
-      <Spinner label="Carregando" />
-    </Card>
+    <div style={{ display: 'grid', gap: space[4], padding: space[5], maxWidth: 420 }}>
+      <Text as="h2" size="2xl" weight="semibold">Planner</Text>
+      <Card tone="raised" style={{ display: 'grid', gap: space[3] }}>
+        {BUTTON_VARIANTS.map((v) => <Button key={v} variant={v}>{v}</Button>)}
+        <Button variant="primary" loading>carregando</Button>
+      </Card>
+      <Card style={{ display: 'grid', gap: space[4] }}>
+        <TextField label="Vazio" hint="rótulo em repouso" value={empty} onValueChange={setEmpty} />
+        <TextField label="Preenchido" value={filled} onValueChange={setFilled} />
+        <TextField label="Valor" mono mode="decimal" value="1.234,56" onValueChange={() => {}} prefix="R$" />
+        <TextField label="Com erro" error="Obrigatório" value="" onValueChange={() => {}} />
+        <TextField label="Desabilitado" disabled value="não editável" onValueChange={() => {}} />
+        <Spinner label="Carregando" />
+      </Card>
+    </div>
   );
 }

@@ -1,20 +1,102 @@
 .frame {
-  display: flex; align-items: center; gap: var(--ds-space-2);
-  border: 1px solid var(--ds-color-border); border-radius: var(--ds-radius-sm);
-  background: var(--ds-color-surface); transition: border-color var(--ds-motion-fast);
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+  background: var(--ds-color-surface);
+  border-radius: var(--ds-radius-sm);
+  padding: 0 var(--ds-space-3);
 }
-.frame:focus-within { border-color: var(--ds-color-accent); }
-.md { min-height: 38px; padding: 0 var(--ds-space-3); }
-.sm { min-height: 32px; padding: 0 var(--ds-space-2); }
-.invalid { border-color: var(--ds-color-overdue); }
+/* `--_lift` is half the frame height plus the 6px the outline sits above it, so the lifted label
+   lands centred on the border line whatever the font metrics are. A percentage cannot: it resolves
+   against the label's own line box. */
+.md { min-height: 56px; --_lift: 34px; }
+.sm { min-height: 48px; --_lift: 30px; }
 .disabled { background: var(--ds-color-surface-raised); }
+
+/* The border lives on the fieldset so the legend can notch it. */
+.outline {
+  position: absolute;
+  inset: -6px 0 0;
+  margin: 0;
+  padding: 0 var(--ds-space-2);
+  pointer-events: none;
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-sm);
+  transition: border-color var(--ds-motion-fast);
+}
+.legend {
+  width: auto;
+  max-width: 0.01px;
+  height: 11px;
+  padding: 0;
+  font-size: var(--ds-text-xs);
+  visibility: hidden;
+  white-space: nowrap;
+  transition: max-width var(--ds-motion-fast);
+}
+.legend > span { padding: 0 4px; }
+
 .input {
-  flex: 1; min-width: 0; border: none; background: transparent; padding: 0;
-  font-family: var(--ds-font-ui); font-size: var(--ds-text-base); color: var(--ds-color-text);
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  padding: 0;
+  font-family: var(--ds-font-ui);
+  font-size: var(--ds-text-base);
+  color: var(--ds-color-text);
 }
 .input:focus { outline: none; }
-/* Placeholder uses the tertiary tone: text-disabled fails contrast (D-20). */
-.input::placeholder { color: var(--ds-color-text-tertiary); }
+/* Transparent until the label lifts, so the two never overlap. */
+.input::placeholder { color: transparent; }
 .mono { font-family: var(--ds-font-mono); font-variant-numeric: tabular-nums; }
+
+.label {
+  position: absolute;
+  left: var(--ds-space-3);
+  top: 50%;
+  transform: translateY(-50%);
+  transform-origin: left top;
+  pointer-events: none;
+  max-width: calc(100% - var(--ds-space-5));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--ds-font-ui);
+  font-size: var(--ds-text-base);
+  color: var(--ds-color-text-tertiary);
+  transition: transform var(--ds-motion-fast), font-size var(--ds-motion-fast), color var(--ds-motion-fast);
+}
+.hasPrefix .label { left: calc(var(--ds-space-3) + 1.6em); }
+
+/* Lifted: focused, filled, or autofilled. Autofill never fires a change event. */
+.input:focus ~ .label,
+.input:not(:placeholder-shown) ~ .label,
+.input:-webkit-autofill ~ .label {
+  transform: translateY(calc(-50% - var(--_lift)));
+  font-size: var(--ds-text-xs);
+  left: var(--ds-space-3);
+  background: inherit;
+  padding: 0 4px;
+  margin-left: -4px;
+}
+.input:focus ~ .label { color: var(--ds-color-accent); }
+.input:focus ~ .outline,
+.input:not(:placeholder-shown) ~ .outline,
+.input:-webkit-autofill ~ .outline { border-color: var(--ds-color-accent); }
+.input:not(:focus) ~ .outline { border-color: var(--ds-color-border); }
+.input:focus ~ .outline { border-color: var(--ds-color-accent); }
+.input:focus ~ .outline > .legend,
+.input:not(:placeholder-shown) ~ .outline > .legend,
+.input:-webkit-autofill ~ .outline > .legend { max-width: 100%; }
+
+.invalid .label { color: var(--ds-color-overdue); }
+.invalid .outline,
+.invalid .input:focus ~ .outline { border-color: var(--ds-color-overdue); }
+
 .affix { display: inline-flex; align-items: center; color: var(--ds-color-text-tertiary); font-size: var(--ds-text-md); }
-@media (max-width: 879px) { .md, .sm { min-height: var(--ds-tap); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .label, .outline, .legend { transition: none; }
+}

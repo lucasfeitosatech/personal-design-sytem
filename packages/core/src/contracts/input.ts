@@ -22,5 +22,12 @@ export type TextFieldContract = {
   mono?: boolean;
 };
 
-/** Minimum height per size, in points, before the touch-target floor is applied. */
-export const INPUT_MIN_HEIGHT: Record<BaseSize, number> = { sm: 32, md: 38 };
+/**
+ * Height per size, in points. A floating label needs room for two lines of content inside the
+ * frame, so these are taller than a button of the same size.
+ */
+export const INPUT_HEIGHT: Record<BaseSize, number> = { sm: 48, md: 56 };
+
+/** The label at rest, and lifted onto the border line. Font sizes in points. */
+export const LABEL_RESTING_SIZE = 14;
+export const LABEL_FLOATING_SIZE = 11;

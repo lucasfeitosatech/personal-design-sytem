@@ -20,7 +20,7 @@
     "./styles.css": "./dist/index.css"
   },
   "scripts": {
-    "build": "tsup",
+    "build": "vite build",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "clean": "rm -rf dist *.tgz"
@@ -36,6 +36,8 @@
     "@types/react-dom": "^19.3.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
-    "tsup": "^8.5.0"
+    "tsup": "^8.5.0",
+    "vite": "^8.3.0",
+    "vite-plugin-dts": "^5.1.1"
   }
 }
