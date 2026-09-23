@@ -39,3 +39,26 @@ npm run typecheck
 
 `design-tokens` generates `src/` from `source/*.tokens.json` and then compiles it, so a token change
 is visible as a source diff before it becomes a build artifact.
+
+`components-react` builds with Vite rather than tsup: it ships CSS Modules, and tsup routes CSS
+through its own pipeline, emitting the classes globally with no mapping. That builds and typechecks
+cleanly and renders with no styles at all.
+
+## Consuming, before there is a registry
+
+```
+npm run pack:all                              # builds everything into dist-packages/
+npm run install-into -- ../<app>              # copies what that surface needs and installs
+```
+
+The tarballs land in `<app>/design-system/` and the dependency is a path inside the app, so a clone
+of the app carries its own copy and the server deploy needs nothing else. The surface is detected
+from the app's dependencies: an app with `react-native` gets the native library, anything else gets
+the web one.
+
+Two traps the script handles. It removes the installed folder before installing, because npm
+resolves a `file:` dependency by path and version and will otherwise keep the previous contents of a
+rebuilt tarball whose version did not change. And it writes `./design-system/...`, because npm reads
+a bare `a/b` argument as a GitHub shorthand rather than a path.
+
+Not `vendor/`: a React Native project already uses that for its Ruby gems.
