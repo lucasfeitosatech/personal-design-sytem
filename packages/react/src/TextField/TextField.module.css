@@ -82,15 +82,16 @@
   margin-left: -4px;
 }
 .input:focus ~ .label { color: var(--ds-color-accent); }
-.input:focus ~ .outline,
-.input:not(:placeholder-shown) ~ .outline,
-.input:-webkit-autofill ~ .outline { border-color: var(--ds-color-accent); }
 .input:not(:focus) ~ .outline { border-color: var(--ds-color-border); }
-.input:focus ~ .outline { border-color: var(--ds-color-accent); }
+/* 2px on focus, with the padding pulled in by 1 so the frame does not jump. */
+.input:focus ~ .outline { border-color: var(--ds-color-accent); border-width: 2px; padding: 0 calc(var(--ds-space-2) - 1px); }
+.input:not(:placeholder-shown):not(:focus) ~ .outline,
+.input:-webkit-autofill:not(:focus) ~ .outline { border-color: var(--ds-color-border); }
 .input:focus ~ .outline > .legend,
 .input:not(:placeholder-shown) ~ .outline > .legend,
 .input:-webkit-autofill ~ .outline > .legend { max-width: 100%; }
 
+.frame:hover .input:not(:focus) ~ .outline { border-color: var(--ds-color-text-tertiary); }
 .invalid .label { color: var(--ds-color-overdue); }
 .invalid .outline,
 .invalid .input:focus ~ .outline { border-color: var(--ds-color-overdue); }

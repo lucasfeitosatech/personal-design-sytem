@@ -25,3 +25,12 @@
 .icon { display: inline-flex; align-items: center; }
 .label { display: inline-flex; align-items: center; }
 @media (max-width: 879px) { .md, .sm { min-height: var(--ds-tap); } }
+
+/* `loading` must be visible, not only announced: aria-busy alone is invisible to everyone else. */
+.spinner {
+  width: 13px; height: 13px; flex: none; border-radius: var(--ds-radius-pill);
+  border: 2px solid currentColor; border-top-color: transparent; opacity: 0.8;
+  animation: button-spin 700ms linear infinite;
+}
+@keyframes button-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 2s; } }

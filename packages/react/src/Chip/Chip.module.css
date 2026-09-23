@@ -14,6 +14,7 @@
 .tone-neutral { background: var(--ds-color-surface-raised); color: var(--ds-color-text-secondary); border-color: var(--ds-color-border); }
 .tone-accent { background: var(--ds-color-accent-soft); color: var(--ds-color-accent); border-color: var(--ds-color-accent-border); }
 .tone-success { background: var(--ds-color-paid-soft); color: var(--ds-color-paid); border-color: var(--ds-color-accent-border); }
+.tone-pending { background: var(--ds-color-surface); color: var(--ds-color-text-secondary); border-color: var(--ds-color-pending); border-style: dashed; }
 .tone-warning { background: var(--ds-color-due-soon-soft); color: var(--ds-color-due-soon); border-color: var(--ds-color-due-soon-mark); }
 .tone-danger { background: var(--ds-color-overdue-soft); color: var(--ds-color-overdue); border-color: var(--ds-color-overdue-border); }
 .tone-muted { background: var(--ds-color-skipped-soft); color: var(--ds-color-skipped); border-color: var(--ds-color-border); }

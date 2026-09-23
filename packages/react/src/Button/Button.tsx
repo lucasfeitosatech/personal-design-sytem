@@ -16,7 +16,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   const classes = [styles.button, styles[variant], styles[size], block ? styles.block : '', className ?? ''].filter(Boolean).join(' ');
   return (
     <button ref={ref} type={type} className={classes} disabled={disabled || loading} aria-busy={loading || undefined} {...rest}>
-      {icon ? (
+      {loading ? <span className={styles.spinner} aria-hidden="true" /> : null}
+      {icon && !loading ? (
         <span className={styles.icon} aria-hidden="true">
           {icon}
         </span>

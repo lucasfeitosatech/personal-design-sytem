@@ -31,10 +31,10 @@
   background: inherit; padding: 0 4px; margin-left: -4px;
 }
 .input:focus ~ .label { color: var(--ds-color-accent); }
-.input:focus ~ .outline, .input:not(:placeholder-shown) ~ .outline { border-color: var(--ds-color-accent); }
 .input:not(:focus) ~ .outline { border-color: var(--ds-color-border); }
-.input:focus ~ .outline { border-color: var(--ds-color-accent); }
+.input:focus ~ .outline { border-color: var(--ds-color-accent); border-width: 2px; padding: 0 calc(var(--ds-space-2) - 1px); }
 .input:focus ~ .outline > .legend, .input:not(:placeholder-shown) ~ .outline > .legend { max-width: 100%; }
 .invalid .label { color: var(--ds-color-overdue); }
+.frame:hover .input:not(:focus) ~ .outline { border-color: var(--ds-color-text-tertiary); }
 .invalid .outline, .invalid .input:focus ~ .outline { border-color: var(--ds-color-overdue); }
 @media (prefers-reduced-motion: reduce) { .label, .outline, .legend { transition: none; } }

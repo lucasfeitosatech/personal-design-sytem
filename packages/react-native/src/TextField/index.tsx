@@ -55,6 +55,8 @@ export function TextField({
   }, [lifted, progress]);
 
   const borderColor = error ? palette.overdue : focused ? palette.accent : palette.border;
+  // 2px on focus, the padding pulled in by 1 so the frame keeps its size.
+  const borderWidth = focused ? 2 : 1;
   const labelColor = error ? palette.overdue : focused ? palette.accent : palette.textTertiary;
   const fill = disabled ? palette.surfaceRaised : palette.surface;
   // Not the fill: a disabled field is grey inside, but the notch opens onto whatever is behind it.
@@ -63,7 +65,7 @@ export function TextField({
   return (
     <Field label={label} hideLabel hint={hint} error={error} required={required} disabled={disabled}>
       {(control) => (
-        <View style={[styles.frame, { minHeight: INPUT_HEIGHT[size], borderColor, backgroundColor: fill }]}>
+        <View style={[styles.frame, { minHeight: INPUT_HEIGHT[size], borderColor, borderWidth, backgroundColor: fill, paddingHorizontal: (size === 'sm' ? space[2] : space[3]) - (borderWidth - 1) }]}>
           <Animated.Text
             pointerEvents="none"
             numberOfLines={1}

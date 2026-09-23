@@ -1,4 +1,4 @@
-import type { ChipContract } from '@lucasfeitosatech/design-core';
+import { CHIP_TONE_GLYPH, type ChipContract } from '@lucasfeitosatech/design-core';
 import styles from './Chip.module.css';
 
 export type ChipProps = ChipContract & {
@@ -13,9 +13,9 @@ export function Chip({ label, tone = 'neutral', icon, mono = false, selected, on
     .join(' ');
   const body = (
     <>
-      {icon ? (
+      {icon ?? CHIP_TONE_GLYPH[tone] ? (
         <span className={styles.icon} aria-hidden="true">
-          {icon}
+          {icon ?? CHIP_TONE_GLYPH[tone]}
         </span>
       ) : null}
       <span className={styles.label}>{label}</span>

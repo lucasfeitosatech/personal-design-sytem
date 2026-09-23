@@ -1,4 +1,4 @@
-import { CHIP_TONE_TOKEN, type ChipContract } from '@lucasfeitosatech/design-core';
+import { CHIP_TONE_GLYPH, CHIP_TONE_TOKEN, type ChipContract } from '@lucasfeitosatech/design-core';
 import type { Palette } from '@lucasfeitosatech/design-tokens';
 import { Pressable, View } from 'react-native';
 import { Text } from '../Text';
@@ -20,7 +20,7 @@ export function Chip({ label, tone = 'neutral', icon, mono = false, selected, on
 
   const body = (
     <View style={styles.inner}>
-      {icon}
+      {icon ?? (CHIP_TONE_GLYPH[tone] ? <Text size="xs" style={{ color: foreground }}>{CHIP_TONE_GLYPH[tone]}</Text> : null)}
       <Text size="xs" weight="medium" mono={mono} style={{ color: foreground }}>
         {label}
       </Text>
@@ -35,12 +35,12 @@ export function Chip({ label, tone = 'neutral', icon, mono = false, selected, on
           disabled={disabled}
           accessibilityRole="button"
           accessibilityState={{ selected, disabled }}
-          style={[styles.chip, { backgroundColor: background, borderColor: border, borderWidth: selected ? 2 : 1 }, disabled ? styles.disabled : null]}
+          style={[styles.chip, { backgroundColor: background, borderColor: border, borderWidth: selected ? 2 : 1, borderStyle: tone === 'pending' ? 'dashed' : 'solid' }, disabled ? styles.disabled : null]}
         >
           {body}
         </Pressable>
       ) : (
-        <View style={[styles.chip, { backgroundColor: background, borderColor: border }]}>{body}</View>
+        <View style={[styles.chip, { backgroundColor: background, borderColor: border, borderWidth: 1, borderStyle: tone === 'pending' ? 'dashed' : 'solid' }]}>{body}</View>
       )}
       {onRemove ? (
         <Pressable

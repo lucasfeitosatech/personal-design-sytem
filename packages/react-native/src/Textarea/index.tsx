@@ -1,4 +1,5 @@
 import { TEXTAREA_LINE_HEIGHT, TEXTAREA_PADDING_Y, type FieldContract, type TextareaContract } from '@lucasfeitosatech/design-core';
+import { space } from '@lucasfeitosatech/design-tokens';
 import { useEffect, useRef, useState } from 'react';
 import { Animated, TextInput, View, type TextInputProps } from 'react-native';
 import { Field } from '../Field';
@@ -25,6 +26,8 @@ export function Textarea({ label, hint, error, required, disabled, rows = 4, max
   }, [lifted, progress]);
 
   const borderColor = error ? palette.overdue : focused ? palette.accent : palette.border;
+  // 2px on focus, the padding pulled in by 1 so the frame keeps its size.
+  const borderWidth = focused ? 2 : 1;
   const fill = disabled ? palette.surfaceRaised : palette.surface;
   const notch = surfaceBehind ?? palette.surface;
   const minHeight = rows * TEXTAREA_LINE_HEIGHT + TEXTAREA_PADDING_Y * 2;
@@ -32,7 +35,7 @@ export function Textarea({ label, hint, error, required, disabled, rows = 4, max
   return (
     <Field label={label} hideLabel hint={hint} error={error} required={required} disabled={disabled}>
       {(control) => (
-        <View style={[styles.frame, { minHeight, borderColor, backgroundColor: fill }]}>
+        <View style={[styles.frame, { minHeight, borderColor, borderWidth, backgroundColor: fill, paddingHorizontal: space[3] - (borderWidth - 1) }]}>
           <Animated.Text
             pointerEvents="none"
             numberOfLines={1}
