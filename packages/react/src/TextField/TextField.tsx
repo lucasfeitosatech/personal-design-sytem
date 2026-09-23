@@ -3,7 +3,7 @@ import { forwardRef, type InputHTMLAttributes, type ReactNode } from 'react';
 import { Field } from '../Field';
 import styles from './TextField.module.css';
 
-export type TextFieldProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'id' | 'size' | 'value' | 'onChange' | 'readOnly' | 'prefix'> &
+export type TextFieldProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'id' | 'size' | 'value' | 'readOnly' | 'prefix'> &
   Omit<FieldContract, 'children'> &
   TextFieldContract & {
     /** Static text inside the frame, before the value. */
@@ -20,7 +20,7 @@ export type TextFieldProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'id' | 
  * single space: an empty placeholder would make the input look filled from the first paint.
  */
 export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function TextField(
-  { label, hint, error, required, disabled, size = 'md', secret = false, mode, mono = false, align = 'left', readOnly, prefix, suffix, className, value, onValueChange, placeholder = ' ', ...rest },
+  { label, hint, error, required, disabled, size = 'md', secret = false, mode, mono = false, align = 'left', readOnly, prefix, suffix, className, value, onChange, onValueChange, placeholder = ' ', ...rest },
   ref,
 ) {
   return (
@@ -44,7 +44,10 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function T
             readOnly={readOnly}
             value={value}
             placeholder={placeholder}
-            onChange={(event) => onValueChange?.(event.target.value)}
+            onChange={(event) => {
+              onChange?.(event);
+              onValueChange?.(event.target.value);
+            }}
             {...control}
             {...rest}
           />

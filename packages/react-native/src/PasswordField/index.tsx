@@ -6,12 +6,14 @@ import { useTheme } from '../theme/ThemeProvider';
 import { styles } from './styles';
 
 export type PasswordFieldProps = Omit<TextFieldProps, 'secret' | 'suffix' | 'mode'> & {
-  showLabel?: string;
-  hideLabel_?: string;
+  /** Accessible name of the reveal control while the value is hidden. */
+  revealLabel?: string;
+  /** And while it is shown. */
+  concealLabel?: string;
 };
 
 /** A TextField that hides its value, with a reveal control inside the frame. */
-export function PasswordField({ showLabel = 'Mostrar senha', hideLabel_ = 'Ocultar senha', ...rest }: PasswordFieldProps) {
+export function PasswordField({ revealLabel = 'Mostrar senha', concealLabel = 'Ocultar senha', ...rest }: PasswordFieldProps) {
   const [revealed, setRevealed] = useState(false);
   const { palette } = useTheme();
   return (
@@ -24,7 +26,7 @@ export function PasswordField({ showLabel = 'Mostrar senha', hideLabel_ = 'Ocult
         <Pressable
           onPress={() => setRevealed((r) => !r)}
           accessibilityRole="button"
-          accessibilityLabel={revealed ? hideLabel_ : showLabel}
+          accessibilityLabel={revealed ? concealLabel : revealLabel}
           accessibilityState={{ selected: revealed }}
           hitSlop={8}
           style={styles.reveal}
