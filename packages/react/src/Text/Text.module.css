@@ -1,0 +1,23 @@
+.text { margin: 0; font-family: var(--ds-font-ui); line-height: 1.45; }
+.mono { font-family: var(--ds-font-mono); font-variant-numeric: tabular-nums; }
+.clamp { display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; }
+
+.size-xs { font-size: var(--ds-text-xs); }
+.size-sm { font-size: var(--ds-text-sm); }
+.size-md { font-size: var(--ds-text-md); }
+.size-base { font-size: var(--ds-text-base); }
+.size-lg { font-size: var(--ds-text-lg); }
+.size-xl { font-size: var(--ds-text-xl); line-height: 1.3; }
+.size-2xl { font-size: var(--ds-text-2xl); line-height: 1.25; }
+
+/* Mirrors TEXT_TONE_TOKEN in design-core. Change both together. */
+.tone-default { color: var(--ds-color-text); }
+.tone-secondary { color: var(--ds-color-text-secondary); }
+.tone-tertiary { color: var(--ds-color-text-tertiary); }
+.tone-disabled { color: var(--ds-color-text-disabled); }
+.tone-accent { color: var(--ds-color-accent); }
+.tone-danger { color: var(--ds-color-overdue); }
+
+.weight-regular { font-weight: 400; }
+.weight-medium { font-weight: 500; }
+.weight-semibold { font-weight: 600; }

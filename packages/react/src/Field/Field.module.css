@@ -1,0 +1,2 @@
+.field { display: flex; flex-direction: column; gap: var(--ds-space-1); }
+.label { display: block; }

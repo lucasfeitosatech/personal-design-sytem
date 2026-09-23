@@ -1,0 +1,10 @@
+.wrap { display: inline-flex; align-items: center; gap: var(--ds-space-2); }
+.ring {
+  display: inline-block; border-radius: var(--ds-radius-pill);
+  border: 2px solid var(--ds-color-border); border-top-color: var(--ds-color-accent);
+  animation: spin 700ms linear infinite;
+}
+.md { width: 20px; height: 20px; }
+.sm { width: 14px; height: 14px; border-width: 1.5px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .ring { animation-duration: 2s; } }

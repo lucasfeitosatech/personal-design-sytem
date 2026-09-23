@@ -1,0 +1,5 @@
+.card { border: 1px solid var(--ds-color-border); border-radius: var(--ds-radius-md); padding: var(--ds-space-4); }
+.flush { padding: 0; overflow: hidden; }
+.tone-default { background: var(--ds-color-surface); }
+.tone-raised { background: var(--ds-color-surface-raised); }
+.tone-muted { background: var(--ds-color-surface-muted); }
