@@ -1,0 +1,34 @@
+{
+  "name": "@lucasfeitosatech/components-react-native",
+  "version": "0.1.0",
+  "description": "React Native components of the design system, for iOS and Android.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "react-native": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "clean": "rm -rf *.tgz"
+  },
+  "peerDependencies": {
+    "@lucasfeitosatech/design-core": "^0.1.0",
+    "@lucasfeitosatech/design-tokens": "^0.1.0",
+    "react": ">=19",
+    "react-native": ">=0.80"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "react": "^19.3.0",
+    "react-native": "^0.87.1"
+  }
+}

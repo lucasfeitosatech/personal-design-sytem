@@ -1,46 +1,41 @@
 # Design system
 
-One identity, one contract, two renderers: React (web) and React Native.
+Reusable components for React and React Native, one identity across both. Four packages published
+from one repository, so a token change and the two implementations that follow it land together.
 
-```
-tokens/source/   DTCG JSON — the only place a value is edited
-tokens/core/     shared contract vocabulary (sizes, variants) as const arrays + types
-src/headless/    platform-free logic: validation, formatting, masks, state
-src/web/         React DOM components + CSS Modules
-src/native/      React Native components
-docs/            the design decisions and one contract per primitive
-```
+| Package | Serves | Ships |
+|---|---|---|
+| `@lucasfeitosatech/design-tokens` | both | CSS custom properties and TypeScript constants, generated from one DTCG source |
+| `@lucasfeitosatech/design-core` | both | component contracts and headless logic; imports no renderer |
+| `@lucasfeitosatech/components-react` | browser | React components with CSS Modules |
+| `@lucasfeitosatech/components-react-native` | iOS and Android | React Native components |
 
-**The dependency rule.** `headless` never imports `web` or `native`. `web` and `native` never import
-each other. Both consume `tokens` and `headless`. No entry point loads both renderers, and the types
-of one must never reference the other. That is what keeps React Native out of a browser bundle.
+**The dependency rule.** `design-core` never imports a renderer. The two component packages never
+import each other. Both depend on tokens and core. That is what keeps React Native out of a browser
+bundle and the DOM out of a native build.
 
-## Entry points
+## A component lives in three places
 
-| Import | Serves |
-|---|---|
-| `@lucasfeitosatech/design-system/tokens` | both |
-| `@lucasfeitosatech/design-system/tokens.css` | web |
-| `@lucasfeitosatech/design-system/headless` | both |
-| `@lucasfeitosatech/design-system/web` | web |
-| `@lucasfeitosatech/design-system/native` | React Native |
-
-## Tokens
-
-`npm run tokens:build` turns `tokens/source/*.tokens.json` into three artifacts with three unit
-policies: CSS custom properties with values verbatim, and TypeScript constants where dimensions and
-durations are numbers. Colours reach TypeScript as `rgba()` because React Native does not parse the
-modern `rgb(r g b / a)` syntax. Font stacks and shadow recipes are web-only by nature; native needs a
-family name and its own elevation recipe, so they are exported apart from the palette.
-
-Names are exactly the ones already shipping on the web, so adopting this package is a value-for-value
-swap with no renaming. The `finance` group in the source keeps the domain vocabulary visible; it is
-flattened on output until the apps are ready to rename.
+The contract is written once in `design-core`: the variants, the sizes, the states every
+implementation must cover. Each renderer then implements it in its own idiom. The web Button is a
+`<button>` with `:hover` and `:focus-visible`; the native Button is a `Pressable` with `hitSlop` and
+an accessibility role. Same name, same variants, same version, two files of about forty lines.
 
 ## Not everything crosses
 
-Some components only make sense on one platform. A DataGrid is not a DataGrid on a phone. The package
-declares those under a single renderer instead of faking an equivalent.
+Some components only make sense on one platform. A DataGrid is not a DataGrid on a phone. Those are
+published under a single renderer instead of faking an equivalent.
 
 Navigation, form bindings, list virtualisation, gestures, animation drivers and file pickers stay in
 the applications. What is shared there is the intent, the schema, the labels and the protocol.
+
+## Building
+
+```
+npm install
+npm run build      # tokens first, then the packages that consume them
+npm run typecheck
+```
+
+`design-tokens` generates `src/` from `source/*.tokens.json` and then compiles it, so a token change
+is visible as a source diff before it becomes a build artifact.

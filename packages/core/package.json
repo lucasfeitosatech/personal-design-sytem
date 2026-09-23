@@ -1,0 +1,19 @@
+{
+  "name": "@lucasfeitosatech/design-core",
+  "version": "0.1.0",
+  "description": "Platform-free layer of the design system: component contracts and headless logic.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "files": ["dist", "README.md"],
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js", "require": "./dist/index.cjs" }
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist *.tgz"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.0"
+  }
+}

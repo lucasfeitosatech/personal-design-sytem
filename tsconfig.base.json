@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "moduleResolution": "bundler",
     "jsx": "react-jsx",
@@ -11,12 +10,7 @@
     "noUnusedParameters": true,
     "noEmit": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true,
     "isolatedModules": true,
-    "verbatimModuleSyntax": true,
-    "baseUrl": ".",
-    "paths": { "@/*": ["./*"] }
-  },
-  "include": ["tokens", "src", "scripts"],
-  "exclude": ["node_modules", "dist"]
+    "verbatimModuleSyntax": true
+  }
 }
