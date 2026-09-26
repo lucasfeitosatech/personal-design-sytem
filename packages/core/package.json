@@ -1,6 +1,6 @@
 {
   "name": "@lucasfeitosatech/design-core",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Platform-free layer of the design system: component contracts and headless logic.",
   "license": "UNLICENSED",
   "type": "module",
@@ -18,7 +18,8 @@
   "scripts": {
     "build": "tsup",
     "typecheck": "tsc --noEmit",
-    "clean": "rm -rf dist *.tgz"
+    "clean": "rm -rf dist *.tgz",
+    "test": "vitest run"
   },
   "devDependencies": {
     "@types/react": "^19.3.0",
