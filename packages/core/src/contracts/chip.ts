@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import type { BaseSize } from './base';
 
 /**
  * Semantic tones, not domain ones. The planner's chips speak of paid, overdue and skipped; a design
@@ -40,6 +41,12 @@ export const CHIP_TONE_GLYPH = {
 export type ChipContract = {
   label: ReactNode;
   tone?: ChipTone;
+  /**
+   * `sm` is a label beside something else, and it is the default because that is what a chip mostly
+   * is. `md` is a control people aim at — a picker — and it carries the touch target, which a 22 pt
+   * label never could.
+   */
+  size?: BaseSize;
   /** Replaces the tone's own glyph. */
   icon?: ReactNode;
   /** Figures and codes read better in mono. */

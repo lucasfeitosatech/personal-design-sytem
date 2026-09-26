@@ -21,7 +21,7 @@ not remove a contract prop, rename it, or change what it means.
 | Switch | yes | yes | Commits on the spot; native uses the platform control |
 | Checkbox | yes | yes | Part of a form. `indeterminate` is a DOM property on the web and `"mixed"` on native |
 | RadioGroup | yes | yes | The group owns the label and the error, so a reader can count "2 of 3" |
-| Chip | yes | yes | Semantic tones, not domain ones; an app maps paid to success and overdue to danger |
+| Chip | yes | yes | Semantic tones, not domain ones; an app maps paid to success and overdue to danger. `size: 'md'` is a chip people tap, and it carries the touch target |
 | EmptyState | yes | yes | Always offers one way out; the error tone announces itself |
 | Section | yes | yes | Sentence case heading (D-18), mono meta, one quiet action |
 | Divider | yes | yes | Decorative and hidden from assistive technology; native uses the platform hairline |
@@ -35,6 +35,11 @@ not remove a contract prop, rename it, or change what it means.
 | ListRow | no | yes | 52 pt row; `List` draws the hairline so no row knows it is the first |
 | Banner | no | yes | A standing condition, never a decision: no timer, no primary action |
 | Skeleton | no | yes | `SkeletonGroup` carries the only announcement; the pulse stops under reduced motion |
+| PracticeTile | no | yes | Native only. 64 pt toggling tile; `partial` is the checkbox `mixed` state and a half fill, not a colour |
+| AffirmationCard | no | yes | Native only. A sentence with its source; `onToggle` makes it a disclosure, otherwise the source stays visible |
+| AIAction / AIPanel | no | yes | Native only. The action is quiet, never primary; `unavailable` is a panel state, not an error |
+| BillRow | no | yes | Native only. Read-only row with one trailing 44 pt control; the name truncates, the figure never does |
+| DateStrip | no | yes | Native only. A week of days; the dot is never the only signal — each day's label says it in words |
 
 ## Where the shared base pays
 
@@ -62,5 +67,9 @@ and the one thing DOM and a phone keyboard could never have agreed on.
   an app can wrap it.
 - **Line height.** The web sets a unitless ratio; the native Text leaves it to the platform rather
   than converting the ratio wrongly. Revisit now that the fonts are bundled by the first app.
-- **No icon set.** `AppBar`, `ListRow`, `TabBar` and `Banner` take icons as nodes the app injects;
-  their own glyphs (`‹`, `←`, `›`) are text, so the chrome works before an app picks an icon library.
+- **No icon set.** `AppBar`, `ListRow`, `TabBar`, `Banner`, `BillRow` and `DateStrip` take icons as
+  nodes the app injects; their own glyphs (`‹`, `→`, `›`, `✓`, `⌄`) are text, so the chrome works
+  before an app picks an icon library.
+- **Nothing counts, nothing formats.** `BillRow` takes the amount already formatted and
+  `AIPanel` takes the generated text already validated: the system draws figures and never produces
+  them, which is what keeps a model's output from reaching a screen through a component.

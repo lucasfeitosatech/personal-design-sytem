@@ -7,8 +7,8 @@ export type ChipProps = ChipContract & {
 };
 
 /** A small label, optionally selectable, optionally removable. */
-export function Chip({ label, tone = 'neutral', icon, mono = false, selected, onRemove, removeLabel = 'Remover', disabled, onClick }: ChipProps) {
-  const classes = [styles.chip, styles[`tone-${tone}`], selected ? styles.selected : '', mono ? 'ds-mono' : '', onClick ? styles.interactive : '']
+export function Chip({ label, tone = 'neutral', size = 'sm', icon, mono = false, selected, onRemove, removeLabel = 'Remover', disabled, onClick }: ChipProps) {
+  const classes = [styles.chip, styles[`tone-${tone}`], size === 'md' ? styles.control : '', selected ? styles.selected : '', mono ? 'ds-mono' : '', onClick ? styles.interactive : '']
     .filter(Boolean)
     .join(' ');
   const body = (

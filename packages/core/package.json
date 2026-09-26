@@ -1,6 +1,6 @@
 {
   "name": "@lucasfeitosatech/design-core",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Platform-free layer of the design system: component contracts and headless logic.",
   "license": "UNLICENSED",
   "type": "module",

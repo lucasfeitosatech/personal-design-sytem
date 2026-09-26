@@ -11,7 +11,7 @@ export type ChipProps = ChipContract & {
 };
 
 /** A small label, optionally selectable, optionally removable. */
-export function Chip({ label, tone = 'neutral', icon, mono = false, selected, onRemove, removeLabel = 'Remover', disabled, onPress }: ChipProps) {
+export function Chip({ label, tone = 'neutral', size = 'sm', icon, mono = false, selected, onRemove, removeLabel = 'Remover', disabled, onPress }: ChipProps) {
   const { palette } = useTheme();
   const key = CHIP_TONE_TOKEN[tone];
   const background = palette[key.background as keyof Palette];
@@ -21,7 +21,7 @@ export function Chip({ label, tone = 'neutral', icon, mono = false, selected, on
   const body = (
     <View style={styles.inner}>
       {icon ?? (CHIP_TONE_GLYPH[tone] ? <Text size="xs" style={{ color: foreground }}>{CHIP_TONE_GLYPH[tone]}</Text> : null)}
-      <Text size="xs" weight="medium" mono={mono} style={{ color: foreground }}>
+      <Text size={size === 'md' ? 'md' : 'xs'} weight="medium" mono={mono} maxFontSizeMultiplier={1.2} style={{ color: foreground }}>
         {label}
       </Text>
     </View>
@@ -35,12 +35,19 @@ export function Chip({ label, tone = 'neutral', icon, mono = false, selected, on
           disabled={disabled}
           accessibilityRole="button"
           accessibilityState={{ selected, disabled }}
-          style={[styles.chip, { backgroundColor: background, borderColor: border, borderWidth: selected ? 2 : 1, borderStyle: tone === 'pending' ? 'dashed' : 'solid' }, disabled ? styles.disabled : null]}
+          style={[
+            styles.chip,
+            size === 'md' ? styles.control : null,
+            { backgroundColor: background, borderColor: border, borderWidth: selected ? 2 : 1, borderStyle: tone === 'pending' ? 'dashed' : 'solid' },
+            disabled ? styles.disabled : null,
+          ]}
         >
           {body}
         </Pressable>
       ) : (
-        <View style={[styles.chip, { backgroundColor: background, borderColor: border, borderWidth: 1, borderStyle: tone === 'pending' ? 'dashed' : 'solid' }]}>{body}</View>
+        <View style={[styles.chip, size === 'md' ? styles.control : null, { backgroundColor: background, borderColor: border, borderWidth: 1, borderStyle: tone === 'pending' ? 'dashed' : 'solid' }]}>
+          {body}
+        </View>
       )}
       {onRemove ? (
         <Pressable

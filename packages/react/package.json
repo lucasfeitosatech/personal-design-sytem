@@ -1,6 +1,6 @@
 {
   "name": "@lucasfeitosatech/components-react",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "React components of the design system, for the browser.",
   "license": "UNLICENSED",
   "type": "module",
@@ -26,8 +26,8 @@
     "clean": "rm -rf dist *.tgz"
   },
   "peerDependencies": {
-    "@lucasfeitosatech/design-core": "^0.2.0",
-    "@lucasfeitosatech/design-tokens": "^0.2.0",
+    "@lucasfeitosatech/design-core": "^0.3.0",
+    "@lucasfeitosatech/design-tokens": "^0.3.0",
     "react": ">=19",
     "react-dom": ">=19"
   },
