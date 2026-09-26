@@ -17,6 +17,9 @@
 }
 .input:focus { outline: none; }
 .input::placeholder { color: transparent; }
+/* Transparent so `:not(:placeholder-shown)` can drive the float; visible once the label has
+   lifted off that line, which matches the native field. */
+.input:focus::placeholder { color: var(--ds-color-text-tertiary); }
 /* Rests at the first line, not centred: a tall frame would put a centred label in the middle of the text. */
 .label {
   position: absolute; left: var(--ds-space-3); top: 12px; transform-origin: left top;

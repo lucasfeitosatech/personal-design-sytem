@@ -50,6 +50,10 @@
 .input:focus { outline: none; }
 /* Transparent until the label lifts, so the two never overlap. */
 .input::placeholder { color: transparent; }
+/* The placeholder is transparent so `:not(:placeholder-shown)` can drive the float. Once the
+   label has lifted it no longer shares that line, so a format hint can show — which is the
+   behaviour the native field has. */
+.input:focus::placeholder { color: var(--ds-color-text-tertiary); }
 .mono { font-family: var(--ds-font-mono); font-variant-numeric: tabular-nums; }
 .right { text-align: right; }
 

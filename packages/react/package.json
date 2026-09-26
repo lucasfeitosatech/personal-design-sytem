@@ -1,6 +1,6 @@
 {
   "name": "@lucasfeitosatech/components-react",
-  "version": "0.3.0",
+  "version": "0.3.2",
   "description": "React components of the design system, for the browser.",
   "license": "UNLICENSED",
   "type": "module",

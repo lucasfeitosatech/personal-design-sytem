@@ -1,6 +1,6 @@
 {
   "name": "@lucasfeitosatech/components-react-native",
-  "version": "0.3.0",
+  "version": "0.3.2",
   "description": "React Native components of the design system, for iOS and Android.",
   "license": "UNLICENSED",
   "type": "module",

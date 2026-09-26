@@ -1,13 +1,23 @@
 {
   "name": "@lucasfeitosatech/design-tokens",
-  "version": "0.3.0",
+  "version": "0.3.2",
   "description": "Design tokens for React and React Native, generated from one DTCG source.",
   "license": "UNLICENSED",
   "type": "module",
-  "sideEffects": ["**/*.css"],
-  "files": ["dist", "source", "README.md"],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "files": [
+    "dist",
+    "source",
+    "README.md"
+  ],
   "exports": {
-    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js", "require": "./dist/index.cjs" },
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
     "./tokens.css": "./dist/tokens.css"
   },
   "scripts": {

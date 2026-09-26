@@ -65,6 +65,13 @@ resolveu pelo caminho nativo).
 - Converter `line-height` proporcional direto para `lineHeight` no nativo, onde o valor é altura.
 - Acrescentar dependência ao pacote nativo sem necessidade: ele distribui TypeScript de propósito,
   para o Metro compilar com o preset do React Native.
+- **Deixar prop do contrato vazar pelo `...rest`.** Se está no contrato, cada renderer trata
+  explicitamente. O `placeholder` do `TextField` e do `Textarea` nativos caía no `...rest` e ia parar
+  no `TextInput`, pintado por cima do label em repouso — na tela lia-se "Nova metaneta", a soma de
+  `label` e `placeholder`. No web a mesma prop era `color: transparent`, invisível de propósito para
+  alimentar o `:not(:placeholder-shown)`. Duas leituras opostas da mesma prop, e nenhum teste via,
+  porque o defeito só existe pintado. Regra agora: a dica aparece depois que o label sobe, nos dois
+  renderers (corrigido em 0.3.1 e 0.3.2).
 
 ## Lacunas conhecidas e conscientes
 

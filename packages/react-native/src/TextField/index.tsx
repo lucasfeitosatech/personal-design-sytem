@@ -44,6 +44,7 @@ export function TextField({
   surfaceBehind,
   value,
   onValueChange,
+  placeholder,
   ...rest
 }: TextFieldProps) {
   const { palette } = useTheme();
@@ -89,6 +90,8 @@ export function TextField({
           {prefix}
           <TextInput
             style={[styles.input, { color: palette.text, textAlign: align }, mono ? { fontFamily: fontFamily('regular', true) } : null]}
+            placeholder={lifted ? placeholder : undefined}
+            placeholderTextColor={palette.textTertiary}
             value={value}
             onChangeText={onValueChange}
             secureTextEntry={secret}

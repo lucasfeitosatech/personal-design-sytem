@@ -15,7 +15,7 @@ export type TextareaProps = Omit<TextInputProps, 'style' | 'value' | 'editable' 
   };
 
 /** Multi-line entry. The label rests at the first line, not centred, and lifts onto the border. */
-export function Textarea({ label, hint, error, required, disabled, rows = 4, maxRows, readOnly, surfaceBehind, value, onValueChange, ...rest }: TextareaProps) {
+export function Textarea({ label, hint, error, required, disabled, rows = 4, maxRows, readOnly, surfaceBehind, value, onValueChange, placeholder, ...rest }: TextareaProps) {
   const { palette } = useTheme();
   const [focused, setFocused] = useState(false);
   const lifted = focused || (value ?? '').length > 0;
@@ -57,6 +57,8 @@ export function Textarea({ label, hint, error, required, disabled, rows = 4, max
             multiline
             textAlignVertical="top"
             style={[styles.input, { color: palette.text, maxHeight: maxRows ? maxRows * TEXTAREA_LINE_HEIGHT + TEXTAREA_PADDING_Y * 2 : undefined }]}
+            placeholder={lifted ? placeholder : undefined}
+            placeholderTextColor={palette.textTertiary}
             value={value}
             onChangeText={onValueChange}
             onFocus={() => setFocused(true)}
