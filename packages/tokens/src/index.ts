@@ -130,10 +130,32 @@ export const layout = {
 } as const;
 
 /**
- * CSS font stacks. Native does not use these: a device needs the family name of an installed or
- * bundled font, not a fallback list. Native families live in `tokens/core/fonts.ts`.
+ * CSS font stacks, for the browser only. A device cannot use a fallback list: it needs the name of a
+ * family bundled in the app, which is what `nativeFonts` carries.
  */
 export const fontStacks = {
   "ui": "'Libre Franklin', system-ui, -apple-system, 'Segoe UI', sans-serif",
   "mono": "'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace"
+} as const;
+
+/**
+ * Families of the fonts an app bundles, per platform: Android matches the asset file name and iOS
+ * the PostScript name, so the map cannot be a single string. Weights are limited to the three UI and
+ * two mono faces the type scale uses; anything else is added deliberately, not imported wholesale.
+ */
+export const nativeFonts = {
+  "ios": {
+    "uiRegular": "LibreFranklin-Regular",
+    "uiMedium": "LibreFranklin-Medium",
+    "uiSemibold": "LibreFranklin-SemiBold",
+    "monoRegular": "IBMPlexMono-Regular",
+    "monoMedium": "IBMPlexMono-Medium"
+  },
+  "android": {
+    "uiRegular": "LibreFranklin-Regular",
+    "uiMedium": "LibreFranklin-Medium",
+    "uiSemibold": "LibreFranklin-SemiBold",
+    "monoRegular": "IBMPlexMono-Regular",
+    "monoMedium": "IBMPlexMono-Medium"
+  }
 } as const;

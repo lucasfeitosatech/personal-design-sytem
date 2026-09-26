@@ -30,6 +30,11 @@ not remove a contract prop, rename it, or change what it means.
 | Toast | yes | yes | Auto-dismiss 6s, 10s with an action, paused on hover; an error never dismisses itself |
 | MoneyInput | yes | yes | Value is digits in cents; fills from the right so the caret never moves |
 | PeriodInput | yes | yes | Value is up to six digits; the slash is drawn, never stored |
+| AppBar | no | yes | Native only. iOS 44 pt bar with the previous screen's name; Android 64 dp bar, no large title |
+| TabBar | no | yes | Native only. iOS 60 pt + safe inset, Android 80 dp with the pill; no badge, ever |
+| ListRow | no | yes | 52 pt row; `List` draws the hairline so no row knows it is the first |
+| Banner | no | yes | A standing condition, never a decision: no timer, no primary action |
+| Skeleton | no | yes | `SkeletonGroup` carries the only announcement; the pulse stops under reduced motion |
 
 ## Where the shared base pays
 
@@ -43,9 +48,11 @@ and the one thing DOM and a phone keyboard could never have agreed on.
 
 ## Known gaps
 
-- **Fonts on native.** The tokens carry CSS font stacks, which a device cannot use. UI text falls
-  back to the system font and mono to Menlo or `monospace` until Libre Franklin and IBM Plex Mono
-  are bundled into the app.
+- **Fonts on native — closed for consumers that bundle the files.** `design-tokens` now publishes
+  `nativeFonts`, the family names per platform (Android matches the asset file name, iOS the
+  PostScript name), and the native `Text` reads them. The files themselves can only live in an app:
+  an app that has not bundled Libre Franklin and IBM Plex Mono resolves nothing and falls back to the
+  platform font, which is a silent, non-breaking degradation.
 - **The native notch.** A native border cannot be cut, so the floating label paints the colour
   behind the frame. The component cannot know what that is, so `surfaceBehind` declares it and
   defaults to the surface colour, which is right inside a Card. Without it a disabled field paints
@@ -54,4 +61,6 @@ and the one thing DOM and a phone keyboard could never have agreed on.
   a gesture library and which one is the application's decision, so the sheet stays gesture-free and
   an app can wrap it.
 - **Line height.** The web sets a unitless ratio; the native Text leaves it to the platform rather
-  than converting the ratio wrongly. Revisit when the fonts are bundled.
+  than converting the ratio wrongly. Revisit now that the fonts are bundled by the first app.
+- **No icon set.** `AppBar`, `ListRow`, `TabBar` and `Banner` take icons as nodes the app injects;
+  their own glyphs (`‹`, `←`, `›`) are text, so the chrome works before an app picks an icon library.

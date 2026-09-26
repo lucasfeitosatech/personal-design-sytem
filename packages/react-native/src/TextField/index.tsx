@@ -3,7 +3,7 @@ import { space } from '@lucasfeitosatech/design-tokens';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Animated, TextInput, View, type TextInputProps } from 'react-native';
 import { Field } from '../Field';
-import { monoFamily } from '../Text/styles';
+import { fontFamily } from '../Text/styles';
 import { useTheme } from '../theme/ThemeProvider';
 import { FLOAT_DURATION, keyboardFor, styles } from './styles';
 
@@ -88,7 +88,7 @@ export function TextField({
           </Animated.Text>
           {prefix}
           <TextInput
-            style={[styles.input, { color: palette.text, textAlign: align }, mono ? { fontFamily: monoFamily } : null]}
+            style={[styles.input, { color: palette.text, textAlign: align }, mono ? { fontFamily: fontFamily('regular', true) } : null]}
             value={value}
             onChangeText={onValueChange}
             secureTextEntry={secret}

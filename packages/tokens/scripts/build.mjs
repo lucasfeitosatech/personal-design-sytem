@@ -81,12 +81,15 @@ const cssPlatform = (selector, colorScheme) => ({
 });
 const tsPlatform = { transforms: [], files: [{ destination: 'x.json', format: 'ds/ts-object', options: { showFileHeader: false } }] };
 
-const [lightCss, darkCss, lightJson, darkJson, coreJson] = await Promise.all([
+const [lightCss, darkCss, lightJson, darkJson, coreJson, nativeFontsJson] = await Promise.all([
   build([...CORE, 'source/theme.light.tokens.json'], cssPlatform(':root', 'light')),
   build(['source/theme.dark.tokens.json'], cssPlatform(":root[data-theme='dark']", 'dark')),
   build(['source/theme.light.tokens.json'], tsPlatform),
   build(['source/theme.dark.tokens.json'], tsPlatform),
   build(CORE, tsPlatform),
+  // Native families are built apart from CORE on purpose: they must not reach tokens.css, where a
+  // bundled family name is meaningless.
+  build(['source/fonts.native.tokens.json'], tsPlatform),
 ]);
 
 mkdirSync(OUT, { recursive: true });
@@ -95,6 +98,7 @@ writeFileSync(`${OUT}/tokens.css`, `${HEADER}${lightCss}\n${darkCss}`);
 const light = JSON.parse(lightJson);
 const dark = JSON.parse(darkJson);
 const core = JSON.parse(coreJson);
+const nativeFonts = JSON.parse(nativeFontsJson);
 const palette = (t) => t.color;
 
 writeFileSync(
@@ -132,10 +136,17 @@ export const tap = ${core.__root.tap};
 export const layout = ${JSON.stringify({ sidebarWidth: core.sidebar.width, contentMax: core.content.max, bottomNavHeight: core['bottom-nav'].height }, null, 2)} as const;
 
 /**
- * CSS font stacks. Native does not use these: a device needs the family name of an installed or
- * bundled font, not a fallback list. Native families live in \`tokens/core/fonts.ts\`.
+ * CSS font stacks, for the browser only. A device cannot use a fallback list: it needs the name of a
+ * family bundled in the app, which is what \`nativeFonts\` carries.
  */
 export const fontStacks = ${JSON.stringify(core.font, null, 2)} as const;
+
+/**
+ * Families of the fonts an app bundles, per platform: Android matches the asset file name and iOS
+ * the PostScript name, so the map cannot be a single string. Weights are limited to the three UI and
+ * two mono faces the type scale uses; anything else is added deliberately, not imported wholesale.
+ */
+export const nativeFonts = ${JSON.stringify(nativeFonts, null, 2)} as const;
 `,
 );
 

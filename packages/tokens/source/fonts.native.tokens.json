@@ -1,0 +1,17 @@
+{
+  "$description": "Installed font families for a device. Not CSS stacks: a phone needs the name of a family that is bundled in the app, and the two platforms name it differently — Android matches the asset file name, iOS the PostScript name. They coincide here because the bundled files are named after their PostScript name. These tokens emit no CSS.",
+  "ios": {
+    "ui-regular": { "$value": "LibreFranklin-Regular", "$type": "fontFamily" },
+    "ui-medium": { "$value": "LibreFranklin-Medium", "$type": "fontFamily" },
+    "ui-semibold": { "$value": "LibreFranklin-SemiBold", "$type": "fontFamily" },
+    "mono-regular": { "$value": "IBMPlexMono-Regular", "$type": "fontFamily" },
+    "mono-medium": { "$value": "IBMPlexMono-Medium", "$type": "fontFamily" }
+  },
+  "android": {
+    "ui-regular": { "$value": "LibreFranklin-Regular", "$type": "fontFamily" },
+    "ui-medium": { "$value": "LibreFranklin-Medium", "$type": "fontFamily" },
+    "ui-semibold": { "$value": "LibreFranklin-SemiBold", "$type": "fontFamily" },
+    "mono-regular": { "$value": "IBMPlexMono-Regular", "$type": "fontFamily" },
+    "mono-medium": { "$value": "IBMPlexMono-Medium", "$type": "fontFamily" }
+  }
+}

@@ -1,11 +1,21 @@
+import type { TextWeight } from '@lucasfeitosatech/design-core';
+import { nativeFonts } from '@lucasfeitosatech/design-tokens';
 import { Platform, StyleSheet } from 'react-native';
 
 /**
- * The UI font is deliberately the system one: the CSS stack in the tokens is a list of fallbacks,
- * and a device needs the family name of a font that is installed or bundled. Bundling Libre
- * Franklin and IBM Plex Mono is its own task; until then mono falls back to the platform default.
+ * The families an app bundles: Android resolves them by asset file name, iOS by PostScript name, and
+ * the token map carries both. An app that has not bundled the files resolves nothing and the platform
+ * falls back to its own font, which is why `fontWeight` is still set beside the family.
  */
-export const monoFamily = Platform.select({ ios: 'Menlo', android: 'monospace', default: 'monospace' });
+const families = Platform.select({ ios: nativeFonts.ios, android: nativeFonts.android, default: nativeFonts.ios });
+
+/** Mono ships two faces, so anything heavier than regular renders as Medium. */
+export function fontFamily(weight: TextWeight, mono: boolean): string {
+  if (mono) return weight === 'regular' ? families.monoRegular : families.monoMedium;
+  if (weight === 'semibold') return families.uiSemibold;
+  if (weight === 'medium') return families.uiMedium;
+  return families.uiRegular;
+}
 
 export const styles = StyleSheet.create({
   base: { lineHeight: undefined },

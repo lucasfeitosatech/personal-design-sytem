@@ -13,5 +13,7 @@ export * from './contracts/chip';
 export * from './contracts/empty-state';
 export * from './contracts/section';
 export * from './contracts/surface';
+export * from './contracts/navigation';
+export * from './contracts/feedback';
 export * from './masks/money';
 export * from './masks/period';
