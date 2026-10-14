@@ -28,7 +28,7 @@ not remove a contract prop, rename it, or change what it means.
 | Select | yes | yes | Two different controls: a combobox popover on the web, a bottom sheet on a device |
 | Modal | yes | yes | Centred dialog with focus trap on the web; bottom sheet with stacked actions on a device |
 | Toast | yes | yes | Auto-dismiss 6s, 10s with an action, paused on hover; an error never dismisses itself |
-| MoneyInput | yes | yes | Value is digits in cents; fills from the right so the caret never moves |
+| MoneyInput | yes | yes | Value is digits in cents; fills from the right so the caret never moves. Focus selects the amount, so typing replaces a pre-filled figure |
 | PeriodInput | yes | yes | Value is up to six digits; the slash is drawn, never stored |
 | AppBar | no | yes | Native only. iOS 44 pt bar with the previous screen's name; Android 64 dp bar, no large title |
 | TabBar | no | yes | Native only. iOS 60 pt + safe inset, Android 80 dp with the pill; no badge, ever |
@@ -70,6 +70,10 @@ and the one thing DOM and a phone keyboard could never have agreed on.
 - **No icon set.** `AppBar`, `ListRow`, `TabBar`, `Banner`, `BillRow` and `DateStrip` take icons as
   nodes the app injects; their own glyphs (`‹`, `→`, `›`, `✓`, `⌄`) are text, so the chrome works
   before an app picks an icon library.
+- **The native money caret.** On the web the MoneyInput moves a stray caret back to the end, so a
+  digit always fills from the right. On native, focus selects the amount (`selectTextOnFocus`), but a
+  tap inside an already focused field still drops the caret where it lands: forcing it means a
+  controlled `selection`, which fights the select-on-focus. Revisit if it shows up in use.
 - **Nothing counts, nothing formats.** `BillRow` takes the amount already formatted and
   `AIPanel` takes the generated text already validated: the system draws figures and never produces
   them, which is what keeps a model's output from reaching a screen through a component.
