@@ -53,6 +53,9 @@ and the one thing DOM and a phone keyboard could never have agreed on.
 
 ## Known gaps
 
+- **The native reveal glyph.** The web PasswordField draws an eye (struck through while the value is
+  shown); native still shows the old circle glyphs, because an eye there needs `react-native-svg`
+  or an image asset and the app decides which. Closing it is a native-round task.
 - **Fonts on native — closed for consumers that bundle the files.** `design-tokens` now publishes
   `nativeFonts`, the family names per platform (Android matches the asset file name, iOS the
   PostScript name), and the native `Text` reads them. The files themselves can only live in an app:

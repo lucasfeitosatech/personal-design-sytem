@@ -87,13 +87,13 @@ export const webShadows = {
 
 /** Closed type scale (D-09). Numbers: points on native, pixels on the web. */
 export const text = {
-  "xs": 11,
-  "sm": 12,
-  "md": 13,
-  "base": 14,
-  "lg": 16,
-  "xl": 20,
-  "2xl": 26
+  "xs": 12,
+  "sm": 13,
+  "md": 14,
+  "base": 15,
+  "lg": 17,
+  "xl": 22,
+  "2xl": 28
 } as const;
 
 export const space = {

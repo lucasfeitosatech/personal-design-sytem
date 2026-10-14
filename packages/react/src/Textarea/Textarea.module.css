@@ -6,14 +6,14 @@
   transition: border-color var(--ds-motion-fast);
 }
 .legend {
-  width: auto; max-width: 0.01px; height: 11px; padding: 0; font-size: var(--ds-text-xs);
+  width: auto; max-width: 0.01px; height: var(--ds-text-xs); padding: 0; font-size: var(--ds-text-xs);
   visibility: hidden; white-space: nowrap; transition: max-width var(--ds-motion-fast);
 }
 .legend > span { padding: 0 4px; }
 .input {
   flex: 1; min-width: 0; resize: vertical; border: none; background: transparent;
   padding: 12px var(--ds-space-3);
-  font-family: var(--ds-font-ui); font-size: var(--ds-text-base); line-height: 20px; color: var(--ds-color-text);
+  font-family: var(--ds-font-ui); font-size: var(--ds-text-base); line-height: 22px; color: var(--ds-color-text);
 }
 .input:focus { outline: none; }
 .input::placeholder { color: transparent; }

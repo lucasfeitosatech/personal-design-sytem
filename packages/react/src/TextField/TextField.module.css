@@ -28,7 +28,7 @@
 .legend {
   width: auto;
   max-width: 0.01px;
-  height: 11px;
+  height: var(--ds-text-xs);
   padding: 0;
   font-size: var(--ds-text-xs);
   visibility: hidden;

@@ -5,7 +5,7 @@
 }
 .main { flex: 1 1 0%; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
 .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.metaRow { display: flex; align-items: center; flex-wrap: wrap; gap: var(--ds-space-1); }
+.metaRow { display: flex; align-items: center; flex-wrap: wrap; gap: var(--ds-space-2); }
 .amount { flex: none; white-space: nowrap; text-align: right; }
 
 .action {

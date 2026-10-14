@@ -11,5 +11,5 @@ export type TextareaContract = {
 };
 
 /** One line of text, in points, used to size the frame from `rows`. */
-export const TEXTAREA_LINE_HEIGHT = 20;
+export const TEXTAREA_LINE_HEIGHT = 22;
 export const TEXTAREA_PADDING_Y = 12;

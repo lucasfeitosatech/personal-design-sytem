@@ -34,9 +34,34 @@ export const PasswordField = forwardRef<HTMLInputElement, PasswordFieldProps>(fu
           aria-label={revealed ? concealLabel : revealLabel}
           aria-pressed={revealed}
         >
-          <span aria-hidden="true">{revealed ? '◎' : '○'}</span>
+          <EyeIcon crossed={revealed} />
         </button>
       }
     />
   );
 });
+
+/**
+ * The eye shows what pressing will do: open while the value is hidden, struck through while it is
+ * shown. Drawn inline in `currentColor` so it follows the button's hover and theme without an
+ * icon library.
+ */
+function EyeIcon({ crossed }: { crossed: boolean }) {
+  return (
+    <svg
+      aria-hidden="true"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M2.5 12s3.5-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.5 6.5-9.5 6.5S2.5 12 2.5 12Z" />
+      <circle cx="12" cy="12" r="3" />
+      {crossed && <path d="M4 4l16 16" />}
+    </svg>
+  );
+}

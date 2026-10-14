@@ -2,31 +2,31 @@
   "$description": "Theme-independent scales. Values are the ones already shipping on the web (D-09 closed type scale).",
   "text": {
     "xs": {
-      "$value": "11px",
-      "$type": "dimension"
-    },
-    "sm": {
       "$value": "12px",
       "$type": "dimension"
     },
-    "md": {
+    "sm": {
       "$value": "13px",
       "$type": "dimension"
     },
-    "base": {
+    "md": {
       "$value": "14px",
       "$type": "dimension"
     },
+    "base": {
+      "$value": "15px",
+      "$type": "dimension"
+    },
     "lg": {
-      "$value": "16px",
+      "$value": "17px",
       "$type": "dimension"
     },
     "xl": {
-      "$value": "20px",
+      "$value": "22px",
       "$type": "dimension"
     },
     "2xl": {
-      "$value": "26px",
+      "$value": "28px",
       "$type": "dimension"
     }
   },
