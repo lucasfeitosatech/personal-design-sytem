@@ -11,7 +11,8 @@ export type ModalProps = ModalContract;
  *
  * Focus is trapped while it is open and returns to whatever opened it on close, because a dialog
  * that leaks focus back to the page leaves a keyboard user lost behind the scrim. A destructive
- * dialog starts focus on the safe action, so Enter does not confirm the deletion.
+ * dialog starts focus on the safe action, so Enter does not confirm the deletion; any other dialog
+ * whose body holds a field starts on that field.
  */
 export function Modal({ open, title, body, primaryAction, secondaryAction, onClose, alert = false }: ModalProps) {
   const id = useId();
@@ -19,14 +20,23 @@ export function Modal({ open, title, body, primaryAction, secondaryAction, onClo
   const primaryRef = useRef<HTMLButtonElement>(null);
   const secondaryRef = useRef<HTMLButtonElement>(null);
   const opener = useRef<HTMLElement | null>(null);
+  // Read through a ref so a new `onClose` on every parent render does not rerun the effect below:
+  // rerunning it returned focus to the opener and refocused the action while someone was typing.
+  const onCloseRef = useRef(onClose);
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  });
 
   useEffect(() => {
     if (!open) return;
     opener.current = document.activeElement as HTMLElement | null;
-    (alert && secondaryRef.current ? secondaryRef.current : primaryRef.current)?.focus();
+    // A body with a field starts on the field, so the dialog can be answered by typing. An alert
+    // still starts on the safe action, whatever its body holds.
+    const field = alert ? null : dialogRef.current?.querySelector<HTMLElement>('input:not([type="hidden"]):not(:disabled), select:not(:disabled), textarea:not(:disabled)');
+    (field ?? (alert && secondaryRef.current ? secondaryRef.current : primaryRef.current))?.focus();
 
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') return onClose();
+      if (event.key === 'Escape') return onCloseRef.current();
       if (event.key !== 'Tab') return;
       const focusable = dialogRef.current?.querySelectorAll<HTMLElement>('button:not(:disabled), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
       if (!focusable || focusable.length === 0) return;
@@ -46,7 +56,7 @@ export function Modal({ open, title, body, primaryAction, secondaryAction, onClo
       document.removeEventListener('keydown', onKeyDown);
       opener.current?.focus();
     };
-  }, [open, alert, onClose]);
+  }, [open, alert]);
 
   if (!open) return null;
 

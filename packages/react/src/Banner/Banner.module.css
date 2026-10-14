@@ -1,0 +1,16 @@
+.banner {
+  display: flex; align-items: flex-start; gap: var(--ds-space-3);
+  padding: var(--ds-space-3);
+  border: 1px solid; border-radius: var(--ds-radius-md);
+}
+.icon { display: inline-flex; flex: none; padding-top: 1px; }
+.main { flex: 1 1 0%; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.actions { display: flex; flex-wrap: wrap; gap: var(--ds-space-1); margin-top: var(--ds-space-1); }
+
+/* Mirrors BANNER_TONE_TOKEN in design-core. Change both together. */
+.tone-warning { border-color: var(--ds-color-due-soon-mark); background: var(--ds-color-due-soon-soft); }
+.tone-warning .icon { color: var(--ds-color-due-soon); }
+.tone-neutral { border-color: var(--ds-color-border); background: var(--ds-color-surface-raised); }
+.tone-neutral .icon { color: var(--ds-color-text-secondary); }
+.tone-danger { border-color: var(--ds-color-overdue-border); background: var(--ds-color-overdue-soft); }
+.tone-danger .icon { color: var(--ds-color-overdue); }

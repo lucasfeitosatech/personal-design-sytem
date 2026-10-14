@@ -11,7 +11,7 @@ export type ListRowProps = ListRowContract;
  * A row that leads somewhere: injected icon, label, mono meta, chevron. The whole row is the target,
  * which is why the minimum height is above the 44 pt rule and not equal to it.
  */
-export function ListRow({ label, icon, meta, detail, trailing = 'chevron', onPress, disabled = false }: ListRowProps) {
+export function ListRow({ label, icon, meta, detail, trailing, onPress, disabled = false }: ListRowProps) {
   const { palette } = useTheme();
 
   return (
@@ -39,7 +39,7 @@ export function ListRow({ label, icon, meta, detail, trailing = 'chevron', onPre
           {meta}
         </Text>
       ) : null}
-      {trailingNode(trailing)}
+      {trailingNode(trailing ?? (onPress ? 'chevron' : 'none'))}
     </Pressable>
   );
 }

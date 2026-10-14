@@ -32,14 +32,14 @@ not remove a contract prop, rename it, or change what it means.
 | PeriodInput | yes | yes | Value is up to six digits; the slash is drawn, never stored |
 | AppBar | no | yes | Native only. iOS 44 pt bar with the previous screen's name; Android 64 dp bar, no large title |
 | TabBar | no | yes | Native only. iOS 60 pt + safe inset, Android 80 dp with the pill; no badge, ever |
-| ListRow | no | yes | 52 pt row; `List` draws the hairline so no row knows it is the first |
-| Banner | no | yes | A standing condition, never a decision: no timer, no primary action |
-| Skeleton | no | yes | `SkeletonGroup` carries the only announcement; the pulse stops under reduced motion |
-| PracticeTile | no | yes | Native only. 64 pt toggling tile; `partial` is the checkbox `mixed` state and a half fill, not a colour |
-| AffirmationCard | no | yes | Native only. A sentence with its source; `onToggle` makes it a disclosure, otherwise the source stays visible |
-| AIAction / AIPanel | no | yes | Native only. The action is quiet, never primary; `unavailable` is a panel state, not an error |
-| BillRow | no | yes | Native only. Read-only row with one trailing 44 pt control; the name truncates, the figure never does |
-| DateStrip | no | yes | Native only. A week of days; the dot is never the only signal — each day's label says it in words |
+| ListRow | yes | yes | 52 pt row; `List` draws the hairline so no row knows it is the first |
+| Banner | yes | yes | A standing condition, never a decision: no timer, no primary action |
+| Skeleton | yes | yes | `SkeletonGroup` carries the only announcement; the pulse stops under reduced motion |
+| PracticeTile | yes | yes | 64 pt toggling tile; `partial` is the checkbox `mixed` state and a half fill, not a colour |
+| AffirmationCard | yes | yes | A sentence with its source; `onToggle` makes it a disclosure, otherwise the source stays visible |
+| AIAction / AIPanel | yes | yes | The action is quiet, never primary; `unavailable` is a panel state, not an error |
+| BillRow | yes | yes | Read-only row with one trailing 44 pt control; the name truncates, the figure never does |
+| DateStrip | yes | yes | A week of days; the dot is never the only signal — each day's label says it in words |
 
 ## Where the shared base pays
 

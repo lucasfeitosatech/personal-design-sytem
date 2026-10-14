@@ -1,0 +1,37 @@
+.strip { display: flex; align-items: center; gap: var(--ds-space-1); }
+.days { flex: 1 1 0%; min-width: 0; display: flex; gap: 2px; }
+
+/* Equal share of what is left after the two steps: seven cells, no measurement. */
+.day {
+  flex: 1 0 0%; min-width: 0;
+  height: 52px; /* Mirrors DATE_STRIP_DAY_HEIGHT in design-core. Change both together. */
+  display: flex; align-items: center; justify-content: center;
+  border: none; border-radius: var(--ds-radius-sm);
+  background: transparent; cursor: pointer;
+}
+.day:hover:not(.on) { background: var(--ds-color-surface-raised); }
+.day:focus-visible { outline: 2px solid var(--ds-color-focus); outline-offset: 2px; }
+.cell { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+
+/* The selected day is filled, and its text flips to the on-accent colour. */
+.on { background: var(--ds-color-accent); }
+.day .weekday { color: var(--ds-color-text-tertiary); }
+.on .weekday { color: var(--ds-color-on-accent); }
+.day .number { color: var(--ds-color-text); }
+.on .number { color: var(--ds-color-on-accent); }
+
+.dot { width: 4px; height: 4px; border-radius: var(--ds-radius-pill); }
+.marked { background: var(--ds-color-text-tertiary); }
+.on .marked { background: var(--ds-color-on-accent); }
+
+.step {
+  flex: none;
+  width: 32px; height: var(--ds-tap);
+  display: flex; align-items: center; justify-content: center;
+  border: none; border-radius: var(--ds-radius-sm);
+  background: transparent; cursor: pointer;
+  color: var(--ds-color-text-secondary); font-size: var(--ds-text-xl); line-height: 1;
+}
+.step:hover:not(:disabled) { background: var(--ds-color-surface-raised); }
+.step:disabled { cursor: not-allowed; opacity: 0.4; }
+.step:focus-visible { outline: 2px solid var(--ds-color-focus); outline-offset: 2px; }

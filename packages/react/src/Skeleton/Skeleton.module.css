@@ -1,0 +1,24 @@
+.skeleton {
+  background: var(--ds-color-surface-raised);
+  /* The duration comes from SKELETON_PULSE_MS in design-core, set inline by the component. */
+  animation-name: skeleton-pulse;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton { animation: none; }
+}
+
+.line, .block { border-radius: var(--ds-radius-sm); }
+.card { border-radius: var(--ds-radius-md); }
+
+.group { display: flex; flex-direction: column; gap: var(--ds-space-3); }
+.groupCard {
+  background: var(--ds-color-surface);
+  border: 1px solid var(--ds-color-border); border-radius: var(--ds-radius-md);
+  padding: var(--ds-space-4);
+}
