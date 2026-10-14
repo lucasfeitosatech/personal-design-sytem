@@ -11,6 +11,7 @@ export * from './Chip';
 export * from './DateStrip';
 export * from './Divider';
 export * from './EmptyState';
+export * from './Eyebrow';
 export * from './Field';
 export * from './ListRow';
 export * from './Modal';

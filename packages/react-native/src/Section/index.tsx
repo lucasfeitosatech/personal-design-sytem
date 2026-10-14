@@ -7,7 +7,8 @@ import { styles } from './styles';
 export type SectionProps = Omit<ViewProps, 'children'> & SectionContract;
 
 /** A titled block. Sentence case heading, mono meta on the right, one quiet action (D-18). */
-export function Section({ title, meta, action, style, children, ...rest }: SectionProps) {
+/** `variant` is accepted for parity with the web; native always draws the card (Known gaps). */
+export function Section({ title, meta, action, variant: _variant, style, children, ...rest }: SectionProps) {
   return (
     <Card style={[styles.section, style]} {...rest}>
       <View style={styles.header}>

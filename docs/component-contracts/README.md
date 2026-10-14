@@ -23,7 +23,8 @@ not remove a contract prop, rename it, or change what it means.
 | RadioGroup | yes | yes | The group owns the label and the error, so a reader can count "2 of 3" |
 | Chip | yes | yes | Semantic tones, not domain ones; an app maps paid to success and overdue to danger. `size: 'md'` is a chip people tap, and it carries the touch target |
 | EmptyState | yes | yes | Always offers one way out; the error tone announces itself |
-| Section | yes | yes | Sentence case heading (D-18), mono meta, one quiet action |
+| Section | yes | yes | Sentence case heading (D-18), mono meta, one quiet action; `plain` variant is web-only |
+| Eyebrow | yes | no | Mono uppercase label before a title; optional index and accent dot (0.6.0) |
 | Divider | yes | yes | Decorative and hidden from assistive technology; native uses the platform hairline |
 | Select | yes | yes | Two different controls: a combobox popover on the web, a bottom sheet on a device |
 | Modal | yes | yes | Centred dialog with focus trap on the web; bottom sheet with stacked actions on a device |
@@ -53,6 +54,9 @@ and the one thing DOM and a phone keyboard could never have agreed on.
 
 ## Known gaps
 
+- **Eyebrow and the plain Section are web-only.** The editorial label and the open, hairline-divided
+  section came from lcsfeitosa.com in 0.6.0. Native accepts `variant` and keeps drawing the card;
+  there is no native Eyebrow yet. Both are a native-round task.
 - **The native reveal glyph.** The web PasswordField draws an eye (struck through while the value is
   shown); native still shows the old circle glyphs, because an eye there needs `react-native-svg`
   or an image asset and the app decides which. Closing it is a native-round task.
