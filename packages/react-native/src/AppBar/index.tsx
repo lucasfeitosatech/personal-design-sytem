@@ -1,5 +1,6 @@
 import { APP_BAR_HEIGHT, type AppBarContract } from '@lucasfeitosatech/design-core';
 import { Platform, Pressable, View } from 'react-native';
+import { Eyebrow } from '../Eyebrow';
 import { Text } from '../Text';
 import { useTheme } from '../theme/ThemeProvider';
 import { styles } from './styles';
@@ -14,8 +15,12 @@ const ios = Platform.OS !== 'android';
  * 64 dp bar with the title beside the arrow and no large title.
  *
  * The chevron is text, not an icon: the system ships no icon set, and a bar has to work without one.
+ *
+ * With `eyebrow` set, the large title screen gains the editorial label above the title, with the
+ * accent dot — the same voice as the web's page header. The large title drops to medium weight and
+ * tightens its tracking to match. Android has no large title, so the eyebrow never appears there.
  */
-export function AppBar({ title, subtitle, backLabel, onBack, actions, large = false }: AppBarProps) {
+export function AppBar({ title, subtitle, backLabel, onBack, actions, large = false, eyebrow }: AppBarProps) {
   const { palette } = useTheme();
   const largeTitle = ios && large;
 
@@ -64,9 +69,12 @@ export function AppBar({ title, subtitle, backLabel, onBack, actions, large = fa
       </View>
 
       {largeTitle ? (
-        <Text size="2xl" weight="semibold" accessibilityRole="header" style={styles.large}>
-          {title}
-        </Text>
+        <View style={styles.large}>
+          {eyebrow ? <Eyebrow dot>{eyebrow}</Eyebrow> : null}
+          <Text size="2xl" weight="medium" accessibilityRole="header" style={styles.largeTitle}>
+            {title}
+          </Text>
+        </View>
       ) : null}
       {subtitle ? <View style={styles.subtitle}>{typeof subtitle === 'string' ? <Text tone="secondary">{subtitle}</Text> : subtitle}</View> : null}
     </View>

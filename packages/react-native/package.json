@@ -1,6 +1,6 @@
 {
   "name": "@lucasfeitosatech/components-react-native",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "React Native components of the design system, for iOS and Android.",
   "license": "UNLICENSED",
   "type": "module",
@@ -24,11 +24,13 @@
     "@lucasfeitosatech/design-core": "^0.7.0",
     "@lucasfeitosatech/design-tokens": "^0.7.0",
     "react": ">=19",
-    "react-native": ">=0.80"
+    "react-native": ">=0.80",
+    "react-native-svg": ">=15"
   },
   "devDependencies": {
     "@types/react": "^19.3.0",
     "react": "^19.3.0",
-    "react-native": "^0.87.1"
+    "react-native": "^0.87.1",
+    "react-native-svg": "^15.15.5"
   }
 }

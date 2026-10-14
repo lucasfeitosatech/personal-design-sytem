@@ -51,6 +51,11 @@ export type AppBarContract = {
   actions?: AppBarAction[];
   /** Root screens of a stack. Ignored on Android, which has no large title. */
   large?: boolean;
+  /**
+   * The editorial label above the large title, with the accent dot — the web PageHeader's eyebrow
+   * moved into the bar. It exists only where the large title exists, so Android ignores it.
+   */
+  eyebrow?: string;
 };
 
 export const LIST_ROW_TRAILING = ['chevron', 'none'] as const;

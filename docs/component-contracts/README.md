@@ -17,21 +17,21 @@ not remove a contract prop, rename it, or change what it means.
 | Field | yes | yes | Web binds by `htmlFor`; native puts the label on the control and hides the visible one |
 | TextField | yes | yes | Binding differs (`target.value` vs `onChangeText`), contract does not |
 | Textarea | yes | yes | Label rests at the first line, not centred |
-| PasswordField | yes | yes | Reveal flips `type`, so a password manager still sees one field |
+| PasswordField | yes | yes | Reveal flips `type`, so a password manager still sees one field; the native eye is drawn with `react-native-svg` (0.7.1) |
 | Switch | yes | yes | Commits on the spot; native uses the platform control |
 | Checkbox | yes | yes | Part of a form. `indeterminate` is a DOM property on the web and `"mixed"` on native |
 | RadioGroup | yes | yes | The group owns the label and the error, so a reader can count "2 of 3" |
 | Chip | yes | yes | Semantic tones, not domain ones; an app maps paid to success and overdue to danger. `size: 'md'` is a chip people tap, and it carries the touch target |
 | EmptyState | yes | yes | Always offers one way out; the error tone announces itself |
-| Section | yes | yes | Sentence case heading (D-18), mono meta, one quiet action; `plain` variant is web-only |
-| Eyebrow | yes | no | Mono uppercase label before a title; optional index and accent dot (0.6.0) |
+| Section | yes | yes | Sentence case heading (D-18), mono meta, one quiet action; `plain` opens the block with a hairline on both renderers (0.7.1) |
+| Eyebrow | yes | yes | Mono uppercase label before a title; optional index and accent dot (0.6.0 web, 0.7.1 native) |
 | Divider | yes | yes | Decorative and hidden from assistive technology; native uses the platform hairline |
 | Select | yes | yes | Two different controls: a combobox popover on the web, a bottom sheet on a device |
 | Modal | yes | yes | Centred dialog with focus trap on the web; bottom sheet with stacked actions on a device |
 | Toast | yes | yes | Auto-dismiss 6s, 10s with an action, paused on hover; an error never dismisses itself |
 | MoneyInput | yes | yes | Value is digits in cents; fills from the right so the caret never moves. Focus selects the amount, so typing replaces a pre-filled figure |
 | PeriodInput | yes | yes | Value is up to six digits; the slash is drawn, never stored |
-| AppBar | no | yes | Native only. iOS 44 pt bar with the previous screen's name; Android 64 dp bar, no large title |
+| AppBar | no | yes | Native only. iOS 44 pt bar with the previous screen's name; Android 64 dp bar, no large title. Optional `eyebrow` above the large title, iOS only (0.7.1) |
 | TabBar | no | yes | Native only. iOS 60 pt + safe inset, Android 80 dp with the pill; no badge, ever |
 | ListRow | yes | yes | 52 pt row; `List` draws the hairline so no row knows it is the first |
 | Banner | yes | yes | A standing condition, never a decision: no timer, no primary action |
@@ -89,12 +89,11 @@ The rules every animation pays:
 - **Reveal needs a view timeline.** It is web-only, and on the web it only moves where
   `animation-timeline: view()` is supported (Chrome and Safari). Firefox — and a reduced-motion user, on
   purpose — sees the content ready. Nothing is ever left invisible waiting for the timeline.
-- **Eyebrow and the plain Section are web-only.** The editorial label and the open, hairline-divided
-  section came from lcsfeitosa.com in 0.6.0. Native accepts `variant` and keeps drawing the card;
-  there is no native Eyebrow yet. Both are a native-round task.
-- **The native reveal glyph.** The web PasswordField draws an eye (struck through while the value is
-  shown); native still shows the old circle glyphs, because an eye there needs `react-native-svg`
-  or an image asset and the app decides which. Closing it is a native-round task.
+- **The native package carries `react-native-svg` as a peer.** Since 0.7.1 the PasswordField eye is
+  drawn with `Svg`, `Path` and `Circle` instead of the old circle glyphs. The dependency stays a
+  peer (`>=15`), never a dependency of the package: the app already ships the library and the system
+  carries no icon set of its own, so a consumer that does not have it must install it. The repo keeps
+  it as a devDependency so the typecheck resolves.
 - **Fonts on native — closed for consumers that bundle the files.** `design-tokens` now publishes
   `nativeFonts`, the family names per platform (Android matches the asset file name, iOS the
   PostScript name), and the native `Text` reads them. The files themselves can only live in an app:

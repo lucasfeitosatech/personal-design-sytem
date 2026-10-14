@@ -1,4 +1,4 @@
-import { radius, space, tap } from '@lucasfeitosatech/design-tokens';
+import { radius, space, tap, text } from '@lucasfeitosatech/design-tokens';
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
@@ -12,6 +12,7 @@ export const styles = StyleSheet.create({
   titleAndroid: { paddingLeft: space[3] },
   actions: { flexDirection: 'row', alignItems: 'center' },
   action: { width: tap, height: tap, alignItems: 'center', justifyContent: 'center', borderRadius: radius.sm },
-  large: { paddingHorizontal: space[4], paddingBottom: space[2] },
+  large: { paddingHorizontal: space[4], paddingBottom: space[2], gap: space[1] },
+  largeTitle: { letterSpacing: -0.035 * text['2xl'] },
   subtitle: { paddingHorizontal: space[4], paddingBottom: space[2] },
 });
