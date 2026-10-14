@@ -23,6 +23,12 @@
   font-size: var(--ds-text-xs); font-weight: 600;
 }
 .half { position: absolute; left: 0; top: 0; bottom: 0; width: 12px; }
+.popIn { animation: ds-tile-pop var(--ds-motion-slow) var(--ds-ease-spring) both; }
+@keyframes ds-tile-pop {
+  from { transform: scale(0.85); }
+  to { transform: scale(1); }
+}
+@media (prefers-reduced-motion: reduce) { .popIn { animation: none; } }
 
 .labels { flex: 1 1 0%; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
 

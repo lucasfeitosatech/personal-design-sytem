@@ -31,6 +31,11 @@ verdade, que é o que faz o leitor anunciar "2 de 3". Indeterminado do Checkbox 
 na web e `accessibilityState` `mixed` no nativo. Placeholder usa o tom terciário, porque o tom
 desabilitado reprova em contraste (D-20).
 
+Toda animação tem fallback de `prefers-reduced-motion: reduce`: o estado final pinta direto, no
+máximo um fade de `--ds-motion-fast`. Só se anima `transform`, `opacity`, `stroke-dashoffset`,
+`background-color` e `border-color` — nunca `transition: all`. A curva `spring` é `linear()` de CSS
+e existe só no web; o nativo leva as béziers pelo `easing` dos tokens.
+
 ## Comandos
 
 ```bash

@@ -1,0 +1,15 @@
+/* The animation is bound to the view timeline, not to a clock: there is no duration to write.
+   `@supports` keeps browsers without a view timeline on the plain, already-visible content, and
+   the media query keeps reduced-motion users on it too — the block never starts hidden. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: ds-reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+    }
+  }
+}
+@keyframes ds-reveal {
+  from { opacity: 0; transform: translateY(16px); }
+}

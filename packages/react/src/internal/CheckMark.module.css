@@ -1,0 +1,19 @@
+.mark {
+  display: inline-block;
+  flex: none;
+}
+/* pathLength="1" puts the whole stroke on a unit dash: offset 1 is empty, 0 is drawn. */
+.mark path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+.animate path {
+  animation: ds-check-draw var(--ds-motion-base) var(--ds-ease-out) 60ms both;
+}
+@keyframes ds-check-draw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate path { animation: none; }
+}

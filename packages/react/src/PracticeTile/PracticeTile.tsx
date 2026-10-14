@@ -1,5 +1,6 @@
 import { TILE_STATE_TOKEN, type PracticeTileContract, type TileGridContract } from '@lucasfeitosatech/design-core';
 import type { ReactNode } from 'react';
+import { CheckMark, useTurnedOn } from '../internal/CheckMark';
 import { Text } from '../Text';
 import styles from './PracticeTile.module.css';
 
@@ -14,6 +15,8 @@ export type TileGridProps = TileGridContract & { children?: ReactNode };
  */
 export function PracticeTile({ label, meta, state = 'idle', onPress, disabled = false }: PracticeTileProps) {
   const token = TILE_STATE_TOKEN[state];
+  // A grid that loads already marked paints its checks settled; only a new `done` pops and draws.
+  const turnCount = useTurnedOn(state === 'done');
   return (
     <button
       type="button"
@@ -23,9 +26,18 @@ export function PracticeTile({ label, meta, state = 'idle', onPress, disabled = 
       disabled={disabled || !onPress}
       onClick={onPress}
     >
-      <span className={styles.mark} aria-hidden="true">
+      {/* The key restarts the pop on every new `done`; the mark re-renders its content either way. */}
+      <span
+        key={turnCount}
+        className={[styles.mark, state === 'done' && turnCount > 0 ? styles.popIn : ''].filter(Boolean).join(' ')}
+        aria-hidden="true"
+      >
         {token.half ? <span className={styles.half} /> : null}
-        {token.mark && !token.half ? <span className={styles.fill}>✓</span> : null}
+        {token.mark && !token.half ? (
+          <span className={styles.fill}>
+            <CheckMark animate={turnCount > 0} />
+          </span>
+        ) : null}
       </span>
       <span className={styles.labels}>
         <Text size="base" weight="medium" lines={2}>

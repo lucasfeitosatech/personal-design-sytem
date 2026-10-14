@@ -1,5 +1,6 @@
 import { type BillRowContract } from '@lucasfeitosatech/design-core';
 import { Chip } from '../Chip';
+import { CheckMark, useTurnedOn } from '../internal/CheckMark';
 import { Text } from '../Text';
 import styles from './BillRow.module.css';
 
@@ -14,6 +15,8 @@ export type BillRowProps = BillRowContract;
  * check when the action already happened.
  */
 export function BillRow({ name, status, meta, amount, action, muted = false }: BillRowProps) {
+  // `action.done` is what tells the row the bill is settled; a list that loads paid stays settled.
+  const turnCount = useTurnedOn(Boolean(action?.done));
   return (
     <div className={[styles.row, muted ? styles.muted : ''].filter(Boolean).join(' ')}>
       <div className={styles.main}>
@@ -45,7 +48,9 @@ export function BillRow({ name, status, meta, amount, action, muted = false }: B
           onClick={action.onPress}
         >
           <span className={styles.glyph} aria-hidden="true">
-            {action.icon ?? '✓'}
+            {action.icon ?? (
+              <CheckMark key={turnCount} animate={Boolean(action.done) && turnCount > 0} />
+            )}
           </span>
         </button>
       ) : null}

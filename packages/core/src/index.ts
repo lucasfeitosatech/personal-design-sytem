@@ -20,5 +20,6 @@ export * from './contracts/quote';
 export * from './contracts/row';
 export * from './contracts/date-strip';
 export * from './contracts/ai';
+export * from './contracts/motion';
 export * from './masks/money';
 export * from './masks/period';

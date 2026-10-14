@@ -10,13 +10,21 @@
   background: var(--ds-color-surface); transition: background var(--ds-motion-fast), border-color var(--ds-motion-fast);
 }
 .mark { color: transparent; font-size: 13px; font-weight: 600; line-height: 1; }
+.pop { display: inline-flex; color: var(--ds-color-on-accent); }
+.popIn { animation: ds-box-pop var(--ds-motion-slow) var(--ds-ease-spring) both; }
+@keyframes ds-box-pop {
+  from { transform: scale(0.85); }
+  to { transform: scale(1); }
+}
 .input:checked + .control .box,
 .input:indeterminate + .control .box { background: var(--ds-color-accent); border-color: var(--ds-color-accent); }
-.input:checked + .control .mark,
 .input:indeterminate + .control .mark { color: var(--ds-color-on-accent); }
 .input:focus-visible + .control .box { outline: 2px solid var(--ds-color-focus); outline-offset: 2px; }
 .invalid { border-color: var(--ds-color-overdue); }
 .labels { display: flex; flex-direction: column; gap: 2px; }
 .error { margin-left: calc(20px + var(--ds-space-3)); }
-@media (prefers-reduced-motion: reduce) { .box { transition: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .box { transition: none; }
+  .popIn { animation: none; }
+}
 @media (max-width: 879px) { .control { min-height: var(--ds-tap); } }

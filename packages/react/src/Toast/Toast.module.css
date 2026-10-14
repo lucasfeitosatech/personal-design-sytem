@@ -7,6 +7,20 @@
   padding: var(--ds-space-3) var(--ds-space-4);
   background: var(--ds-color-text); color: var(--ds-color-bg);
   border-radius: var(--ds-radius-md); box-shadow: var(--ds-shadow-overlay);
+  animation: ds-toast-in var(--ds-motion-base) var(--ds-ease-out) both;
+}
+@keyframes ds-toast-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+/* Entry only: the application keeps the toast mounted for its lifetime and unmounts it, so there
+   is no exit to animate. */
+@media (prefers-reduced-motion: reduce) {
+  .toast { animation-name: ds-toast-fade; animation-duration: var(--ds-motion-fast); }
+}
+@keyframes ds-toast-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 .error { background: var(--ds-color-overdue); color: var(--ds-color-on-overdue); }
 .message { flex: 1; min-width: 0; color: inherit; }

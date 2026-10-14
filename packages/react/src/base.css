@@ -1,4 +1,9 @@
 /* Global utilities the components rely on. Scoped class names cannot cover these. */
+/* The mono figure face: tabular figures keep a column of numbers from shifting while one settles. */
+.ds-mono {
+  font-family: var(--ds-font-mono);
+  font-variant-numeric: tabular-nums;
+}
 .ds-visually-hidden {
   position: absolute;
   width: 1px;

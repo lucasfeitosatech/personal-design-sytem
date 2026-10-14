@@ -41,6 +41,9 @@ not remove a contract prop, rename it, or change what it means.
 | AIAction / AIPanel | yes | yes | The action is quiet, never primary; `unavailable` is a panel state, not an error |
 | BillRow | yes | yes | Read-only row with one trailing 44 pt control; the name truncates, the figure never does |
 | DateStrip | yes | yes | A week of days; the dot is never the only signal — each day's label says it in words |
+| AnimatedNumber | yes | no | Settles on a new value with the core tween; the moving text is `aria-hidden`, the reader hears the final value once (0.7.0) |
+| ProgressBar | yes | no | `role="meter"` for a measured share, not a loading indicator; first paint fills from 0, later changes transition (0.7.0) |
+| Reveal | yes | no | Scroll-driven fade-up on `animation-timeline: view()`; pure CSS, no JS, content never waits hidden (0.7.0) |
 
 ## Where the shared base pays
 
@@ -52,8 +55,40 @@ The value is always the digits, never the formatted string. Typing appends and b
 so the caret stays at the end and never has to be repositioned — the trap that breaks masked inputs,
 and the one thing DOM and a phone keyboard could never have agreed on.
 
+## Motion
+
+Movement is how the system says "something changed". The tokens are `--ds-motion-fast/base/slow/reveal`
+(150/220/320/560 ms) and `--ds-ease-out`, `--ds-ease-in-out`, `--ds-ease-spring`. The spring is a CSS
+`linear(...)` timing function for confirmations (the check pop): it has no React Native equivalent, so
+`design-tokens` ships it through CSS only and its `easing` export carries the two cubic curves' control
+points. The tween math — `easeOutCubic` and `tweenValue` — is pure in `design-core`, tested once, so a
+number and a bar settle at the same pace on both renderers.
+
+The rules every animation pays:
+
+- Only `transform`, `opacity`, `stroke-dashoffset`, `background-color` and `border-color` animate.
+  Never `transition: all`.
+- Every animation has a `prefers-reduced-motion: reduce` fallback that removes the displacement, scale
+  and drawing — the final state paints directly — and keeps at most a `--ds-motion-fast` fade.
+- The drawn check: a 16 px SVG with `pathLength=1`, its stroke drawn by `stroke-dashoffset` 60 ms after
+  the box pops with the spring. It plays only on a *new* marking (`useTurnedOn` counts the rising edge
+  after mount); a list that loads already marked paints its checks settled, and every new marking
+  replays it through the element's `key`.
+- `Reveal` is the one animation with no clock at all: it is bound to the view timeline and runs on the
+  scroll itself, so it exists only where `animation-timeline: view()` is supported.
+
 ## Known gaps
 
+- **Native has no movement yet.** The native package compiles against the motion tokens (`motion` with
+  its four durations, `easing` with the two cubic curves' control points), but no native component
+  animates: when the native round comes, it will use exactly those tokens, not new ones. `AnimatedNumber`
+  and `ProgressBar` have no native version in 0.7.0.
+- **The Toast has no exit.** The application keeps a toast mounted for its whole lifetime and unmounts
+  it, so the entrance is the only animation to write; an exit would need the app to hold the toast
+  through it, which is the app's state, not the component's.
+- **Reveal needs a view timeline.** It is web-only, and on the web it only moves where
+  `animation-timeline: view()` is supported (Chrome and Safari). Firefox — and a reduced-motion user, on
+  purpose — sees the content ready. Nothing is ever left invisible waiting for the timeline.
 - **Eyebrow and the plain Section are web-only.** The editorial label and the open, hairline-divided
   section came from lcsfeitosa.com in 0.6.0. Native accepts `variant` and keeps drawing the card;
   there is no native Eyebrow yet. Both are a native-round task.

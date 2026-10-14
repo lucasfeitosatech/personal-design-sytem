@@ -1,6 +1,8 @@
 import type { ModalContract } from '@lucasfeitosatech/design-core';
 import { useEffect, useId, useRef } from 'react';
 import { Button } from '../Button';
+import { useReducedMotion } from '../hooks/useReducedMotion';
+import { usePresence } from '../internal/usePresence';
 import { Text } from '../Text';
 import styles from './Modal.module.css';
 
@@ -15,6 +17,9 @@ export type ModalProps = ModalContract;
  * whose body holds a field starts on that field.
  */
 export function Modal({ open, title, body, primaryAction, secondaryAction, onClose, alert = false }: ModalProps) {
+  // The exit lasts one fast motion; reduced motion unmounts at once. Focus and keys stay wired to
+  // `open`, not `mounted`, so they release the moment the dialog is logically closed.
+  const { mounted, closing } = usePresence(open, useReducedMotion() ? 0 : 150);
   const id = useId();
   const dialogRef = useRef<HTMLDivElement>(null);
   const primaryRef = useRef<HTMLButtonElement>(null);
@@ -58,17 +63,22 @@ export function Modal({ open, title, body, primaryAction, secondaryAction, onClo
     };
   }, [open, alert]);
 
-  if (!open) return null;
+  if (!mounted) return null;
 
   return (
-    <div className={styles.scrim} onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
+    <div
+      className={[styles.scrim, closing ? styles.closing : ''].filter(Boolean).join(' ')}
+      // Leaving: still painted for the exit, but no longer reachable by Tab, clicks or readers.
+      inert={closing || undefined}
+      onMouseDown={(event) => event.target === event.currentTarget && onClose()}
+    >
       <div
         ref={dialogRef}
         role={alert ? 'alertdialog' : 'dialog'}
         aria-modal="true"
         aria-labelledby={`${id}-title`}
         aria-describedby={body ? `${id}-body` : undefined}
-        className={styles.dialog}
+        className={[styles.dialog, closing ? styles.closing : ''].filter(Boolean).join(' ')}
       >
         <Text as="h2" id={`${id}-title`} size="lg" weight="semibold">
           {title}

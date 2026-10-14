@@ -90,6 +90,31 @@
     "base": {
       "$value": "220ms",
       "$type": "duration"
+    },
+    "slow": {
+      "$value": "320ms",
+      "$type": "duration"
+    },
+    "reveal": {
+      "$value": "560ms",
+      "$type": "duration"
+    }
+  },
+  "easing": {
+    "$description": "Timing curves. `spring` is a `linear(...)` function and has no DTCG type: it ships to the web through the CSS variables and stays out of the native artifact.",
+    "out": {
+      "$value": "cubic-bezier(.23, 1, .32, 1)",
+      "$type": "cubicBezier",
+      "$description": "Entries and exits."
+    },
+    "inOut": {
+      "$value": "cubic-bezier(.65, 0, .35, 1)",
+      "$type": "cubicBezier",
+      "$description": "Movement inside the screen."
+    },
+    "spring": {
+      "$value": "linear(0, 0.009, 0.035 2.1%, 0.141 4.4%, 0.723 12.9%, 0.938 16.7%, 1.017 19.4%, 1.067 22.2%, 1.088 25.5%, 1.083 28.1%, 1.061 31.3%, 1.003 39.3%, 0.985 44.4%, 0.981 49.6%, 0.999 69.6%, 1)",
+      "$description": "Confirmation (check)."
     }
   },
   "font": {

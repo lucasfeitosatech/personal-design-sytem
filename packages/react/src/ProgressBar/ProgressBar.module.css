@@ -1,0 +1,37 @@
+/* The fill scales instead of resizing: scaleX is the only property that animates, so the bar
+   never touches layout, and the pill track keeps its width through the whole fill. */
+.bar {
+  display: block;
+  background: var(--ds-color-surface-raised);
+  border-radius: var(--ds-radius-pill);
+  overflow: hidden;
+}
+.size-md { height: 8px; }
+.size-sm { height: 4px; }
+
+/* Mirrors PROGRESS_TONE_TOKEN in design-core. Change both together. */
+.tone-accent { background: var(--ds-color-accent); }
+.tone-muted { background: var(--ds-color-text-tertiary); }
+.tone-danger { background: var(--ds-color-overdue); }
+
+.fill {
+  display: block;
+  height: 100%;
+  border-radius: var(--ds-radius-pill);
+  transform: scaleX(var(--ds-progress));
+  transform-origin: left;
+  /* `backwards` holds scaleX(0) through the delay, then releases to the resting transform —
+     the same value the keyframe ended on — so later changes ride the transition. */
+  animation-name: ds-progress-fill;
+  animation-timing-function: var(--ds-ease-out);
+  animation-fill-mode: backwards;
+  transition: transform var(--ds-motion-slow) var(--ds-ease-out);
+}
+@keyframes ds-progress-fill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(var(--ds-progress)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  /* The share is still true; it simply stops being drawn. */
+  .fill { animation: none; transition: none; }
+}

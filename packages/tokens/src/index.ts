@@ -116,8 +116,17 @@ export const radius = {
 
 export const motion = {
   "fast": 150,
-  "base": 220
+  "base": 220,
+  "slow": 320,
+  "reveal": 560
 } as const;
+
+/**
+ * Control points of the cubic curves, for the native easing functions. The `spring` curve stays
+ * out on purpose: it is a `linear(...)` timing function and React Native has no such thing, so it
+ * only ships through the CSS variables to the web.
+ */
+export const easing = { out: [0.23,1,0.32,1], inOut: [0.65,0,0.35,1] } as const;
 
 /** Minimum touch target, in points. */
 export const tap = 44;
