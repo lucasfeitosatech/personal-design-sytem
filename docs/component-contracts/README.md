@@ -27,9 +27,9 @@ not remove a contract prop, rename it, or change what it means.
 | Eyebrow | yes | yes | Mono uppercase label before a title; optional index and accent dot (0.6.0 web, 0.7.1 native) |
 | Divider | yes | yes | Decorative and hidden from assistive technology; native uses the platform hairline |
 | Select | yes | yes | Two different controls: a combobox popover on the web, a bottom sheet on a device |
-| Modal | yes | yes | Centred dialog with focus trap on the web; bottom sheet with stacked actions on a device |
-| Toast | yes | yes | Auto-dismiss 6s, 10s with an action, paused on hover; an error never dismisses itself. `leaving`/`onExited` play the exit on a device; the web accepts and ignores them (0.8.0) |
-| MoneyInput | yes | yes | Value is digits in cents; fills from the right so the caret never moves. Focus selects the amount, so typing replaces a pre-filled figure |
+| Modal | yes | yes | Centred dialog with focus trap on the web; bottom sheet with stacked actions on a device. An action accepts `disabled`: no press, announced as unavailable, painted with the disabled tone (0.8.1) |
+| Toast | yes | yes | Auto-dismiss 6s, 10s with an action, paused on hover; an error never dismisses itself. `leaving`/`onExited` play the exit on a device; the web accepts and ignores them (0.8.0). `actionDisabled` keeps the action visible but off, in the disabled tone (0.8.1) |
+| MoneyInput | yes | yes | Value is digits in cents; fills from the right so the caret never moves. Focus selects the amount, so typing replaces a pre-filled figure. `autoFocus` on both; native also takes a ref to the inner `TextInput`, so an application can focus the field when the modal around it opens (0.8.1) |
 | PeriodInput | yes | yes | Value is up to six digits; the slash is drawn, never stored |
 | AppBar | no | yes | Native only. iOS 44 pt bar with the previous screen's name; Android 64 dp bar, no large title. Optional `eyebrow` above the large title, iOS only (0.7.1) |
 | TabBar | no | yes | Native only. iOS 60 pt + safe inset, Android 80 dp with the pill; no badge, ever |

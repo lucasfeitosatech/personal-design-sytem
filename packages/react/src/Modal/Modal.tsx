@@ -96,11 +96,11 @@ export function Modal({ open, title, body, primaryAction, secondaryAction, onClo
         ) : null}
         <div className={styles.actions}>
           {secondaryAction ? (
-            <Button ref={secondaryRef} variant="ghost" onClick={secondaryAction.onPress ?? onClose} loading={secondaryAction.loading}>
+            <Button ref={secondaryRef} variant="ghost" onClick={secondaryAction.disabled ? undefined : secondaryAction.onPress ?? onClose} loading={secondaryAction.loading} disabled={secondaryAction.disabled}>
               {secondaryAction.label}
             </Button>
           ) : null}
-          <Button ref={primaryRef} variant={primaryAction.variant ?? (alert ? 'danger' : 'primary')} onClick={primaryAction.onPress} loading={primaryAction.loading}>
+          <Button ref={primaryRef} variant={primaryAction.variant ?? (alert ? 'danger' : 'primary')} onClick={primaryAction.disabled ? undefined : primaryAction.onPress} loading={primaryAction.loading} disabled={primaryAction.disabled}>
             {primaryAction.label}
           </Button>
         </div>

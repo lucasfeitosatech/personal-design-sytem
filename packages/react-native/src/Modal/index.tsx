@@ -26,11 +26,11 @@ export function Modal({ open, title, body, primaryAction, secondaryAction, onClo
         </Text>
         {body ? typeof body === 'string' ? <Text size="base" tone="secondary">{body}</Text> : body : null}
         <View style={styles.actions}>
-          <Button variant={primaryAction.variant ?? (alert ? 'danger' : 'primary')} loading={primaryAction.loading} onPress={primaryAction.onPress} block>
+          <Button variant={primaryAction.variant ?? (alert ? 'danger' : 'primary')} loading={primaryAction.loading} disabled={primaryAction.disabled} onPress={primaryAction.disabled ? undefined : primaryAction.onPress} block>
             {primaryAction.label}
           </Button>
           {secondaryAction ? (
-            <Button variant="ghost" loading={secondaryAction.loading} onPress={secondaryAction.onPress ?? onClose} block>
+            <Button variant="ghost" loading={secondaryAction.loading} disabled={secondaryAction.disabled} onPress={secondaryAction.disabled ? undefined : secondaryAction.onPress ?? onClose} block>
               {secondaryAction.label}
             </Button>
           ) : null}

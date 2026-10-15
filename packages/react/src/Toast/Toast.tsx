@@ -12,7 +12,7 @@ export type ToastProps = ToastContract;
  * reaching for its undo is worse than no message. An error never dismisses itself, because one that
  * disappears on its own may never have been read.
  */
-export function Toast({ message, tone = 'default', actionLabel, onAction, onDismiss, dismissLabel = 'Fechar' }: ToastProps) {
+export function Toast({ message, tone = 'default', actionLabel, actionDisabled = false, onAction, onDismiss, dismissLabel = 'Fechar' }: ToastProps) {
   const timeout = toastTimeout(tone, Boolean(actionLabel));
   const [paused, setPaused] = useState(false);
   const dismiss = useRef(onDismiss);
@@ -36,8 +36,8 @@ export function Toast({ message, tone = 'default', actionLabel, onAction, onDism
       <Text size="md" className={styles.message}>
         {message}
       </Text>
-      {actionLabel && onAction ? (
-        <button type="button" className={styles.action} onClick={onAction}>
+      {actionLabel && (onAction || actionDisabled) ? (
+        <button type="button" className={styles.action} disabled={actionDisabled} onClick={onAction}>
           {actionLabel}
         </button>
       ) : null}

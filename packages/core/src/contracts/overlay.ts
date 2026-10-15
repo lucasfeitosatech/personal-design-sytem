@@ -6,6 +6,8 @@ export type ModalAction = {
   variant?: ButtonVariant;
   loading?: boolean;
   onPress?: () => void;
+  /** The action is off: no press, announced as unavailable, painted with the disabled tone. */
+  disabled?: boolean;
 };
 
 /**
@@ -43,6 +45,8 @@ export type ToastContract = {
   message: string;
   tone?: ToastTone;
   actionLabel?: string;
+  /** The action stays visible but off: painted with the disabled tone, announced as unavailable. */
+  actionDisabled?: boolean;
   onAction?: () => void;
   onDismiss?: () => void;
   dismissLabel?: string;

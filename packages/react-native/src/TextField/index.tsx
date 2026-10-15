@@ -1,6 +1,6 @@
 import { INPUT_HEIGHT, LABEL_FLOATING_SIZE, LABEL_RESTING_SIZE, type FieldContract, type TextFieldContract } from '@lucasfeitosatech/design-core';
 import { space } from '@lucasfeitosatech/design-tokens';
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { forwardRef, useEffect, useRef, useState, type ComponentRef, type ReactNode } from 'react';
 import { Animated, TextInput, View, type TextInputProps } from 'react-native';
 import { Field } from '../Field';
 import { fontFamily } from '../Text/styles';
@@ -27,26 +27,29 @@ export type TextFieldProps = Omit<TextInputProps, 'style' | 'value' | 'editable'
  * animation driven by focus and by the value being non-empty. The label paints the surface colour
  * behind itself to sit on the border line, because a native border cannot be notched.
  */
-export function TextField({
-  label,
-  hint,
-  error,
-  required,
-  disabled,
-  size = 'md',
-  secret = false,
-  mode = 'text',
-  mono = false,
-  align = 'left',
-  readOnly,
-  prefix,
-  suffix,
-  surfaceBehind,
-  value,
-  onValueChange,
-  placeholder,
-  ...rest
-}: TextFieldProps) {
+export const TextField = forwardRef<ComponentRef<typeof TextInput>, TextFieldProps>(function TextField(
+  {
+    label,
+    hint,
+    error,
+    required,
+    disabled,
+    size = 'md',
+    secret = false,
+    mode = 'text',
+    mono = false,
+    align = 'left',
+    readOnly,
+    prefix,
+    suffix,
+    surfaceBehind,
+    value,
+    onValueChange,
+    placeholder,
+    ...rest
+  },
+  ref,
+) {
   const { palette } = useTheme();
   const [focused, setFocused] = useState(false);
   // A prefix already occupies the row, so the label has nowhere to rest.
@@ -89,6 +92,7 @@ export function TextField({
           </Animated.Text>
           {prefix}
           <TextInput
+            ref={ref}
             style={[styles.input, { color: palette.text, textAlign: align }, mono ? { fontFamily: fontFamily('regular', true) } : null]}
             placeholder={lifted ? placeholder : undefined}
             placeholderTextColor={palette.textTertiary}
@@ -110,4 +114,4 @@ export function TextField({
       )}
     </Field>
   );
-}
+});

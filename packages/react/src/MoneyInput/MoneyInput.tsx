@@ -21,7 +21,7 @@ export type MoneyInputProps = MoneyInputContract;
  * alone: that is how the whole amount gets replaced.
  */
 export const MoneyInput = forwardRef<HTMLInputElement, MoneyInputProps>(function MoneyInput(
-  { value = '', onValueChange, placeholder = '0,00', ...rest },
+  { value = '', onValueChange, placeholder = '0,00', autoFocus, ...rest },
   ref,
 ) {
   const selectedOnFocus = useRef(false);
@@ -35,6 +35,7 @@ export const MoneyInput = forwardRef<HTMLInputElement, MoneyInputProps>(function
       inputMode="decimal"
       prefix="R$"
       placeholder={placeholder}
+      autoFocus={autoFocus}
       value={formatMoney(value)}
       onValueChange={(next) => onValueChange?.(moneyDigits(next))}
       onFocus={(event) => {

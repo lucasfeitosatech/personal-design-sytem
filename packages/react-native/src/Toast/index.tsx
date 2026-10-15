@@ -16,7 +16,7 @@ export type ToastProps = ToastContract;
  * `onExited` lets it unmount. There is no hover on a device, so the pause the web toast gets does
  * not exist here; the timings are the same otherwise. An error never dismisses itself.
  */
-export function Toast({ message, tone = 'default', actionLabel, onAction, onDismiss, dismissLabel = 'Fechar', leaving = false, onExited }: ToastProps) {
+export function Toast({ message, tone = 'default', actionLabel, actionDisabled = false, onAction, onDismiss, dismissLabel = 'Fechar', leaving = false, onExited }: ToastProps) {
   const { palette } = useTheme();
   const reduced = useReduceMotion();
   const timeout = toastTimeout(tone, Boolean(actionLabel));
@@ -91,9 +91,9 @@ export function Toast({ message, tone = 'default', actionLabel, onAction, onDism
       <Text size="md" style={[styles.message, { color: isError ? palette.onOverdue : palette.bg }]} lines={2}>
         {message}
       </Text>
-      {actionLabel && onAction ? (
-        <Pressable onPress={onAction} accessibilityRole="button" hitSlop={8}>
-          <Text size="md" weight="semibold" style={{ color: isError ? palette.onOverdue : palette.bg }}>
+      {actionLabel && (onAction || actionDisabled) ? (
+        <Pressable onPress={actionDisabled ? undefined : onAction} accessibilityRole="button" accessibilityState={{ disabled: actionDisabled }} disabled={actionDisabled} hitSlop={8}>
+          <Text size="md" weight="semibold" style={{ color: isError ? palette.onOverdue : palette.bg, opacity: actionDisabled ? 0.55 : 1 }}>
             {actionLabel}
           </Text>
         </Pressable>

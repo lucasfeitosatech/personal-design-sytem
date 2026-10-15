@@ -12,6 +12,8 @@ export type MoneyInputContract = Omit<FieldContract, 'children'> & {
   size?: BaseSize;
   readOnly?: boolean;
   placeholder?: string;
+  /** Focuses the field on mount. This is how an application focuses the amount when it opens the modal around it. */
+  autoFocus?: boolean;
 };
 
 /** Month and year. The value is up to six digits, "032026". */
