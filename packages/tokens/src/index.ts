@@ -9,9 +9,9 @@ export type Palette = Record<keyof typeof lightPalette, string>;
 export const lightPalette = {
   "bg": "#faf9f7",
   "bgPage": "#f3f1ed",
-  "surface": "#ffffff",
+  "surface": "#f9f7f3",
   "surfaceRaised": "#f0ede8",
-  "surfaceMuted": "#fcfbf9",
+  "surfaceMuted": "#f6f4f0",
   "border": "#e6e2dc",
   "borderSoft": "#f0ede8",
   "text": "#1e1c19",

@@ -10,7 +10,7 @@
       "$type": "color"
     },
     "surface": {
-      "$value": "#ffffff",
+      "$value": "#f9f7f3",
       "$type": "color"
     },
     "surface-raised": {
@@ -18,7 +18,7 @@
       "$type": "color"
     },
     "surface-muted": {
-      "$value": "#fcfbf9",
+      "$value": "#f6f4f0",
       "$type": "color"
     },
     "border": {

@@ -20,6 +20,7 @@ export * from './PasswordField';
 export * from './PeriodInput';
 export * from './PracticeTile';
 export * from './ProgressBar';
+export * from './Reveal';
 export * from './RadioGroup';
 export * from './Section';
 export * from './Select';

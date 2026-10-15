@@ -1,6 +1,7 @@
 import { CHIP_TONE_GLYPH, CHIP_TONE_TOKEN, type ChipContract } from '@lucasfeitosatech/design-core';
 import type { Palette } from '@lucasfeitosatech/design-tokens';
-import { Pressable, View } from 'react-native';
+import { Animated, Pressable, View } from 'react-native';
+import { usePressScale } from '../internal/usePressScale';
 import { Text } from '../Text';
 import { useTheme } from '../theme/ThemeProvider';
 import { styles } from './styles';
@@ -13,6 +14,7 @@ export type ChipProps = ChipContract & {
 /** A small label, optionally selectable, optionally removable. */
 export function Chip({ label, tone = 'neutral', size = 'sm', icon, mono = false, selected, onRemove, removeLabel = 'Remover', disabled, onPress }: ChipProps) {
   const { palette } = useTheme();
+  const press = usePressScale();
   const key = CHIP_TONE_TOKEN[tone];
   const background = palette[key.background as keyof Palette];
   const foreground = palette[key.foreground as keyof Palette];
@@ -28,9 +30,11 @@ export function Chip({ label, tone = 'neutral', size = 'sm', icon, mono = false,
   );
 
   return (
-    <View style={styles.wrap}>
+    <Animated.View style={[styles.wrap, press.style]}>
       {onPress ? (
         <Pressable
+          onPressIn={press.onPressIn}
+          onPressOut={press.onPressOut}
           onPress={onPress}
           disabled={disabled}
           accessibilityRole="button"
@@ -63,6 +67,6 @@ export function Chip({ label, tone = 'neutral', size = 'sm', icon, mono = false,
           </Text>
         </Pressable>
       ) : null}
-    </View>
+    </Animated.View>
   );
 }

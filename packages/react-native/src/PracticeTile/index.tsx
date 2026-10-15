@@ -1,7 +1,8 @@
 import { PRACTICE_TILE_MIN_HEIGHT, TILE_STATE_TOKEN, type PracticeTileContract, type TileGridContract } from '@lucasfeitosatech/design-core';
 import type { Palette } from '@lucasfeitosatech/design-tokens';
 import type { ReactNode } from 'react';
-import { Pressable, View } from 'react-native';
+import { Animated, Pressable, View } from 'react-native';
+import { usePressScale } from '../internal/usePressScale';
 import { CheckMark, PopMark, useTurnedOn } from '../internal/CheckMark';
 import { Text } from '../Text';
 import { useTheme } from '../theme/ThemeProvider';
@@ -21,9 +22,13 @@ export function PracticeTile({ label, meta, state = 'idle', onPress, disabled = 
   const markColor = token.mark ? palette[token.mark as keyof Palette] : undefined;
   // A grid that loads already marked paints its checks settled; only a new `done` pops and draws.
   const turnCount = useTurnedOn(state === 'done');
+  const press = usePressScale();
 
   return (
+    <Animated.View style={[styles.cell, press.style]}>
     <Pressable
+      onPressIn={press.onPressIn}
+      onPressOut={press.onPressOut}
       accessibilityRole="checkbox"
       accessibilityLabel={meta ? `${label}, ${meta}` : label}
       accessibilityState={{ checked: state === 'partial' ? 'mixed' : state === 'done', disabled }}
@@ -61,6 +66,7 @@ export function PracticeTile({ label, meta, state = 'idle', onPress, disabled = 
         ) : null}
       </View>
     </Pressable>
+    </Animated.View>
   );
 }
 
