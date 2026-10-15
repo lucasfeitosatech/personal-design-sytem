@@ -34,6 +34,10 @@ export type ToastTone = (typeof TOAST_TONES)[number];
 /**
  * A short confirmation, usually with a way to undo. An error stays until dismissed: a message that
  * disappears on its own is one the person may never have read.
+ *
+ * The exit is the application's state, not the component's: the app keeps the toast mounted while
+ * it leaves by setting `leaving`, and the component calls `onExited` when the out is done, so the
+ * app can unmount it.
  */
 export type ToastContract = {
   message: string;
@@ -42,6 +46,10 @@ export type ToastContract = {
   onAction?: () => void;
   onDismiss?: () => void;
   dismissLabel?: string;
+  /** The toast is leaving: play the exit before calling `onExited`. */
+  leaving?: boolean;
+  /** Called when the exit animation ends, so the application can unmount the toast. */
+  onExited?: () => void;
 };
 
 /** Milliseconds before a default toast dismisses itself. Longer when there is an action to notice. */

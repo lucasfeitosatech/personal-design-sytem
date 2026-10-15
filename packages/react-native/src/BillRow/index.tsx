@@ -1,6 +1,7 @@
 import { BILL_ROW_MIN_HEIGHT, type BillRowContract } from '@lucasfeitosatech/design-core';
 import { Pressable, View } from 'react-native';
 import { Chip } from '../Chip';
+import { CheckMark, PopMark, useTurnedOn } from '../internal/CheckMark';
 import { Text } from '../Text';
 import { useTheme } from '../theme/ThemeProvider';
 import { styles } from './styles';
@@ -15,6 +16,8 @@ export type BillRowProps = BillRowContract;
  */
 export function BillRow({ name, status, meta, amount, action, muted = false }: BillRowProps) {
   const { palette } = useTheme();
+  // `action.done` is what tells the row the bill is settled; a list that loads paid stays settled.
+  const turnCount = useTurnedOn(Boolean(action?.done));
 
   return (
     <View style={[styles.row, { minHeight: BILL_ROW_MIN_HEIGHT }]}>
@@ -54,9 +57,10 @@ export function BillRow({ name, status, meta, amount, action, muted = false }: B
           ]}
         >
           {action.icon ?? (
-            <Text size="lg" tone="accent">
-              ✓
-            </Text>
+            // The key remounts the glyph on every new settlement, which replays the pop and the draw.
+            <PopMark key={turnCount} animate={turnCount > 0} size={20}>
+              <CheckMark animate={turnCount > 0} color={palette.accent} />
+            </PopMark>
           )}
         </Pressable>
       ) : null}

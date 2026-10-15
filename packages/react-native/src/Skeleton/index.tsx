@@ -1,6 +1,7 @@
 import { SKELETON_PULSE_MS, SKELETON_SHAPE_HEIGHT, type SkeletonContract, type SkeletonGroupContract } from '@lucasfeitosatech/design-core';
-import { useEffect, useRef, useState } from 'react';
-import { AccessibilityInfo, Animated, Easing, View, type DimensionValue } from 'react-native';
+import { useEffect, useRef } from 'react';
+import { Animated, Easing, View, type DimensionValue } from 'react-native';
+import { useReduceMotion } from '../internal/useReduceMotion';
 import { useTheme } from '../theme/ThemeProvider';
 import { styles } from './styles';
 
@@ -46,21 +47,7 @@ export function SkeletonGroup({ label, card = false, children }: SkeletonGroupPr
 
 function usePulse(): Animated.Value | number {
   const value = useRef(new Animated.Value(1)).current;
-  const [reduced, setReduced] = useState(false);
-
-  useEffect(() => {
-    let active = true;
-    AccessibilityInfo.isReduceMotionEnabled()
-      .then((enabled) => {
-        if (active) setReduced(enabled);
-      })
-      .catch(() => undefined);
-    const subscription = AccessibilityInfo.addEventListener('reduceMotionChanged', setReduced);
-    return () => {
-      active = false;
-      subscription.remove();
-    };
-  }, []);
+  const reduced = useReduceMotion();
 
   useEffect(() => {
     if (reduced) return;

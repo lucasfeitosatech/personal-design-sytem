@@ -1,5 +1,6 @@
 import type { CheckboxContract } from '@lucasfeitosatech/design-core';
 import { Pressable, View } from 'react-native';
+import { CheckMark, PopMark, useTurnedOn } from '../internal/CheckMark';
 import { Text } from '../Text';
 import { useTheme } from '../theme/ThemeProvider';
 import { styles } from './styles';
@@ -15,6 +16,8 @@ export function Checkbox({ checked, onCheckedChange, label, description, disable
   const { palette } = useTheme();
   const on = checked === true || checked === 'indeterminate';
   const borderColor = error ? palette.overdue : on ? palette.accent : palette.pending;
+  // Only marks that happen after mount pop and draw: a form that loads checked paints settled.
+  const turnCount = useTurnedOn(checked === true);
 
   return (
     <View style={styles.wrap}>
@@ -26,13 +29,21 @@ export function Checkbox({ checked, onCheckedChange, label, description, disable
         accessibilityState={{ checked: checked === 'indeterminate' ? 'mixed' : checked, disabled }}
         style={[styles.row, disabled ? styles.disabled : null]}
       >
-        <View style={[styles.box, { borderColor, backgroundColor: on ? palette.accent : palette.surface }]}>
-          {on ? (
+        {/* The key remounts the box on every new marking, which is what replays the pop. */}
+        <PopMark
+          key={turnCount}
+          animate={turnCount > 0}
+          size={20}
+          style={[styles.box, { borderColor, backgroundColor: on ? palette.accent : palette.surface }]}
+        >
+          {checked === 'indeterminate' ? (
             <Text size="sm" weight="semibold" style={{ color: palette.onAccent }}>
-              {checked === 'indeterminate' ? '–' : '✓'}
+              –
             </Text>
+          ) : checked === true ? (
+            <CheckMark animate={turnCount > 0} color={palette.onAccent} />
           ) : null}
-        </View>
+        </PopMark>
         <View style={styles.labels}>
           <Text size="base">{label}</Text>
           {description ? (

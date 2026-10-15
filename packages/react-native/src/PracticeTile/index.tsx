@@ -2,9 +2,10 @@ import { PRACTICE_TILE_MIN_HEIGHT, TILE_STATE_TOKEN, type PracticeTileContract, 
 import type { Palette } from '@lucasfeitosatech/design-tokens';
 import type { ReactNode } from 'react';
 import { Pressable, View } from 'react-native';
+import { CheckMark, PopMark, useTurnedOn } from '../internal/CheckMark';
 import { Text } from '../Text';
 import { useTheme } from '../theme/ThemeProvider';
-import { styles } from './styles';
+import { MARK, styles } from './styles';
 
 export type PracticeTileProps = PracticeTileContract;
 export type TileGridProps = TileGridContract & { children?: ReactNode };
@@ -18,6 +19,8 @@ export function PracticeTile({ label, meta, state = 'idle', onPress, disabled = 
   const { palette } = useTheme();
   const token = TILE_STATE_TOKEN[state];
   const markColor = token.mark ? palette[token.mark as keyof Palette] : undefined;
+  // A grid that loads already marked paints its checks settled; only a new `done` pops and draws.
+  const turnCount = useTurnedOn(state === 'done');
 
   return (
     <Pressable
@@ -38,16 +41,15 @@ export function PracticeTile({ label, meta, state = 'idle', onPress, disabled = 
         disabled ? styles.disabled : null,
       ]}
     >
-      <View style={[styles.mark, { borderColor: markColor ?? palette.textTertiary }]}>
+      {/* The key remounts the mark on every new `done`, which is what replays the pop. */}
+      <PopMark key={turnCount} animate={turnCount > 0} size={MARK} style={[styles.mark, { borderColor: markColor ?? palette.textTertiary }]}>
         {token.half ? <View style={[styles.half, { backgroundColor: markColor }]} /> : null}
         {markColor && !token.half ? (
           <View style={[styles.fill, { backgroundColor: markColor }]}>
-            <Text size="xs" weight="semibold" style={{ color: palette.onAccent }}>
-              ✓
-            </Text>
+            <CheckMark animate={turnCount > 0} color={palette.onAccent} />
           </View>
         ) : null}
-      </View>
+      </PopMark>
       <View style={styles.labels}>
         <Text size="base" weight="medium" lines={2} maxFontSizeMultiplier={1.2}>
           {label}

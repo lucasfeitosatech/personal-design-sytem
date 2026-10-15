@@ -28,7 +28,7 @@ not remove a contract prop, rename it, or change what it means.
 | Divider | yes | yes | Decorative and hidden from assistive technology; native uses the platform hairline |
 | Select | yes | yes | Two different controls: a combobox popover on the web, a bottom sheet on a device |
 | Modal | yes | yes | Centred dialog with focus trap on the web; bottom sheet with stacked actions on a device |
-| Toast | yes | yes | Auto-dismiss 6s, 10s with an action, paused on hover; an error never dismisses itself |
+| Toast | yes | yes | Auto-dismiss 6s, 10s with an action, paused on hover; an error never dismisses itself. `leaving`/`onExited` play the exit on a device; the web accepts and ignores them (0.8.0) |
 | MoneyInput | yes | yes | Value is digits in cents; fills from the right so the caret never moves. Focus selects the amount, so typing replaces a pre-filled figure |
 | PeriodInput | yes | yes | Value is up to six digits; the slash is drawn, never stored |
 | AppBar | no | yes | Native only. iOS 44 pt bar with the previous screen's name; Android 64 dp bar, no large title. Optional `eyebrow` above the large title, iOS only (0.7.1) |
@@ -41,8 +41,8 @@ not remove a contract prop, rename it, or change what it means.
 | AIAction / AIPanel | yes | yes | The action is quiet, never primary; `unavailable` is a panel state, not an error |
 | BillRow | yes | yes | Read-only row with one trailing 44 pt control; the name truncates, the figure never does |
 | DateStrip | yes | yes | A week of days; the dot is never the only signal — each day's label says it in words |
-| AnimatedNumber | yes | no | Settles on a new value with the core tween; the moving text is `aria-hidden`, the reader hears the final value once (0.7.0) |
-| ProgressBar | yes | no | `role="meter"` for a measured share, not a loading indicator; first paint fills from 0, later changes transition (0.7.0) |
+| AnimatedNumber | yes | yes | Settles on a new value with the core tween; the moving text is hidden from the reader, who hears the final value once (0.7.0 web, 0.8.0 native) |
+| ProgressBar | yes | yes | `role="meter"` for a measured share, not a loading indicator; first paint fills from 0, later changes transition (0.7.0 web, 0.8.0 native) |
 | Reveal | yes | no | Scroll-driven fade-up on `animation-timeline: view()`; pure CSS, no JS, content never waits hidden (0.7.0) |
 
 ## Where the shared base pays
@@ -58,11 +58,20 @@ and the one thing DOM and a phone keyboard could never have agreed on.
 ## Motion
 
 Movement is how the system says "something changed". The tokens are `--ds-motion-fast/base/slow/reveal`
-(150/220/320/560 ms) and `--ds-ease-out`, `--ds-ease-in-out`, `--ds-ease-spring`. The spring is a CSS
-`linear(...)` timing function for confirmations (the check pop): it has no React Native equivalent, so
-`design-tokens` ships it through CSS only and its `easing` export carries the two cubic curves' control
-points. The tween math — `easeOutCubic` and `tweenValue` — is pure in `design-core`, tested once, so a
-number and a bar settle at the same pace on both renderers.
+(150/220/320/560 ms) and `--ds-ease-out`, `--ds-ease-in-out`, `--ds-ease-spring`. The tween math —
+`easeOutCubic` and `tweenValue` — is pure in `design-core`, tested once, so a number and a bar settle at
+the same pace on both renderers.
+
+On a device the same movement runs on `Animated` and `Easing` alone — no Reanimated, no other
+library — with the native driver on everything that is a `transform` or an `opacity`, and `false`
+only where the property is not one of those (the check's `strokeDashoffset`). The cubic curves are
+the token control points through `Easing.bezier`; the spring, which the web writes as a CSS
+`linear(...)`, has no such syntax in React Native and is translated to
+`Animated.spring({ damping: 14, stiffness: 180, mass: 1 })` — the constants the web curve was tuned
+around. Reduced motion comes from `AccessibilityInfo` (`isReduceMotionEnabled` plus the
+`reduceMotionChanged` listener) through one internal hook, and pays the same fallback the web does:
+the final state paints directly, at most a fast fade, and a list that loads already marked never
+animates on mount.
 
 The rules every animation pays:
 
@@ -76,21 +85,24 @@ The rules every animation pays:
   replays it through the element's `key`.
 - `Reveal` is the one animation with no clock at all: it is bound to the view timeline and runs on the
   scroll itself, so it exists only where `animation-timeline: view()` is supported.
+- The native Toast rises 12 pt while it fades in, and leaves falling 8 pt through the contract's
+  `leaving` and `onExited`; the native ProgressBar fills with a `scaleX` plus a compensating
+  `translateX` that plants the left edge, because `transformOrigin` is newer than the package's
+  React Native peer range and both transforms stay on the native driver; the sheet's panel keeps
+  the platform slide while its scrim fades on top of it.
 
 ## Known gaps
 
-- **Native has no movement yet.** The native package compiles against the motion tokens (`motion` with
-  its four durations, `easing` with the two cubic curves' control points), but no native component
-  animates: when the native round comes, it will use exactly those tokens, not new ones. `AnimatedNumber`
-  and `ProgressBar` have no native version in 0.7.0.
-- **The Toast has no exit.** The application keeps a toast mounted for its whole lifetime and unmounts
-  it, so the entrance is the only animation to write; an exit would need the app to hold the toast
-  through it, which is the app's state, not the component's.
+- **The web Toast accepts the exit and ignores it.** The contract carries `leaving` and `onExited`,
+  and the native renderer plays the out through them; the web toast has no exit animation of its own,
+  so it accepts both props and does nothing with them. Writing one there is the web round's job, not
+  the contract's: the exit is the application's state in both renderers.
 - **Reveal needs a view timeline.** It is web-only, and on the web it only moves where
   `animation-timeline: view()` is supported (Chrome and Safari). Firefox — and a reduced-motion user, on
   purpose — sees the content ready. Nothing is ever left invisible waiting for the timeline.
 - **The native package carries `react-native-svg` as a peer.** Since 0.7.1 the PasswordField eye is
-  drawn with `Svg`, `Path` and `Circle` instead of the old circle glyphs. The dependency stays a
+  drawn with `Svg`, `Path` and `Circle` instead of the old circle glyphs, and since 0.8.0 the drawn
+  check is a `Path` whose `strokeDashoffset` the `Animated` API drives. The dependency stays a
   peer (`>=15`), never a dependency of the package: the app already ships the library and the system
   carries no icon set of its own, so a consumer that does not have it must install it. The repo keeps
   it as a devDependency so the typecheck resolves.

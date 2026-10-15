@@ -1,6 +1,7 @@
-import { radius, space } from '@lucasfeitosatech/design-tokens';
-import type { ReactNode } from 'react';
-import { Modal as RNModal, Pressable, StyleSheet, View } from 'react-native';
+import { motion, radius, space } from '@lucasfeitosatech/design-tokens';
+import { useEffect, useRef, type ReactNode } from 'react';
+import { Animated, Modal as RNModal, Pressable, StyleSheet, View } from 'react-native';
+import { useReduceMotion } from '../useReduceMotion';
 import { useTheme } from '../../theme/ThemeProvider';
 
 export type SheetProps = {
@@ -17,17 +18,45 @@ export type SheetProps = {
   alert?: boolean;
 };
 
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
 /**
  * A panel from the bottom of the screen, over the scrim. The shared base of Select and Modal.
+ *
+ * The panel slides with the platform animation; the scrim fades in on top of it, because the
+ * slide alone reads as the screen going dark and back, not as something arriving. With a reduced
+ * motion the panel appears without a slide and the scrim without the fade.
  *
  * Deliberately gesture-free: dragging it down needs a gesture library, and which one is the
  * application's decision. Tapping the scrim closes, which is the same escape with one finger.
  */
 export function Sheet({ open, onRequestClose, children, safeBottom = 0, accessibilityLabel, alert = false }: SheetProps) {
   const { palette } = useTheme();
+  const reduced = useReduceMotion();
+  const scrim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (!open) {
+      // Reset while hidden so the next open always fades from clear.
+      scrim.setValue(0);
+      return;
+    }
+    if (reduced) {
+      scrim.setValue(1);
+      return;
+    }
+    const fade = Animated.timing(scrim, { toValue: 1, duration: motion.base, useNativeDriver: true });
+    fade.start();
+    return () => fade.stop();
+  }, [open, reduced, scrim]);
+
   return (
-    <RNModal visible={open} transparent animationType="slide" onRequestClose={onRequestClose} statusBarTranslucent>
-      <Pressable style={[styles.scrim, { backgroundColor: palette.scrim }]} onPress={onRequestClose} accessibilityLabel="Fechar" />
+    <RNModal visible={open} transparent animationType={reduced ? 'none' : 'slide'} onRequestClose={onRequestClose} statusBarTranslucent>
+      <AnimatedPressable
+        style={[styles.scrim, { backgroundColor: palette.scrim, opacity: scrim }]}
+        onPress={onRequestClose}
+        accessibilityLabel="Fechar"
+      />
       <View
         accessibilityViewIsModal
         accessibilityRole={alert ? 'alert' : undefined}

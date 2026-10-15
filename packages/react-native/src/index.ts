@@ -1,5 +1,6 @@
 export * from './AffirmationCard';
 export * from './AIPanel';
+export * from './AnimatedNumber';
 export * from './AppBar';
 export * from './Banner';
 export * from './BillRow';
@@ -18,6 +19,7 @@ export * from './MoneyInput';
 export * from './PasswordField';
 export * from './PeriodInput';
 export * from './PracticeTile';
+export * from './ProgressBar';
 export * from './RadioGroup';
 export * from './Section';
 export * from './Select';
