@@ -7,6 +7,7 @@ export const styles = StyleSheet.create({
   heading: { flexDirection: 'row', alignItems: 'baseline', gap: space[2], flexShrink: 1 },
   action: { flexDirection: 'row', alignItems: 'center', gap: space[2] },
   // Open block: a hairline on top and room on both sides, no card of its own.
-  plain: { borderTopWidth: StyleSheet.hairlineWidth, paddingTop: space[5], paddingBottom: space[5] },
+  // The web rhythm: a hairline, then the block close under it; the next hairline does the separating.
+  plain: { borderTopWidth: StyleSheet.hairlineWidth, paddingTop: space[4], paddingBottom: space[2] },
   plainTitle: { letterSpacing: -0.02 * text.lg },
 });
