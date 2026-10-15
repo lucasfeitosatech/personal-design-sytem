@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Animated, TextInput, View, type TextInputProps } from 'react-native';
 import { Field } from '../Field';
 import { FLOAT_DURATION } from '../TextField/styles';
+import { useReduceMotion } from '../internal/useReduceMotion';
 import { useTheme } from '../theme/ThemeProvider';
 import { styles } from './styles';
 
@@ -17,13 +18,19 @@ export type TextareaProps = Omit<TextInputProps, 'style' | 'value' | 'editable' 
 /** Multi-line entry. The label rests at the first line, not centred, and lifts onto the border. */
 export function Textarea({ label, hint, error, required, disabled, rows = 4, maxRows, readOnly, surfaceBehind, value, onValueChange, placeholder, ...rest }: TextareaProps) {
   const { palette } = useTheme();
+  const reduced = useReduceMotion();
   const [focused, setFocused] = useState(false);
   const lifted = focused || (value ?? '').length > 0;
   const progress = useRef(new Animated.Value(lifted ? 1 : 0)).current;
 
   useEffect(() => {
+    if (reduced) {
+      // No timing to stop: the label lands where it ends.
+      progress.setValue(lifted ? 1 : 0);
+      return;
+    }
     Animated.timing(progress, { toValue: lifted ? 1 : 0, duration: FLOAT_DURATION, useNativeDriver: false }).start();
-  }, [lifted, progress]);
+  }, [lifted, progress, reduced]);
 
   const borderColor = error ? palette.overdue : focused ? palette.accent : palette.border;
   // 2px on focus, the padding pulled in by 1 so the frame keeps its size.
@@ -55,7 +62,12 @@ export function Textarea({ label, hint, error, required, disabled, rows = 4, max
               {...rest}
             />
           </View>
+          {/* The visual label is not a node: the input already carries its name, and a second
+              announcement of the same word is a field that says its name twice. */}
           <Animated.Text
+            accessible={false}
+            accessibilityElementsHidden
+            importantForAccessibility="no-hide-descendants"
             pointerEvents="none"
             numberOfLines={1}
             style={[

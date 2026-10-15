@@ -38,7 +38,7 @@
       "$type": "color"
     },
     "text-tertiary": {
-      "$value": "#8f887e",
+      "$value": "#948e84",
       "$type": "color"
     },
     "text-disabled": {
@@ -119,7 +119,7 @@
         "$type": "color"
       },
       "skipped": {
-        "$value": "#6b655c",
+        "$value": "#938d82",
         "$type": "color"
       },
       "skipped-soft": {

@@ -36,7 +36,7 @@ export const lightPalette = {
   "overdueSoft": "#fbede8",
   "overdueBorder": "#ebc9bc",
   "onOverdue": "#ffffff",
-  "skipped": "#948c81",
+  "skipped": "#6f685f",
   "skippedSoft": "#f0ede8"
 } as const;
 
@@ -50,7 +50,7 @@ export const darkPalette: Palette = {
   "borderSoft": "#262320",
   "text": "#ece8e1",
   "textSecondary": "#b5aea4",
-  "textTertiary": "#8f887e",
+  "textTertiary": "#948e84",
   "textDisabled": "#6b655c",
   "accent": "#6fb08f",
   "accentHover": "#86c2a3",
@@ -70,7 +70,7 @@ export const darkPalette: Palette = {
   "overdueSoft": "#2e1e19",
   "overdueBorder": "#4a2c23",
   "onOverdue": "#141311",
-  "skipped": "#6b655c",
+  "skipped": "#938d82",
   "skippedSoft": "#262320"
 };
 

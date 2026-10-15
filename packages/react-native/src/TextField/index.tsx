@@ -3,6 +3,7 @@ import { space } from '@lucasfeitosatech/design-tokens';
 import { forwardRef, useEffect, useRef, useState, type ComponentRef, type ReactNode } from 'react';
 import { Animated, TextInput, View, type TextInputProps } from 'react-native';
 import { Field } from '../Field';
+import { useReduceMotion } from '../internal/useReduceMotion';
 import { fontFamily } from '../Text/styles';
 import { useTheme } from '../theme/ThemeProvider';
 import { FLOAT_DURATION, keyboardFor, styles } from './styles';
@@ -51,14 +52,20 @@ export const TextField = forwardRef<ComponentRef<typeof TextInput>, TextFieldPro
   ref,
 ) {
   const { palette } = useTheme();
+  const reduced = useReduceMotion();
   const [focused, setFocused] = useState(false);
   // A prefix already occupies the row, so the label has nowhere to rest.
   const lifted = focused || (value ?? '').length > 0 || prefix !== undefined;
   const progress = useRef(new Animated.Value(lifted ? 1 : 0)).current;
 
   useEffect(() => {
+    if (reduced) {
+      // No timing to stop: the label lands where it ends.
+      progress.setValue(lifted ? 1 : 0);
+      return;
+    }
     Animated.timing(progress, { toValue: lifted ? 1 : 0, duration: FLOAT_DURATION, useNativeDriver: false }).start();
-  }, [lifted, progress]);
+  }, [lifted, progress, reduced]);
 
   const borderColor = error ? palette.overdue : focused ? palette.accent : palette.border;
   // 2px on focus, the padding pulled in by 1 so the frame keeps its size.
@@ -96,7 +103,12 @@ export const TextField = forwardRef<ComponentRef<typeof TextInput>, TextFieldPro
             />
             {suffix}
           </View>
+          {/* The visual label is not a node: the input already carries its name, and a second
+              announcement of the same word is a field that says its name twice. */}
           <Animated.Text
+            accessible={false}
+            accessibilityElementsHidden
+            importantForAccessibility="no-hide-descendants"
             pointerEvents="none"
             numberOfLines={1}
             style={[

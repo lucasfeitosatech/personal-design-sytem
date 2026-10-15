@@ -119,7 +119,7 @@
         "$type": "color"
       },
       "skipped": {
-        "$value": "#948c81",
+        "$value": "#6f685f",
         "$type": "color"
       },
       "skipped-soft": {

@@ -1,5 +1,5 @@
 import { toastTimeout, type ToastContract } from '@lucasfeitosatech/design-core';
-import { easing, motion, radius, space } from '@lucasfeitosatech/design-tokens';
+import { easing, motion, radius, space, tap } from '@lucasfeitosatech/design-tokens';
 import { useEffect, useRef, type ReactNode } from 'react';
 import { Animated, Easing, Pressable, StyleSheet, View } from 'react-native';
 import { useReduceMotion } from '../internal/useReduceMotion';
@@ -27,6 +27,14 @@ export function Toast({ message, tone = 'default', actionLabel, actionDisabled =
   // A stop() fires its callback with finished false, and a replaced run must not fire onExited:
   // the generation token invalidates the callback of any execution cancelled by a cleanup.
   const generation = useRef(0);
+  // The out can end as a fade or land directly under reduced motion, and either way the app
+  // unmounts on the signal: it is called once per toast, not once per effect run.
+  const exitedOnce = useRef(false);
+  const fireExited = () => {
+    if (exitedOnce.current) return;
+    exitedOnce.current = true;
+    exited.current?.();
+  };
 
   // The values start in the off state so a toast that mounts mid-screen never paints settled for
   // a frame before it moves.
@@ -41,11 +49,10 @@ export function Toast({ message, tone = 'default', actionLabel, actionDisabled =
 
   useEffect(() => {
     if (reduced) {
-      // No displacement: at most the short fade.
+      // No displacement, no fade: the final state paints directly.
       offset.setValue(0);
-      const fade = Animated.timing(opacity, { toValue: 1, duration: motion.fast, useNativeDriver: true });
-      fade.start();
-      return () => fade.stop();
+      opacity.setValue(1);
+      return;
     }
     const curve = Easing.bezier(...easing.out);
     const enter = Animated.parallel([
@@ -60,14 +67,14 @@ export function Toast({ message, tone = 'default', actionLabel, actionDisabled =
     if (!leaving) return;
     const gen = generation.current;
     const onExit = (result: { finished: boolean }) => {
-      if (result.finished && gen === generation.current) exited.current?.();
+      if (result.finished && gen === generation.current) fireExited();
     };
     if (reduced) {
-      const fade = Animated.timing(opacity, { toValue: 0, duration: motion.fast, useNativeDriver: true });
-      fade.start(onExit);
+      // No fade: the toast vanishes and the app is told once.
+      opacity.setValue(0);
+      fireExited();
       return () => {
         generation.current += 1;
-        fade.stop();
       };
     }
     const curve = Easing.bezier(...easing.out);
@@ -83,23 +90,34 @@ export function Toast({ message, tone = 'default', actionLabel, actionDisabled =
   }, [leaving, reduced, opacity, offset]);
 
   const isError = tone === 'error';
+  const hasAction = Boolean(actionLabel) && (Boolean(onAction) || actionDisabled);
   return (
     <Animated.View
       accessibilityLiveRegion={isError ? 'assertive' : 'polite'}
-      style={[styles.toast, { backgroundColor: isError ? palette.overdue : palette.text, opacity, transform: [{ translateY: offset }] }]}
+      style={[styles.toast, hasAction ? styles.toastWithAction : null, { backgroundColor: isError ? palette.overdue : palette.text, opacity, transform: [{ translateY: offset }] }]}
     >
-      <Text size="md" style={[styles.message, { color: isError ? palette.onOverdue : palette.bg }]} lines={2}>
+      <Text size="md" style={[styles.message, { color: isError ? palette.onOverdue : palette.bg }]}>
         {message}
       </Text>
-      {actionLabel && (onAction || actionDisabled) ? (
-        <Pressable onPress={actionDisabled ? undefined : onAction} accessibilityRole="button" accessibilityState={{ disabled: actionDisabled }} disabled={actionDisabled} hitSlop={8}>
-          <Text size="md" weight="semibold" style={{ color: isError ? palette.onOverdue : palette.bg, opacity: actionDisabled ? 0.55 : 1 }}>
-            {actionLabel}
-          </Text>
-        </Pressable>
-      ) : null}
-      {onDismiss ? (
-        <Pressable onPress={onDismiss} accessibilityRole="button" accessibilityLabel={dismissLabel} hitSlop={8}>
+      {hasAction ? (
+        // The action and the close share the second line: on one the action would eat the
+        // message's width, and a message with no width is a toast that cannot be read.
+        <View style={styles.actionRow}>
+          <Pressable onPress={actionDisabled ? undefined : onAction} accessibilityRole="button" accessibilityState={{ disabled: actionDisabled }} disabled={actionDisabled} hitSlop={8}>
+            <Text size="md" weight="semibold" style={{ color: isError ? palette.onOverdue : palette.bg, opacity: actionDisabled ? 0.55 : 1 }}>
+              {actionLabel}
+            </Text>
+          </Pressable>
+          {onDismiss ? (
+            <Pressable onPress={onDismiss} accessibilityRole="button" accessibilityLabel={dismissLabel} style={styles.close}>
+              <Text size="lg" style={{ color: isError ? palette.onOverdue : palette.bg }}>
+                ×
+              </Text>
+            </Pressable>
+          ) : null}
+        </View>
+      ) : onDismiss ? (
+        <Pressable onPress={onDismiss} accessibilityRole="button" accessibilityLabel={dismissLabel} style={styles.close}>
           <Text size="lg" style={{ color: isError ? palette.onOverdue : palette.bg }}>
             ×
           </Text>
@@ -120,5 +138,11 @@ export function ToastRegion({ children, tabBar = 0, safeBottom = 0 }: { children
 const styles = StyleSheet.create({
   region: { position: 'absolute', left: space[4], right: space[4], gap: space[2] },
   toast: { flexDirection: 'row', alignItems: 'center', gap: space[3], paddingVertical: space[3], paddingHorizontal: space[4], borderRadius: radius.md },
+  // With an action the message owns the first line in full; the action and the close settle on
+  // the second, right-aligned.
+  toastWithAction: { flexDirection: 'column', alignItems: 'stretch' },
+  actionRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', gap: space[3], marginTop: space[2] },
   message: { flex: 1 },
+  // The glyph stays 17 pt; the region around it grows to the touch target.
+  close: { width: tap, height: tap, alignItems: 'center', justifyContent: 'center' },
 });

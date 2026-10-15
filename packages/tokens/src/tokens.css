@@ -62,7 +62,7 @@
   --ds-color-overdue-soft: #fbede8;
   --ds-color-overdue-border: #ebc9bc;
   --ds-color-on-overdue: #ffffff;
-  --ds-color-skipped: #948c81;
+  --ds-color-skipped: #6f685f;
   --ds-color-skipped-soft: #f0ede8;
   --ds-shadow-overlay: 0 12px 32px rgba(30, 28, 25, 0.16);
 }
@@ -78,7 +78,7 @@
   --ds-color-border-soft: #262320;
   --ds-color-text: #ece8e1;
   --ds-color-text-secondary: #b5aea4;
-  --ds-color-text-tertiary: #8f887e;
+  --ds-color-text-tertiary: #948e84;
   --ds-color-text-disabled: #6b655c;
   --ds-color-accent: #6fb08f;
   --ds-color-accent-hover: #86c2a3;
@@ -98,7 +98,7 @@
   --ds-color-overdue-soft: #2e1e19;
   --ds-color-overdue-border: #4a2c23;
   --ds-color-on-overdue: #141311;
-  --ds-color-skipped: #6b655c;
+  --ds-color-skipped: #938d82;
   --ds-color-skipped-soft: #262320;
   --ds-shadow-overlay: 0 12px 32px rgba(0, 0, 0, 0.5);
 }
