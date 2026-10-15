@@ -1,5 +1,6 @@
 import { APP_BAR_HEIGHT, type AppBarContract } from '@lucasfeitosatech/design-core';
 import { Platform, Pressable, View } from 'react-native';
+import Svg, { Path } from 'react-native-svg';
 import { Eyebrow } from '../Eyebrow';
 import { Text } from '../Text';
 import { useTheme } from '../theme/ThemeProvider';
@@ -14,7 +15,8 @@ const ios = Platform.OS !== 'android';
  * previous screen's name in the accent, with the title at 2xl underneath on a root screen; Android a
  * 64 dp bar with the title beside the arrow and no large title.
  *
- * The chevron is text, not an icon: the system ships no icon set, and a bar has to work without one.
+ * The back mark is drawn, not typed: a 2 pt chevron on iOS and an arrow on Android, sized to the
+ * label beside it, so it sits on the same line as the title below instead of floating as a glyph.
  *
  * With `eyebrow` set, the large title screen gains the editorial label above the title, with the
  * accent dot — the same voice as the web's page header. The large title drops to medium weight and
@@ -34,11 +36,18 @@ export function AppBar({ title, subtitle, backLabel, onBack, actions, large = fa
             onPress={onBack}
             style={ios ? styles.backIos : styles.backAndroid}
           >
-            <Text size="xl" tone={ios ? 'accent' : 'default'}>
-              {ios ? '‹' : '←'}
-            </Text>
+            <Svg width={22} height={22} viewBox="0 0 24 24" accessible={false} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
+              <Path
+                d={ios ? 'M15 18l-6-6 6-6' : 'M19 12H5M12 19l-7-7 7-7'}
+                stroke={ios ? palette.accent : palette.text}
+                strokeWidth={2.2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                fill="none"
+              />
+            </Svg>
             {ios && backLabel ? (
-              <Text size="lg" tone="accent" lines={1}>
+              <Text size="md" weight="medium" tone="accent" lines={1}>
                 {backLabel}
               </Text>
             ) : null}
