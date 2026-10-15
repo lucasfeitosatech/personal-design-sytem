@@ -24,6 +24,8 @@ export function keyboardFor(mode: InputMode): KeyboardTypeOptions {
 }
 
 export const styles = StyleSheet.create({
+  /** Borderless wrapper so the label can be a sibling of the frame and draw above its border. */
+  container: { position: 'relative' },
   frame: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -32,7 +34,7 @@ export const styles = StyleSheet.create({
     borderRadius: radius.sm,
     paddingHorizontal: space[3],
   },
-  /** Absolute so it can sit on the border line; the surface colour behind it fakes the notch. */
+  /** Absolute over the frame; the surface colour behind it fakes the notch. */
   label: { position: 'absolute', zIndex: 1 },
   input: { flex: 1, minWidth: 0, padding: 0, fontSize: text.base },
 });

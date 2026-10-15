@@ -71,7 +71,31 @@ export const TextField = forwardRef<ComponentRef<typeof TextInput>, TextFieldPro
   return (
     <Field label={label} hideLabel hint={hint} error={error} required={required} disabled={disabled}>
       {(control) => (
-        <View style={[styles.frame, { minHeight: INPUT_HEIGHT[size], borderColor, borderWidth, backgroundColor: fill, paddingHorizontal: (size === 'sm' ? space[2] : space[3]) - (borderWidth - 1) }]}>
+        // The label is a sibling of the frame, not a child: on iOS the frame's CALayer border
+        // paints over its own children, so a label inside the frame gets clipped by the line.
+        <View style={styles.container}>
+          <View style={[styles.frame, { minHeight: INPUT_HEIGHT[size], borderColor, borderWidth, backgroundColor: fill, paddingHorizontal: (size === 'sm' ? space[2] : space[3]) - (borderWidth - 1) }]}>
+            {prefix}
+            <TextInput
+              ref={ref}
+              style={[styles.input, { color: palette.text, textAlign: align }, mono ? { fontFamily: fontFamily('regular', true) } : null]}
+              placeholder={lifted ? placeholder : undefined}
+              placeholderTextColor={palette.textTertiary}
+              value={value}
+              onChangeText={onValueChange}
+              secureTextEntry={secret}
+              keyboardType={keyboardFor(mode)}
+              autoCapitalize={mode === 'email' || mode === 'url' ? 'none' : undefined}
+              autoCorrect={mode === 'text' ? undefined : false}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
+              editable={control.editable && readOnly !== true}
+              accessibilityLabel={control.accessibilityLabel}
+              accessibilityHint={control.accessibilityHint}
+              {...rest}
+            />
+            {suffix}
+          </View>
           <Animated.Text
             pointerEvents="none"
             numberOfLines={1}
@@ -80,8 +104,10 @@ export const TextField = forwardRef<ComponentRef<typeof TextInput>, TextFieldPro
               {
                 color: labelColor,
                 backgroundColor: notch,
-                left: space[3],
-                top: progress.interpolate({ inputRange: [0, 1], outputRange: [INPUT_HEIGHT[size] / 2 - 10, -8] }),
+                left: borderWidth + space[3],
+                // The border no longer counts into the absolute position: it used to be a child of
+                // the frame, so the two values carry the borderWidth back on, as left already does.
+                top: progress.interpolate({ inputRange: [0, 1], outputRange: [INPUT_HEIGHT[size] / 2 - 10 + borderWidth, -8 + borderWidth] }),
                 fontSize: progress.interpolate({ inputRange: [0, 1], outputRange: [LABEL_RESTING_SIZE, LABEL_FLOATING_SIZE] }),
                 paddingHorizontal: progress.interpolate({ inputRange: [0, 1], outputRange: [0, 4] }),
               },
@@ -90,26 +116,6 @@ export const TextField = forwardRef<ComponentRef<typeof TextInput>, TextFieldPro
             {label}
             {required ? ' *' : ''}
           </Animated.Text>
-          {prefix}
-          <TextInput
-            ref={ref}
-            style={[styles.input, { color: palette.text, textAlign: align }, mono ? { fontFamily: fontFamily('regular', true) } : null]}
-            placeholder={lifted ? placeholder : undefined}
-            placeholderTextColor={palette.textTertiary}
-            value={value}
-            onChangeText={onValueChange}
-            secureTextEntry={secret}
-            keyboardType={keyboardFor(mode)}
-            autoCapitalize={mode === 'email' || mode === 'url' ? 'none' : undefined}
-            autoCorrect={mode === 'text' ? undefined : false}
-            onFocus={() => setFocused(true)}
-            onBlur={() => setFocused(false)}
-            editable={control.editable && readOnly !== true}
-            accessibilityLabel={control.accessibilityLabel}
-            accessibilityHint={control.accessibilityHint}
-            {...rest}
-          />
-          {suffix}
         </View>
       )}
     </Field>

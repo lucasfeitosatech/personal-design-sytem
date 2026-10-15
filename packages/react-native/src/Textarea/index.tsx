@@ -35,7 +35,26 @@ export function Textarea({ label, hint, error, required, disabled, rows = 4, max
   return (
     <Field label={label} hideLabel hint={hint} error={error} required={required} disabled={disabled}>
       {(control) => (
-        <View style={[styles.frame, { minHeight, borderColor, borderWidth, backgroundColor: fill, paddingHorizontal: space[3] - (borderWidth - 1) }]}>
+        // The label is a sibling of the frame, not a child: on iOS the frame's CALayer border
+        // paints over its own children, so a label inside the frame gets clipped by the line.
+        <View style={styles.container}>
+          <View style={[styles.frame, { minHeight, borderColor, borderWidth, backgroundColor: fill, paddingHorizontal: space[3] - (borderWidth - 1) }]}>
+            <TextInput
+              multiline
+              textAlignVertical="top"
+              style={[styles.input, { color: palette.text, maxHeight: maxRows ? maxRows * TEXTAREA_LINE_HEIGHT + TEXTAREA_PADDING_Y * 2 : undefined }]}
+              placeholder={lifted ? placeholder : undefined}
+              placeholderTextColor={palette.textTertiary}
+              value={value}
+              onChangeText={onValueChange}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
+              editable={control.editable && readOnly !== true}
+              accessibilityLabel={control.accessibilityLabel}
+              accessibilityHint={control.accessibilityHint}
+              {...rest}
+            />
+          </View>
           <Animated.Text
             pointerEvents="none"
             numberOfLines={1}
@@ -44,7 +63,10 @@ export function Textarea({ label, hint, error, required, disabled, rows = 4, max
               {
                 color: error ? palette.overdue : focused ? palette.accent : palette.textTertiary,
                 backgroundColor: notch,
-                top: progress.interpolate({ inputRange: [0, 1], outputRange: [TEXTAREA_PADDING_Y, -8] }),
+                left: borderWidth + space[3],
+                // The border no longer counts into the absolute position: it used to be a child of
+                // the frame, so the two values carry the borderWidth back on, as left already does.
+                top: progress.interpolate({ inputRange: [0, 1], outputRange: [TEXTAREA_PADDING_Y + borderWidth, -8 + borderWidth] }),
                 fontSize: progress.interpolate({ inputRange: [0, 1], outputRange: [14, 11] }),
                 paddingHorizontal: progress.interpolate({ inputRange: [0, 1], outputRange: [0, 4] }),
               },
@@ -53,21 +75,6 @@ export function Textarea({ label, hint, error, required, disabled, rows = 4, max
             {label}
             {required ? ' *' : ''}
           </Animated.Text>
-          <TextInput
-            multiline
-            textAlignVertical="top"
-            style={[styles.input, { color: palette.text, maxHeight: maxRows ? maxRows * TEXTAREA_LINE_HEIGHT + TEXTAREA_PADDING_Y * 2 : undefined }]}
-            placeholder={lifted ? placeholder : undefined}
-            placeholderTextColor={palette.textTertiary}
-            value={value}
-            onChangeText={onValueChange}
-            onFocus={() => setFocused(true)}
-            onBlur={() => setFocused(false)}
-            editable={control.editable && readOnly !== true}
-            accessibilityLabel={control.accessibilityLabel}
-            accessibilityHint={control.accessibilityHint}
-            {...rest}
-          />
         </View>
       )}
     </Field>
