@@ -1,6 +1,6 @@
 {
   "name": "@lucasfeitosatech/design-tokens",
-  "version": "0.10.1",
+  "version": "0.11.0",
   "description": "Design tokens for React and React Native, generated from one DTCG source.",
   "license": "UNLICENSED",
   "type": "module",

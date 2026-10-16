@@ -15,8 +15,8 @@ not remove a contract prop, rename it, or change what it means.
 | Card | yes | yes | Border and luminance, never a shadow |
 | Spinner | yes | yes | `label` is required and announced on both |
 | Field | yes | yes | Web binds by `htmlFor`; native puts the label on the control and hides the visible one |
-| TextField | yes | yes | Binding differs (`target.value` vs `onChangeText`), contract does not |
-| Textarea | yes | yes | Label rests at the first line, not centred |
+| TextField | yes | yes | Binding differs (`target.value` vs `onChangeText`), contract does not. Native label floats inside the frame, no notch (0.11.0) |
+| Textarea | yes | yes | Label rests at the first line, not centred; native lifts it inside the frame and the box grows by one space (0.11.0) |
 | PasswordField | yes | yes | Reveal flips `type`, so a password manager still sees one field; the native eye is drawn with `react-native-svg` (0.7.1) |
 | Switch | yes | yes | Commits on the spot; native uses the platform control |
 | Checkbox | yes | yes | Part of a form. `indeterminate` is a DOM property on the web and `"mixed"` on native |
@@ -111,10 +111,12 @@ The rules every animation pays:
   PostScript name), and the native `Text` reads them. The files themselves can only live in an app:
   an app that has not bundled Libre Franklin and IBM Plex Mono resolves nothing and falls back to the
   platform font, which is a silent, non-breaking degradation.
-- **The native notch.** A native border cannot be cut, so the floating label paints the colour
-  behind the frame. The component cannot know what that is, so `surfaceBehind` declares it and
-  defaults to the surface colour, which is right inside a Card. Without it a disabled field paints
-  its own grey fill over a white card and leaves a visible block.
+- **The native label floats inside the frame (0.11.0).** The label no longer crosses the border,
+  so there is no notch to fake: it lands 6pt inside the top, the input keeps the first line clear
+  of it with a top padding (20pt on `TextField`; one more `space[3]` on a lifted `Textarea`, which
+  grows by the same room so the bottom padding survives). The minimum frame heights already hold
+  it, so nothing in the core moved. `surfaceBehind` is kept accepted — deprecated, no effect — so
+  existing callers keep compiling.
 - **Sheet gestures.** The native sheet closes by tapping the scrim, not by dragging. Dragging needs
   a gesture library and which one is the application's decision, so the sheet stays gesture-free and
   an app can wrap it.

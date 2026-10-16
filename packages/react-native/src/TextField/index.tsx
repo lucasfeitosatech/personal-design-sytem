@@ -6,7 +6,7 @@ import { Field } from '../Field';
 import { useReduceMotion } from '../internal/useReduceMotion';
 import { fontFamily } from '../Text/styles';
 import { useTheme } from '../theme/ThemeProvider';
-import { FLOAT_DURATION, keyboardFor, styles } from './styles';
+import { FLOAT_DURATION, keyboardFor, LIFTED_INPUT_PAD_TOP, styles } from './styles';
 
 export type TextFieldProps = Omit<TextInputProps, 'style' | 'value' | 'editable' | 'onChangeText' | 'placeholder'> &
   Omit<FieldContract, 'children'> &
@@ -14,9 +14,8 @@ export type TextFieldProps = Omit<TextInputProps, 'style' | 'value' | 'editable'
     prefix?: ReactNode;
     suffix?: ReactNode;
     /**
-     * The colour behind the frame. The floating label paints it to fake a notch, because a native
-     * border cannot be cut. Defaults to the surface colour, which is right inside a Card; pass the
-     * page colour when the field sits directly on the background.
+     * @deprecated The label no longer crosses the border, so there is no notch to paint and no
+     * colour to declare. Kept accepted so existing callers keep compiling; it has no effect.
      */
     surfaceBehind?: string;
   };
@@ -25,8 +24,8 @@ export type TextFieldProps = Omit<TextInputProps, 'style' | 'value' | 'editable'
  * Single-line text entry with a floating label, the same contract as the web.
  *
  * The web floats the label with CSS; a device has no `:not(:placeholder-shown)`, so the lift is an
- * animation driven by focus and by the value being non-empty. The label paints the surface colour
- * behind itself to sit on the border line, because a native border cannot be notched.
+ * animation driven by focus and by the value being non-empty. The label floats up inside the frame,
+ * at the top, and the input gains a top padding that keeps the text clear of it.
  */
 export const TextField = forwardRef<ComponentRef<typeof TextInput>, TextFieldProps>(function TextField(
   {
@@ -72,8 +71,6 @@ export const TextField = forwardRef<ComponentRef<typeof TextInput>, TextFieldPro
   const borderWidth = focused ? 2 : 1;
   const labelColor = error ? palette.overdue : focused ? palette.accent : palette.textTertiary;
   const fill = disabled ? palette.surfaceRaised : palette.surface;
-  // Not the fill: a disabled field is grey inside, but the notch opens onto whatever is behind it.
-  const notch = surfaceBehind ?? palette.surface;
 
   return (
     <Field label={label} hideLabel hint={hint} error={error} required={required} disabled={disabled}>
@@ -85,7 +82,11 @@ export const TextField = forwardRef<ComponentRef<typeof TextInput>, TextFieldPro
             {prefix}
             <TextInput
               ref={ref}
-              style={[styles.input, { color: palette.text, textAlign: align }, mono ? { fontFamily: fontFamily('regular', true) } : null]}
+              style={[
+                styles.input,
+                { color: palette.text, textAlign: align, paddingTop: lifted ? LIFTED_INPUT_PAD_TOP : 0 },
+                mono ? { fontFamily: fontFamily('regular', true) } : null,
+              ]}
               placeholder={lifted ? placeholder : undefined}
               placeholderTextColor={palette.textTertiary}
               value={value}
@@ -115,13 +116,12 @@ export const TextField = forwardRef<ComponentRef<typeof TextInput>, TextFieldPro
               styles.label,
               {
                 color: labelColor,
-                backgroundColor: notch,
                 left: borderWidth + space[3],
                 // The border no longer counts into the absolute position: it used to be a child of
                 // the frame, so the two values carry the borderWidth back on, as left already does.
-                top: progress.interpolate({ inputRange: [0, 1], outputRange: [INPUT_HEIGHT[size] / 2 - 10 + borderWidth, -8 + borderWidth] }),
+                // Lifted, the label sits 6pt inside the top border, and the input clears it.
+                top: progress.interpolate({ inputRange: [0, 1], outputRange: [INPUT_HEIGHT[size] / 2 - 10 + borderWidth, 6 + borderWidth] }),
                 fontSize: progress.interpolate({ inputRange: [0, 1], outputRange: [LABEL_RESTING_SIZE, LABEL_FLOATING_SIZE] }),
-                paddingHorizontal: progress.interpolate({ inputRange: [0, 1], outputRange: [0, 4] }),
               },
             ]}
           >

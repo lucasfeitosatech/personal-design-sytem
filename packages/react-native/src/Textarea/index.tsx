@@ -11,11 +11,14 @@ import { styles } from './styles';
 export type TextareaProps = Omit<TextInputProps, 'style' | 'value' | 'editable' | 'onChangeText' | 'multiline'> &
   Omit<FieldContract, 'children'> &
   TextareaContract & {
-    /** The colour behind the frame; the floating label paints it to fake a notch. */
+    /**
+     * @deprecated The label no longer crosses the border, so there is no notch to paint and no
+     * colour to declare. Kept accepted so existing callers keep compiling; it has no effect.
+     */
     surfaceBehind?: string;
   };
 
-/** Multi-line entry. The label rests at the first line, not centred, and lifts onto the border. */
+/** Multi-line entry. The label rests at the first line, not centred, and lifts to the top inside the frame. */
 export function Textarea({ label, hint, error, required, disabled, rows = 4, maxRows, readOnly, surfaceBehind, value, onValueChange, placeholder, ...rest }: TextareaProps) {
   const { palette } = useTheme();
   const reduced = useReduceMotion();
@@ -36,8 +39,10 @@ export function Textarea({ label, hint, error, required, disabled, rows = 4, max
   // 2px on focus, the padding pulled in by 1 so the frame keeps its size.
   const borderWidth = focused ? 2 : 1;
   const fill = disabled ? palette.surfaceRaised : palette.surface;
-  const notch = surfaceBehind ?? palette.surface;
-  const minHeight = rows * TEXTAREA_LINE_HEIGHT + TEXTAREA_PADDING_Y * 2;
+  // Lifted, the label sits 6pt inside the top border, so the first line starts one more space
+  // down and the box grows by that same room, keeping the bottom padding its size.
+  const topPadding = lifted ? TEXTAREA_PADDING_Y + space[3] : TEXTAREA_PADDING_Y;
+  const minHeight = rows * TEXTAREA_LINE_HEIGHT + topPadding + TEXTAREA_PADDING_Y;
 
   return (
     <Field label={label} hideLabel hint={hint} error={error} required={required} disabled={disabled}>
@@ -49,7 +54,14 @@ export function Textarea({ label, hint, error, required, disabled, rows = 4, max
             <TextInput
               multiline
               textAlignVertical="top"
-              style={[styles.input, { color: palette.text, maxHeight: maxRows ? maxRows * TEXTAREA_LINE_HEIGHT + TEXTAREA_PADDING_Y * 2 : undefined }]}
+              style={[
+                styles.input,
+                {
+                  color: palette.text,
+                  paddingTop: topPadding,
+                  maxHeight: maxRows ? maxRows * TEXTAREA_LINE_HEIGHT + topPadding + TEXTAREA_PADDING_Y : undefined,
+                },
+              ]}
               placeholder={lifted ? placeholder : undefined}
               placeholderTextColor={palette.textTertiary}
               value={value}
@@ -74,13 +86,12 @@ export function Textarea({ label, hint, error, required, disabled, rows = 4, max
               styles.label,
               {
                 color: error ? palette.overdue : focused ? palette.accent : palette.textTertiary,
-                backgroundColor: notch,
                 left: borderWidth + space[3],
                 // The border no longer counts into the absolute position: it used to be a child of
                 // the frame, so the two values carry the borderWidth back on, as left already does.
-                top: progress.interpolate({ inputRange: [0, 1], outputRange: [TEXTAREA_PADDING_Y + borderWidth, -8 + borderWidth] }),
+                // Lifted, the label sits 6pt inside the top border, and the first line clears it.
+                top: progress.interpolate({ inputRange: [0, 1], outputRange: [TEXTAREA_PADDING_Y + borderWidth, 6 + borderWidth] }),
                 fontSize: progress.interpolate({ inputRange: [0, 1], outputRange: [14, 11] }),
-                paddingHorizontal: progress.interpolate({ inputRange: [0, 1], outputRange: [0, 4] }),
               },
             ]}
           >
