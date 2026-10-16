@@ -35,6 +35,10 @@ export function Textarea({ label, hint, error, required, disabled, rows = 4, max
   // The label's width at floating size, measured by an invisible twin: the notch must open as
   // wide as the raised label, plus the gap on either side.
   const [labelWidth, setLabelWidth] = useState(0);
+  // The label's line height in each state, measured by the same twins: iOS scales lineHeight
+  // with Dynamic Type, so the fixed 14/22 would off-centre the label once the font grows.
+  const [floatHeight, setFloatHeight] = useState(0);
+  const [restHeight, setRestHeight] = useState(0);
   const lifted = focused || (value ?? '').length > 0;
   const progress = useRef(new Animated.Value(lifted ? 1 : 0)).current;
 
@@ -55,11 +59,22 @@ export function Textarea({ label, hint, error, required, disabled, rows = 4, max
   const pad = space[3] + 1;
   // The cut starts a gap before the label, so the raised text never touches the stroke.
   const notchStart = pad - NOTCH_GAP;
-  const notchWidth = progress.interpolate({ inputRange: [0, 1], outputRange: [0, labelWidth > 0 ? labelWidth + 2 * NOTCH_GAP : 0] });
+  // The cut must never reach the rounded corner: it stops short of the right arc.
+  const notchMax = bounds.width > 0 ? Math.max(0, bounds.width - notchStart - (radius.sm + 2)) : 0;
+  const notchTarget = Math.min(labelWidth > 0 ? labelWidth + 2 * NOTCH_GAP : 0, notchMax);
+  const notchWidth = progress.interpolate({ inputRange: [0, 1], outputRange: [0, notchTarget] });
+  // Measured line heights, or the scale's nominal lines before the twins have laid out.
+  const floatH = floatHeight > 0 ? floatHeight : NATIVE_LABEL_FLOAT_LINE;
+  const restH = restHeight > 0 ? restHeight : NATIVE_LABEL_REST_LINE;
   const inputFor = (lines: number) => TEXTAREA_PADDING_Y * 2 + lines * TEXTAREA_LINE_HEIGHT;
-  const minHeight = TEXTAREA_NOTCH_CLEAR + inputFor(rows);
+  // The clearance above the scrollable input is the lower half of the raised label plus 4, the
+  // 2 of border included; it never shrinks below the contract's fixed clearance.
+  const clear = Math.max(TEXTAREA_NOTCH_CLEAR, Math.ceil(floatH / 2) + 4);
+  const minHeight = clear + inputFor(rows);
   // At rest the label is centred on the first content line, below the clearance.
-  const restingTop = TEXTAREA_NOTCH_CLEAR + TEXTAREA_PADDING_Y + (TEXTAREA_LINE_HEIGHT - NATIVE_LABEL_REST_LINE) / 2;
+  const restingTop = clear + TEXTAREA_PADDING_Y + (TEXTAREA_LINE_HEIGHT - restH) / 2;
+  // The label's width constraint, shared by the visible label and the measuring twins.
+  const labelMaxWidth = bounds.width > 0 ? bounds.width - 2 * pad : undefined;
 
   const onLayout = (event: LayoutChangeEvent) => {
     setBounds({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height });
@@ -70,7 +85,7 @@ export function Textarea({ label, hint, error, required, disabled, rows = 4, max
       {(control) => (
         <View style={styles.container} onLayout={onLayout}>
           <View style={[styles.frame, { minHeight, backgroundColor: fill, paddingHorizontal: pad }]}>
-            <View style={styles.spacer} />
+            <View style={[styles.spacer, { height: clear }]} />
             <TextInput
               multiline
               textAlignVertical="top"
@@ -104,15 +119,35 @@ export function Textarea({ label, hint, error, required, disabled, rows = 4, max
             notchStart={notchStart}
             notchWidth={notchWidth}
           />
-          {/* Invisible twin of the raised label: it only measures the width the notch opens to. */}
+          {/* Invisible twin of the raised label: it measures the width the notch opens to and the
+              line's height, under the same width constraint as the label it mirrors. */}
           <Text
             accessible={false}
             accessibilityElementsHidden
             importantForAccessibility="no-hide-descendants"
             pointerEvents="none"
             numberOfLines={1}
-            onLayout={(event) => setLabelWidth(event.nativeEvent.layout.width)}
-            style={[styles.measure, { fontSize: NATIVE_LABEL_FLOAT_SIZE, lineHeight: NATIVE_LABEL_FLOAT_LINE }]}
+            onLayout={(event) => {
+              setLabelWidth(event.nativeEvent.layout.width);
+              setFloatHeight(event.nativeEvent.layout.height);
+            }}
+            style={[
+              styles.measure,
+              { fontSize: NATIVE_LABEL_FLOAT_SIZE, lineHeight: NATIVE_LABEL_FLOAT_LINE, maxWidth: labelMaxWidth },
+            ]}
+          >
+            {label}
+            {required ? ' *' : ''}
+          </Text>
+          {/* Second twin at the resting size: the resting centre is measured, not assumed. */}
+          <Text
+            accessible={false}
+            accessibilityElementsHidden
+            importantForAccessibility="no-hide-descendants"
+            pointerEvents="none"
+            numberOfLines={1}
+            onLayout={(event) => setRestHeight(event.nativeEvent.layout.height)}
+            style={[styles.measure, { fontSize: nativeText.base, lineHeight: NATIVE_LABEL_REST_LINE, maxWidth: labelMaxWidth }]}
           >
             {label}
             {required ? ' *' : ''}
@@ -131,11 +166,12 @@ export function Textarea({ label, hint, error, required, disabled, rows = 4, max
                 color: error ? palette.overdue : focused ? palette.accent : palette.textTertiary,
                 left: pad,
                 // At rest the label rests on the first line; lifted, the centre of its line lands
-                // on the centre of the stroke.
-                top: progress.interpolate({ inputRange: [0, 1], outputRange: [restingTop, borderWidth / 2 - NATIVE_LABEL_FLOAT_LINE / 2] }),
+                // on the centre of the stroke. Both use the measured line height, so Dynamic
+                // Type's scaled lines stay centred too.
+                top: progress.interpolate({ inputRange: [0, 1], outputRange: [restingTop, borderWidth / 2 - floatH / 2] }),
                 fontSize: progress.interpolate({ inputRange: [0, 1], outputRange: [nativeText.base, NATIVE_LABEL_FLOAT_SIZE] }),
                 lineHeight: progress.interpolate({ inputRange: [0, 1], outputRange: [NATIVE_LABEL_REST_LINE, NATIVE_LABEL_FLOAT_LINE] }),
-                maxWidth: bounds.width > 0 ? bounds.width - 2 * pad : undefined,
+                maxWidth: labelMaxWidth,
               },
             ]}
           >
