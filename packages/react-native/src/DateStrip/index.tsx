@@ -80,7 +80,7 @@ export function DateStrip({
               }}
               style={({ pressed }) => [
                 styles.day,
-                { height: DATE_STRIP_DAY_HEIGHT, backgroundColor: on ? palette.accent : 'transparent' },
+                { minHeight: DATE_STRIP_DAY_HEIGHT, backgroundColor: on ? palette.accent : 'transparent' },
                 pressed && !on ? { backgroundColor: palette.surfaceRaised } : null,
               ]}
             >
