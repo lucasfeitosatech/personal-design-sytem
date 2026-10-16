@@ -1,6 +1,6 @@
 {
   "name": "@lucasfeitosatech/components-react-native",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "description": "React Native components of the design system, for iOS and Android.",
   "license": "UNLICENSED",
   "type": "module",
@@ -21,8 +21,8 @@
     "clean": "rm -rf *.tgz"
   },
   "peerDependencies": {
-    "@lucasfeitosatech/design-core": "^0.12.0",
-    "@lucasfeitosatech/design-tokens": "^0.12.0",
+    "@lucasfeitosatech/design-core": "^0.13.0",
+    "@lucasfeitosatech/design-tokens": "^0.13.0",
     "react": ">=19",
     "react-native": ">=0.80",
     "react-native-svg": ">=15"

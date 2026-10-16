@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
  * Semantic roles of text. The web gets these for free from CSS inheritance; native does not, so
  * every string on a device passes through the Text primitive or it leaves the type scale.
  */
-export const TEXT_TONES = ['default', 'secondary', 'tertiary', 'disabled', 'accent', 'danger'] as const;
+export const TEXT_TONES = ['default', 'secondary', 'tertiary', 'disabled', 'accent', 'danger', 'positive'] as const;
 export type TextTone = (typeof TEXT_TONES)[number];
 
 /** The one place a tone is bound to a palette key. Native reads it; the web stylesheet mirrors it. */
@@ -15,6 +15,7 @@ export const TEXT_TONE_TOKEN = {
   disabled: 'textDisabled',
   accent: 'accent',
   danger: 'overdue',
+  positive: 'paid',
 } as const satisfies Record<TextTone, string>;
 
 export const TEXT_SIZES = ['xs', 'sm', 'md', 'base', 'lg', 'xl', '2xl'] as const;

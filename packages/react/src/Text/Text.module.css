@@ -17,6 +17,7 @@
 .tone-disabled { color: var(--ds-color-text-disabled); }
 .tone-accent { color: var(--ds-color-accent); }
 .tone-danger { color: var(--ds-color-overdue); }
+.tone-positive { color: var(--ds-color-paid); }
 
 .weight-regular { font-weight: 400; }
 .weight-medium { font-weight: 500; }

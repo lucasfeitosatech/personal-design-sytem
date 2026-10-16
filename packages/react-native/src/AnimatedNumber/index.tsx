@@ -18,7 +18,7 @@ declare global {
  * everywhere the system moves. The moving text is the component's only output: a screen reader
  * hears the final value through the `accessibilityLabel`, never the frames in between.
  */
-export function AnimatedNumber({ value, format, durationMs }: AnimatedNumberProps) {
+export function AnimatedNumber({ value, format, durationMs, tone }: AnimatedNumberProps) {
   const reduced = useReduceMotion();
   const [displayed, setDisplayed] = useState(value);
   // The value the last painted frame showed. A new tween starts from it, not from the previous
@@ -64,7 +64,7 @@ export function AnimatedNumber({ value, format, durationMs }: AnimatedNumberProp
   }, [value, durationMs, reduced]);
 
   return (
-    <Text mono size="base" accessibilityLabel={format(value)}>
+    <Text mono size="base" tone={tone} accessibilityLabel={format(value)}>
       {format(displayed)}
     </Text>
   );

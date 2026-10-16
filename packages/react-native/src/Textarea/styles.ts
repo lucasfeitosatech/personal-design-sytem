@@ -1,15 +1,24 @@
-import { radius, space, nativeText } from '@lucasfeitosatech/design-tokens';
+import { nativeText, radius } from '@lucasfeitosatech/design-tokens';
 import { StyleSheet } from 'react-native';
 import { TEXTAREA_LINE_HEIGHT, TEXTAREA_PADDING_Y } from '@lucasfeitosatech/design-core';
-import { LABEL_BAND } from '../TextField/styles';
+
+/**
+ * Fixed clearance the raised label owns above the scrollable input: the resting label sits below
+ * it, on the first line, and scrolled lines never pass behind the half of the label that hangs
+ * under the border.
+ */
+export const TEXTAREA_NOTCH_CLEAR = 8;
 
 export const styles = StyleSheet.create({
-  /** Borderless wrapper so the label can be a sibling of the frame, above it in paint order. */
+  /** Borderless wrapper so the outline and the label can be siblings of the frame, above it in paint order. */
   container: { position: 'relative' },
-  frame: { flexDirection: 'column', borderWidth: 1, borderRadius: radius.sm, paddingHorizontal: space[3] },
-  /** Fixed band for the label, outside the scrollable input: scrolled lines never pass behind it. */
-  labelBand: { height: LABEL_BAND },
-  /** Absolute inside the top of the frame; a sibling of it so the border cannot clip it. Left is inline: it must include the frame border. */
+  /** The frame carries no border: the line is drawn by the NotchedOutline, so padding never moves. */
+  frame: { borderRadius: radius.sm },
+  /** Fixed space the label's lower half occupies; the input starts below it. */
+  spacer: { height: TEXTAREA_NOTCH_CLEAR },
+  /** Invisible twin of the raised label; it only measures the width the notch must open to. */
+  measure: { position: 'absolute', left: 0, top: 0, opacity: 0 },
+  /** Absolute over the frame; it crosses the stroke the outline notches out around it. */
   label: { position: 'absolute', zIndex: 1 },
   input: { flex: 1, padding: 0, paddingVertical: TEXTAREA_PADDING_Y, fontSize: nativeText.base, lineHeight: TEXTAREA_LINE_HEIGHT },
 });

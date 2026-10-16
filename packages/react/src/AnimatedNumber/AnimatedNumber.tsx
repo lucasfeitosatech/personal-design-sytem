@@ -1,6 +1,7 @@
 import { NUMBER_TWEEN_MS, tweenValue, type AnimatedNumberContract } from '@lucasfeitosatech/design-core';
 import { useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from '../hooks/useReducedMotion';
+import toneStyles from '../Text/Text.module.css';
 
 export type AnimatedNumberProps = AnimatedNumberContract & { className?: string };
 
@@ -10,7 +11,7 @@ export type AnimatedNumberProps = AnimatedNumberContract & { className?: string 
  * everywhere the system moves. The moving text is hidden from readers: a screen reader hears the
  * final value once, not every frame in between.
  */
-export function AnimatedNumber({ value, format, durationMs, className }: AnimatedNumberProps) {
+export function AnimatedNumber({ value, format, durationMs, tone, className }: AnimatedNumberProps) {
   const reduced = useReducedMotion();
   const [displayed, setDisplayed] = useState(value);
   // The value the last painted frame showed. A new tween starts from it, not from the previous
@@ -56,7 +57,7 @@ export function AnimatedNumber({ value, format, durationMs, className }: Animate
   }, [value, durationMs, reduced]);
 
   return (
-    <span className={['ds-mono', className ?? ''].filter(Boolean).join(' ')}>
+    <span className={['ds-mono', tone ? toneStyles[`tone-${tone}`] : '', className ?? ''].filter(Boolean).join(' ')}>
       <span aria-hidden="true">{format(displayed)}</span>
       <span className="ds-visually-hidden">{format(value)}</span>
     </span>

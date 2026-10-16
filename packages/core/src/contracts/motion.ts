@@ -1,3 +1,5 @@
+import type { TextTone } from './text';
+
 /**
  * Movement is how the system says "something changed". The tween math is pure and lives here so
  * both renderers settle a number and a bar at the same pace, without re-deriving the curve.
@@ -26,6 +28,8 @@ export type AnimatedNumberContract = {
   /** Turns the number into text; the same function formats every frame and the final value. */
   format: (value: number) => string;
   durationMs?: number;
+  /** The figure can carry the sign of a balance: a positive tone, not a colour of its own. */
+  tone?: TextTone;
 };
 
 export const PROGRESS_TONES = ['accent', 'muted', 'danger'] as const;
