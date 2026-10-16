@@ -6,11 +6,12 @@ import type { InputMode } from '@lucasfeitosatech/design-core';
 export const FLOAT_DURATION = 150;
 
 /**
- * Top padding of the input while the label is lifted. The label sits 6pt inside the top border, an
- * 11pt glyph, so 20pt keeps the first line clear of it — and the minimum frame height (48pt on
- * `sm`) still holds it, with room to spare.
+ * Height of the fixed band the label lifts into. The label sits 6pt inside the top border, an
+ * 11pt glyph, so 20pt holds it — and the minimum frame height (48pt on `sm`) still holds the text
+ * row below it, with room to spare. The band is always present, so the frame's height, and the
+ * row's position inside it, never move with focus or entry.
  */
-export const LIFTED_INPUT_PAD_TOP = 20;
+export const LABEL_BAND = 20;
 
 /** `numeric` and `decimal` raise different keyboards on a phone; the web only distinguishes inputMode. */
 export function keyboardFor(mode: InputMode): KeyboardTypeOptions {
@@ -34,13 +35,15 @@ export const styles = StyleSheet.create({
   /** Borderless wrapper so the label can be a sibling of the frame, above it in paint order. */
   container: { position: 'relative' },
   frame: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: space[2],
+    flexDirection: 'column',
     borderWidth: 1,
     borderRadius: radius.sm,
     paddingHorizontal: space[3],
   },
+  /** Fixed band reserved for the label, lifted or not: the row below never moves. */
+  labelBand: { height: LABEL_BAND },
+  /** The bottom row: prefix, input and suffix share one centre line. */
+  row: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: space[2] },
   /** Absolute inside the top of the frame; a sibling of it so the border cannot clip it. */
   label: { position: 'absolute', zIndex: 1 },
   input: { flex: 1, minWidth: 0, padding: 0, fontSize: text.base },

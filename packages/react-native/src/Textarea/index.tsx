@@ -3,7 +3,7 @@ import { space } from '@lucasfeitosatech/design-tokens';
 import { useEffect, useRef, useState } from 'react';
 import { Animated, TextInput, View, type TextInputProps } from 'react-native';
 import { Field } from '../Field';
-import { FLOAT_DURATION } from '../TextField/styles';
+import { FLOAT_DURATION, LABEL_BAND } from '../TextField/styles';
 import { useReduceMotion } from '../internal/useReduceMotion';
 import { useTheme } from '../theme/ThemeProvider';
 import { styles } from './styles';
@@ -18,7 +18,11 @@ export type TextareaProps = Omit<TextInputProps, 'style' | 'value' | 'editable' 
     surfaceBehind?: string;
   };
 
-/** Multi-line entry. The label rests at the first line, not centred, and lifts to the top inside the frame. */
+/**
+ * Multi-line entry. The label rests at the first line, not centred, and lifts into a fixed band
+ * above the scrollable input, which is always reserved: the frame's height never moves with focus
+ * or entry.
+ */
 export function Textarea({ label, hint, error, required, disabled, rows = 4, maxRows, readOnly, surfaceBehind, value, onValueChange, placeholder, ...rest }: TextareaProps) {
   const { palette } = useTheme();
   const reduced = useReduceMotion();
@@ -39,10 +43,10 @@ export function Textarea({ label, hint, error, required, disabled, rows = 4, max
   // 2px on focus, the padding pulled in by 1 so the frame keeps its size.
   const borderWidth = focused ? 2 : 1;
   const fill = disabled ? palette.surfaceRaised : palette.surface;
-  // Lifted, the label sits 6pt inside the top border, so the first line starts one more space
-  // down and the box grows by that same room, keeping the bottom padding its size.
-  const topPadding = lifted ? TEXTAREA_PADDING_Y + space[3] : TEXTAREA_PADDING_Y;
-  const minHeight = rows * TEXTAREA_LINE_HEIGHT + topPadding + TEXTAREA_PADDING_Y;
+  // The band is always there, so the limits depend on the content lines alone, not on the label
+  // being lifted.
+  const inputFor = (lines: number) => TEXTAREA_PADDING_Y * 2 + lines * TEXTAREA_LINE_HEIGHT;
+  const minHeight = LABEL_BAND + inputFor(rows);
 
   return (
     <Field label={label} hideLabel hint={hint} error={error} required={required} disabled={disabled}>
@@ -51,6 +55,7 @@ export function Textarea({ label, hint, error, required, disabled, rows = 4, max
         // paints over its own children, so a label inside the frame gets clipped by the line.
         <View style={styles.container}>
           <View style={[styles.frame, { minHeight, borderColor, borderWidth, backgroundColor: fill, paddingHorizontal: space[3] - (borderWidth - 1) }]}>
+            <View style={styles.labelBand} />
             <TextInput
               multiline
               textAlignVertical="top"
@@ -58,8 +63,7 @@ export function Textarea({ label, hint, error, required, disabled, rows = 4, max
                 styles.input,
                 {
                   color: palette.text,
-                  paddingTop: topPadding,
-                  maxHeight: maxRows ? maxRows * TEXTAREA_LINE_HEIGHT + topPadding + TEXTAREA_PADDING_Y : undefined,
+                  maxHeight: maxRows ? inputFor(maxRows) : undefined,
                 },
               ]}
               placeholder={lifted ? placeholder : undefined}
@@ -89,8 +93,9 @@ export function Textarea({ label, hint, error, required, disabled, rows = 4, max
                 left: borderWidth + space[3],
                 // The border no longer counts into the absolute position: it used to be a child of
                 // the frame, so the two values carry the borderWidth back on, as left already does.
-                // Lifted, the label sits 6pt inside the top border, and the first line clears it.
-                top: progress.interpolate({ inputRange: [0, 1], outputRange: [TEXTAREA_PADDING_Y + borderWidth, 6 + borderWidth] }),
+                // Lifted, the label sits 6pt inside the top border, in the reserved band; at rest
+                // it rests on the first line below the band.
+                top: progress.interpolate({ inputRange: [0, 1], outputRange: [LABEL_BAND + TEXTAREA_PADDING_Y + borderWidth, 6 + borderWidth] }),
                 fontSize: progress.interpolate({ inputRange: [0, 1], outputRange: [14, 11] }),
               },
             ]}
