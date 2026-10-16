@@ -1,4 +1,4 @@
-import { radius, space, text } from '@lucasfeitosatech/design-tokens';
+import { radius, space, nativeText } from '@lucasfeitosatech/design-tokens';
 import { StyleSheet, type KeyboardTypeOptions } from 'react-native';
 import type { InputMode } from '@lucasfeitosatech/design-core';
 
@@ -46,5 +46,5 @@ export const styles = StyleSheet.create({
   row: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: space[2] },
   /** Absolute inside the top of the frame; a sibling of it so the border cannot clip it. */
   label: { position: 'absolute', zIndex: 1 },
-  input: { flex: 1, minWidth: 0, padding: 0, fontSize: text.base },
+  input: { flex: 1, minWidth: 0, padding: 0, fontSize: nativeText.base },
 });

@@ -1,7 +1,7 @@
-import { radius, space } from '@lucasfeitosatech/design-tokens';
+import { radius } from '@lucasfeitosatech/design-tokens';
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
-  card: { borderWidth: 1, borderRadius: radius.md, padding: space[4] },
+  card: { borderWidth: 1, borderRadius: radius.md, padding: 20 },
   flush: { padding: 0, overflow: 'hidden' },
 });

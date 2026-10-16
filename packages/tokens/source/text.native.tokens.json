@@ -1,0 +1,33 @@
+{
+  "$description": "Type scale of the native app, in points. Built apart from core on purpose: it must not reach tokens.css, and it is not the web `text` scale — the same seven steps, each one a little taller, because a 15 px face reads small on a phone. The `px` suffix is the dimension marker only; the build emits bare numbers and React Native reads them as points.",
+  "text": {
+    "xs": {
+      "$value": "13px",
+      "$type": "dimension"
+    },
+    "sm": {
+      "$value": "14px",
+      "$type": "dimension"
+    },
+    "md": {
+      "$value": "15px",
+      "$type": "dimension"
+    },
+    "base": {
+      "$value": "17px",
+      "$type": "dimension"
+    },
+    "lg": {
+      "$value": "19px",
+      "$type": "dimension"
+    },
+    "xl": {
+      "$value": "24px",
+      "$type": "dimension"
+    },
+    "2xl": {
+      "$value": "32px",
+      "$type": "dimension"
+    }
+  }
+}

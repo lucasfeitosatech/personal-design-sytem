@@ -1,9 +1,9 @@
-import { LIST_ROW_MIN_HEIGHT, type ListRowContract } from '@lucasfeitosatech/design-core';
+import { type ListRowContract } from '@lucasfeitosatech/design-core';
 import { Children, type ReactNode, isValidElement } from 'react';
 import { Pressable, View } from 'react-native';
 import { Text } from '../Text';
 import { useTheme } from '../theme/ThemeProvider';
-import { styles } from './styles';
+import { LIST_ROW_MIN_HEIGHT, styles } from './styles';
 
 export type ListRowProps = ListRowContract & {
   /**

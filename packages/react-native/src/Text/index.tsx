@@ -1,5 +1,5 @@
 import { TEXT_TONE_TOKEN, TEXT_WEIGHT_VALUE, type TextContract } from '@lucasfeitosatech/design-core';
-import { text as textScale } from '@lucasfeitosatech/design-tokens';
+import { nativeText as textScale } from '@lucasfeitosatech/design-tokens';
 import { Text as RNText, type TextProps as RNTextProps } from 'react-native';
 import { useTheme } from '../theme/ThemeProvider';
 import { fontFamily, styles } from './styles';

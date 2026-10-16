@@ -98,7 +98,7 @@ const cssPlatform = (selector, colorScheme) => ({
 });
 const tsPlatform = { transforms: [], files: [{ destination: 'x.json', format: 'ds/ts-object', options: { showFileHeader: false } }] };
 
-const [lightCss, darkCss, lightJson, darkJson, coreJson, nativeFontsJson] = await Promise.all([
+const [lightCss, darkCss, lightJson, darkJson, coreJson, nativeFontsJson, nativeTextJson] = await Promise.all([
   build([...CORE, 'source/theme.light.tokens.json'], cssPlatform(':root', 'light')),
   build(['source/theme.dark.tokens.json'], cssPlatform(":root[data-theme='dark']", 'dark')),
   build(['source/theme.light.tokens.json'], tsPlatform),
@@ -107,6 +107,9 @@ const [lightCss, darkCss, lightJson, darkJson, coreJson, nativeFontsJson] = awai
   // Native families are built apart from CORE on purpose: they must not reach tokens.css, where a
   // bundled family name is meaningless.
   build(['source/fonts.native.tokens.json'], tsPlatform),
+  // Same reason for the native type scale: a phone scale must not reach the web's CSS variables,
+  // and the web keeps its own `text` scale untouched.
+  build(['source/text.native.tokens.json'], tsPlatform),
 ]);
 
 mkdirSync(OUT, { recursive: true });
@@ -116,6 +119,7 @@ const light = JSON.parse(lightJson);
 const dark = JSON.parse(darkJson);
 const core = JSON.parse(coreJson);
 const nativeFonts = JSON.parse(nativeFontsJson);
+const nativeText = JSON.parse(nativeTextJson).text;
 const palette = (t) => t.color;
 
 writeFileSync(
@@ -139,6 +143,13 @@ export const webShadows = ${JSON.stringify({ overlay: { light: light.shadow.over
 
 /** Closed type scale (D-09). Numbers: points on native, pixels on the web. */
 export const text = ${JSON.stringify(core.text, null, 2)} as const;
+
+/**
+ * Type scale of the native app, in points. Deliberately a different scale from \`text\`: the same
+ * seven steps, each one a little taller, because the app is read on a phone where 15 px reads small.
+ * The web keeps \`text\`; only the native renderer reads this.
+ */
+export const nativeText = ${JSON.stringify(nativeText, null, 2)} as const;
 
 export const space = ${JSON.stringify(core.space, null, 2)} as const;
 

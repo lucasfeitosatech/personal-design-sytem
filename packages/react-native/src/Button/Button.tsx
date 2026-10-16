@@ -1,5 +1,5 @@
 import { BUTTON_MIN_HEIGHT, type ButtonContract } from '@lucasfeitosatech/design-core';
-import { radius, space, tap, text, type Palette } from '@lucasfeitosatech/design-tokens';
+import { radius, space, tap, nativeText, type Palette } from '@lucasfeitosatech/design-tokens';
 import type { ReactNode } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View, type PressableProps, type StyleProp, type ViewStyle } from 'react-native';
 import { useTheme } from '../theme/ThemeProvider';
@@ -35,7 +35,7 @@ export function Button({ variant = 'secondary', size = 'md', loading = false, bl
     >
       {loading ? <ActivityIndicator size="small" color={tone.label} /> : null}
       {icon && !loading ? <View accessibilityElementsHidden>{icon}</View> : null}
-      <Text style={[styles.label, { color: tone.label, fontSize: size === 'sm' ? text.sm : text.md }]}>{children}</Text>
+      <Text style={[styles.label, { color: tone.label, fontSize: size === 'sm' ? nativeText.sm : nativeText.md }]}>{children}</Text>
     </Pressable>
   );
 }

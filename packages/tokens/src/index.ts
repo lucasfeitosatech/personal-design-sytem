@@ -96,6 +96,21 @@ export const text = {
   "2xl": 28
 } as const;
 
+/**
+ * Type scale of the native app, in points. Deliberately a different scale from `text`: the same
+ * seven steps, each one a little taller, because the app is read on a phone where 15 px reads small.
+ * The web keeps `text`; only the native renderer reads this.
+ */
+export const nativeText = {
+  "xs": 13,
+  "sm": 14,
+  "md": 15,
+  "base": 17,
+  "lg": 19,
+  "xl": 24,
+  "2xl": 32
+} as const;
+
 export const space = {
   "1": 4,
   "2": 8,
