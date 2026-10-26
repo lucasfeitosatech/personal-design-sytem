@@ -1,6 +1,6 @@
 import { motion, radius, space } from '@lucasfeitosatech/design-tokens';
 import { useEffect, useRef, type ReactNode } from 'react';
-import { Animated, Modal as RNModal, Pressable, StyleSheet, View } from 'react-native';
+import { Animated, KeyboardAvoidingView, Modal as RNModal, Pressable, StyleSheet, View } from 'react-native';
 import { useReduceMotion } from '../useReduceMotion';
 import { useTheme } from '../../theme/ThemeProvider';
 
@@ -57,23 +57,28 @@ export function Sheet({ open, onRequestClose, children, safeBottom = 0, accessib
         onPress={onRequestClose}
         accessibilityLabel="Fechar"
       />
-      <View
-        accessibilityViewIsModal
-        accessibilityRole={alert ? 'alert' : undefined}
-        accessibilityLabel={accessibilityLabel}
-        style={[styles.sheet, { backgroundColor: palette.surface, paddingBottom: space[4] + safeBottom }]}
-      >
-        <View style={[styles.handle, { backgroundColor: palette.border }]} />
-        {children}
-      </View>
+      {/* The modal is its own window, out of reach of the screen's keyboard handling: the panel
+          rises above the keypad here, on both platforms. With edge-to-edge (Android 15+) the window
+          is no longer resized for the keyboard; where it still is, the padding comes out zero. */}
+      <KeyboardAvoidingView behavior="padding" style={styles.avoider} pointerEvents="box-none">
+        <View
+          accessibilityViewIsModal
+          accessibilityRole={alert ? 'alert' : undefined}
+          accessibilityLabel={accessibilityLabel}
+          style={[styles.sheet, { backgroundColor: palette.surface, paddingBottom: space[4] + safeBottom }]}
+        >
+          <View style={[styles.handle, { backgroundColor: palette.border }]} />
+          {children}
+        </View>
+      </KeyboardAvoidingView>
     </RNModal>
   );
 }
 
 const styles = StyleSheet.create({
   scrim: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 },
+  avoider: { flex: 1, justifyContent: 'flex-end' },
   sheet: {
-    position: 'absolute', left: 0, right: 0, bottom: 0,
     borderTopLeftRadius: radius.lg, borderTopRightRadius: radius.lg,
     paddingTop: space[2], paddingHorizontal: space[4], maxHeight: '80%',
   },

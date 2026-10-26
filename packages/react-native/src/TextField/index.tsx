@@ -1,7 +1,7 @@
 import { INPUT_HEIGHT, type FieldContract, type TextFieldContract } from '@lucasfeitosatech/design-core';
 import { nativeText, radius, space } from '@lucasfeitosatech/design-tokens';
-import { forwardRef, useEffect, useRef, useState, type ComponentRef, type ReactNode } from 'react';
-import { Animated, Text, TextInput, View, type LayoutChangeEvent, type TextInputProps } from 'react-native';
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState, type ComponentRef, type ReactNode } from 'react';
+import { Animated, Pressable, Text, TextInput, View, type LayoutChangeEvent, type TextInputProps } from 'react-native';
 import { Field } from '../Field';
 import { NotchedOutline } from '../internal/NotchedOutline';
 import { useReduceMotion } from '../internal/useReduceMotion';
@@ -56,6 +56,8 @@ export const TextField = forwardRef<ComponentRef<typeof TextInput>, TextFieldPro
 ) {
   const { palette } = useTheme();
   const reduced = useReduceMotion();
+  const input = useRef<ComponentRef<typeof TextInput>>(null);
+  useImperativeHandle(ref, () => input.current as ComponentRef<typeof TextInput>, []);
   const [focused, setFocused] = useState(false);
   // The frame's measured size; 0 until the first onLayout, when the outline is drawn uncut.
   const [bounds, setBounds] = useState({ width: 0, height: 0 });
@@ -113,11 +115,17 @@ export const TextField = forwardRef<ComponentRef<typeof TextInput>, TextFieldPro
     <Field label={label} hideLabel hint={hint} error={error} required={required} disabled={disabled}>
       {(control) => (
         <View style={styles.container} onLayout={onLayout}>
-          <View style={[styles.frame, { minHeight: INPUT_HEIGHT[size], backgroundColor: fill, paddingHorizontal: pad }]}>
+          {/* The whole frame is the target, not only the line of text: a tap above or below it, or
+              in the padding, focuses the input. Not a node of its own — the input carries the name. */}
+          <Pressable
+            accessible={false}
+            onPress={() => input.current?.focus()}
+            style={[styles.frame, { minHeight: INPUT_HEIGHT[size], backgroundColor: fill, paddingHorizontal: pad }]}
+          >
             <View style={styles.row}>
               {prefix}
               <TextInput
-                ref={ref}
+                ref={input}
                 style={[
                   styles.input,
                   { color: palette.text, textAlign: align },
@@ -143,7 +151,7 @@ export const TextField = forwardRef<ComponentRef<typeof TextInput>, TextFieldPro
                 <View onLayout={(event) => setSuffixWidth(event.nativeEvent.layout.width)}>{suffix}</View>
               ) : null}
             </View>
-          </View>
+          </Pressable>
           {/* The border is drawn, not set: iOS cannot notch a CALayer's stroke, so the line is a
               clipped drawing and the gap behind the label is a hole, not a painted background. */}
           <NotchedOutline

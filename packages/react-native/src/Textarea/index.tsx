@@ -1,7 +1,7 @@
 import { TEXTAREA_LINE_HEIGHT, TEXTAREA_PADDING_Y, type FieldContract, type TextareaContract } from '@lucasfeitosatech/design-core';
 import { nativeText, radius, space } from '@lucasfeitosatech/design-tokens';
-import { useEffect, useRef, useState } from 'react';
-import { Animated, Text, TextInput, View, type LayoutChangeEvent, type TextInputProps } from 'react-native';
+import { useEffect, useRef, useState, type ComponentRef } from 'react';
+import { Animated, Pressable, Text, TextInput, View, type LayoutChangeEvent, type TextInputProps } from 'react-native';
 import { Field } from '../Field';
 import { NotchedOutline } from '../internal/NotchedOutline';
 import { FLOAT_DURATION, NATIVE_LABEL_FLOAT_LINE, NATIVE_LABEL_FLOAT_SIZE, NATIVE_LABEL_REST_LINE, NOTCH_GAP } from '../TextField/styles';
@@ -41,6 +41,7 @@ export function Textarea({ label, hint, error, required, disabled, rows = 4, max
   const [restHeight, setRestHeight] = useState(0);
   const lifted = focused || (value ?? '').length > 0;
   const progress = useRef(new Animated.Value(lifted ? 1 : 0)).current;
+  const input = useRef<ComponentRef<typeof TextInput>>(null);
 
   useEffect(() => {
     if (reduced) {
@@ -84,9 +85,12 @@ export function Textarea({ label, hint, error, required, disabled, rows = 4, max
     <Field label={label} hideLabel hint={hint} error={error} required={required} disabled={disabled}>
       {(control) => (
         <View style={styles.container} onLayout={onLayout}>
-          <View style={[styles.frame, { minHeight, backgroundColor: fill, paddingHorizontal: pad }]}>
+          {/* The whole frame is the target, the label's clearance and the padding included; the
+              input carries the name, so the frame is not a node of its own. */}
+          <Pressable accessible={false} onPress={() => input.current?.focus()} style={[styles.frame, { minHeight, backgroundColor: fill, paddingHorizontal: pad }]}>
             <View style={[styles.spacer, { height: clear }]} />
             <TextInput
+              ref={input}
               multiline
               textAlignVertical="top"
               style={[
@@ -107,7 +111,7 @@ export function Textarea({ label, hint, error, required, disabled, rows = 4, max
               accessibilityHint={control.accessibilityHint}
               {...rest}
             />
-          </View>
+          </Pressable>
           {/* The border is drawn, not set: iOS cannot notch a CALayer's stroke, so the line is a
               clipped drawing and the gap behind the label is a hole, not a painted background. */}
           <NotchedOutline
