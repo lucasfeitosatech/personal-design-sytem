@@ -21,5 +21,6 @@ export * from './contracts/row';
 export * from './contracts/date-strip';
 export * from './contracts/ai';
 export * from './contracts/motion';
+export * from './contracts/level';
 export * from './masks/money';
 export * from './masks/period';

@@ -43,6 +43,9 @@ not remove a contract prop, rename it, or change what it means.
 | DateStrip | yes | yes | A week of days; the dot is never the only signal — each day's label says it in words |
 | AnimatedNumber | yes | yes | Settles on a new value with the core tween; the moving text is hidden from the reader, who hears the final value once (0.7.0 web, 0.8.0 native) |
 | ProgressBar | yes | yes | `role="meter"` for a measured share, not a loading indicator; first paint fills from 0, later changes transition (0.7.0 web, 0.8.0 native) |
+| LevelSlider | yes | yes | A self-reported level, 0–100 in steps of 10; `null` is "not marked" and draws no knob. The knob stays inside the track at both ends. Web: a transparent range input over the drawing; native: `PanResponder` (tap marks, a horizontal drag follows, a vertical one is handed back to the scroll) and `adjustable` with increment/decrement (0.14.0) |
+| BatteryInput | yes | yes | The same level as a charge in ten cells; a tap fills up to its cell (`batteryLevelAt`). Accent at every level, never an alarm colour (0.14.0) |
+| MoodFace | yes | yes | A face from `faceGeometry(level)`: mouth and brows bend, the eyes do not (they would read as energy). Tweens with the number tween; decorative unless it has a `label` (0.14.0) |
 | Reveal | yes | no | Scroll-driven fade-up on `animation-timeline: view()`; pure CSS, no JS, content never waits hidden (0.7.0) |
 
 ## Where the shared base pays

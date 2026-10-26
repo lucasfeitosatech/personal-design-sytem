@@ -6,6 +6,7 @@ import { TEXT_TONES, TEXT_TONE_TOKEN } from './text';
 import { TILE_STATES, TILE_STATE_TOKEN, PRACTICE_TILE_MIN_HEIGHT } from './tile';
 import { BILL_ROW_MIN_HEIGHT } from './row';
 import { DATE_STRIP_DAY_HEIGHT } from './date-strip';
+import { LEVEL_FIRST_ADJUST, adjustLevel, batteryLevelAt, faceGeometry, levelAt, levelOffset, snapLevel } from './level';
 
 /**
  * The maps are the only place a tone touches a palette key, and a renderer indexes them at runtime.
@@ -84,5 +85,51 @@ describe('motion math', () => {
   it('jumps straight to the target with no duration', () => {
     expect(tweenValue(3, 7, 0, 0)).toBe(7);
     expect(tweenValue(3, 7, 0, -1)).toBe(7);
+  });
+});
+
+describe('level scale', () => {
+  it('snaps to the step and stays on the scale', () => {
+    expect(snapLevel(34)).toBe(30);
+    expect(snapLevel(35)).toBe(40);
+    expect(snapLevel(-20)).toBe(0);
+    expect(snapLevel(140)).toBe(100);
+  });
+
+  it('keeps the ends inside the inset, so the knob never leaves the track', () => {
+    expect(levelAt(14, 300, 14)).toBe(0);
+    expect(levelAt(286, 300, 14)).toBe(100);
+    expect(levelAt(0, 300, 14)).toBe(0);
+    expect(levelAt(300, 300, 14)).toBe(100);
+    expect(levelOffset(0, 300, 14)).toBe(14);
+    expect(levelOffset(100, 300, 14)).toBe(286);
+  });
+
+  it('round-trips a level through its position', () => {
+    for (let level = 0; level <= 100; level += 10) expect(levelAt(levelOffset(level, 320, 14), 320, 14)).toBe(level);
+  });
+
+  it('fills a battery up to the cell that was touched', () => {
+    expect(batteryLevelAt(0, 100, 0)).toBe(0);
+    expect(batteryLevelAt(1, 100, 0)).toBe(0);
+    expect(batteryLevelAt(5, 100, 0)).toBe(10);
+    expect(batteryLevelAt(25, 100, 0)).toBe(30);
+    expect(batteryLevelAt(99, 100, 0)).toBe(100);
+    expect(batteryLevelAt(120, 100, 0)).toBe(100);
+  });
+
+  it('starts an assistive adjustment at the middle, never at an end', () => {
+    expect(adjustLevel(null, 'increment')).toBe(LEVEL_FIRST_ADJUST);
+    expect(adjustLevel(null, 'decrement')).toBe(LEVEL_FIRST_ADJUST);
+    expect(adjustLevel(100, 'increment')).toBe(100);
+    expect(adjustLevel(0, 'decrement')).toBe(0);
+    expect(adjustLevel(40, 'increment')).toBe(50);
+  });
+
+  it('bends the mouth from a frown to a smile and shows the cheeks only at the top', () => {
+    expect(faceGeometry(0).mouth).toBe('M 33 68 Q 50 52 67 68');
+    expect(faceGeometry(100).mouth).toBe('M 33 68 Q 50 84 67 68');
+    expect(faceGeometry(50).cheek).toBe(0);
+    expect(faceGeometry(100).cheek).toBeGreaterThan(0);
   });
 });

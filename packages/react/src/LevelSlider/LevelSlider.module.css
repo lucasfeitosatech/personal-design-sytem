@@ -1,0 +1,30 @@
+/* The input is the control; the rail, fill and knob are its drawing. --ds-level is 0..1. */
+.wrap { display: flex; flex-direction: column; gap: 2px; }
+.disabled { opacity: 0.55; }
+.track { position: relative; height: 44px; }
+.rail, .fill {
+  position: absolute; top: 19px; height: 6px; border-radius: var(--ds-radius-pill);
+}
+.rail { left: 0; right: 0; background: var(--ds-color-surface-raised); }
+/* The fill ends under the knob's centre: its radius plus the share of the span inside the radii. */
+.fill {
+  left: 0; background: var(--ds-color-accent);
+  width: calc(var(--ds-level-knob) / 2 + (100% - var(--ds-level-knob)) * var(--ds-level));
+  transition: width var(--ds-motion-fast) var(--ds-ease-out);
+}
+.knob {
+  position: absolute; top: calc(22px - var(--ds-level-knob) / 2);
+  width: var(--ds-level-knob); height: var(--ds-level-knob); box-sizing: border-box;
+  left: calc((100% - var(--ds-level-knob)) * var(--ds-level));
+  border-radius: var(--ds-radius-pill); background: var(--ds-color-accent);
+  border: 3px solid var(--ds-color-surface); box-shadow: 0 0 0 1px var(--ds-color-accent);
+  transition: left var(--ds-motion-fast) var(--ds-ease-out);
+}
+.input {
+  position: absolute; inset: 0; width: 100%; height: 100%; margin: 0;
+  opacity: 0; cursor: pointer; -webkit-appearance: none; appearance: none;
+}
+.disabled .input { cursor: not-allowed; }
+.track:focus-within { outline: 2px solid var(--ds-color-focus); outline-offset: 2px; border-radius: var(--ds-radius-sm); }
+.ends { display: flex; justify-content: space-between; }
+@media (prefers-reduced-motion: reduce) { .fill, .knob { transition: none; } }

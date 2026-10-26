@@ -1,0 +1,6 @@
+.face { flex: none; transition: opacity var(--ds-motion-base); }
+.empty { opacity: 0.4; }
+.head { fill: var(--ds-color-accent-soft); stroke: var(--ds-color-accent); }
+.cheek { fill: var(--ds-color-accent); }
+.line { fill: none; stroke: var(--ds-color-text); stroke-linecap: round; }
+.eye { fill: var(--ds-color-text); }
