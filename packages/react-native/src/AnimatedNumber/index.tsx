@@ -1,9 +1,10 @@
-import { NUMBER_TWEEN_MS, tweenValue, type AnimatedNumberContract } from '@lucasfeitosatech/design-core';
+import { NUMBER_TWEEN_MS, tweenValue, type AnimatedNumberContract, type TextContract } from '@lucasfeitosatech/design-core';
 import { useEffect, useRef, useState } from 'react';
 import { useReduceMotion } from '../internal/useReduceMotion';
 import { Text } from '../Text';
 
-export type AnimatedNumberProps = AnimatedNumberContract;
+/** `size` and `weight` let a screen's main figure read larger than a figure in a list (native only). */
+export type AnimatedNumberProps = AnimatedNumberContract & Pick<TextContract, 'size' | 'weight'>;
 
 // The runtime ships these from React Native's timer setup, but the type definitions do not, so the
 // ambient declarations live with the only component that needs them.
@@ -18,7 +19,7 @@ declare global {
  * everywhere the system moves. The moving text is the component's only output: a screen reader
  * hears the final value through the `accessibilityLabel`, never the frames in between.
  */
-export function AnimatedNumber({ value, format, durationMs, tone }: AnimatedNumberProps) {
+export function AnimatedNumber({ value, format, durationMs, tone, size = 'base', weight }: AnimatedNumberProps) {
   const reduced = useReduceMotion();
   const [displayed, setDisplayed] = useState(value);
   // The value the last painted frame showed. A new tween starts from it, not from the previous
@@ -64,7 +65,7 @@ export function AnimatedNumber({ value, format, durationMs, tone }: AnimatedNumb
   }, [value, durationMs, reduced]);
 
   return (
-    <Text mono size="base" tone={tone} accessibilityLabel={format(value)}>
+    <Text mono size={size} weight={weight} tone={tone} accessibilityLabel={format(value)}>
       {format(displayed)}
     </Text>
   );

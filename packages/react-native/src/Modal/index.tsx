@@ -41,6 +41,7 @@ export function Modal({ open, title, body, primaryAction, secondaryAction, onClo
 }
 
 const styles = StyleSheet.create({
-  content: { gap: space[3] },
-  actions: { gap: space[2], marginTop: space[2] },
+  // The app's sheet rhythm (planner, 04/11/2026): blocks 24 apart, actions 12 apart and a step away.
+  content: { gap: space[5] },
+  actions: { gap: space[3], marginTop: space[2] },
 });

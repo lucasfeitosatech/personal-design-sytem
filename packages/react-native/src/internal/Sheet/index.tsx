@@ -65,7 +65,7 @@ export function Sheet({ open, onRequestClose, children, safeBottom = 0, accessib
           accessibilityViewIsModal
           accessibilityRole={alert ? 'alert' : undefined}
           accessibilityLabel={accessibilityLabel}
-          style={[styles.sheet, { backgroundColor: palette.surface, paddingBottom: space[4] + safeBottom }]}
+          style={[styles.sheet, { backgroundColor: palette.surface, paddingBottom: space[5] + safeBottom }]}
         >
           <View style={[styles.handle, { backgroundColor: palette.border }]} />
           {children}
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   avoider: { flex: 1, justifyContent: 'flex-end' },
   sheet: {
     borderTopLeftRadius: radius.lg, borderTopRightRadius: radius.lg,
-    paddingTop: space[2], paddingHorizontal: space[4], maxHeight: '80%',
+    paddingTop: space[3], paddingHorizontal: space[5], maxHeight: '80%',
   },
-  handle: { width: 36, height: 5, borderRadius: radius.pill, alignSelf: 'center', marginBottom: space[3] },
+  handle: { width: 36, height: 5, borderRadius: radius.pill, alignSelf: 'center', marginBottom: space[5] },
 });
